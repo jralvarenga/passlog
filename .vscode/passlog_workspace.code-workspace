@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+	],
+	"settings": {
+		"files.autoSave": "afterDelay",		
+	},
+	"extensions": {
+		"recommendations": [
+			"dsznajder.es7-react-js-snippets",
+			"ms-vscode.vscode-typescript-next",
+			"msjsdiag.vscode-react-native",
+			"ms-vscode.js-debug",
+			"VisualStudioExptTeam.vscodeintellicode",
+			"toba.vsfire"
+		]
+	}
+}
