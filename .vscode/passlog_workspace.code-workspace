@@ -1,11 +1,22 @@
 {
 	"folders": [
 		{
+			"name": "root",
 			"path": ".."
+		},
+		{
+			"name": "firebase",
+			"path": "../firebase"
+		},
+		{
+			"name": "mobile",
+			"path": "../mobile",
 		},
 	],
 	"settings": {
-		"files.autoSave": "afterDelay",		
+		"files.autoSave": "afterDelay",
+		"editor.tabSize": 2,
+		"git.ignoreLimitWarning": true,
 	},
 	"extensions": {
 		"recommendations": [
