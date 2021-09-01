@@ -1,10 +1,10 @@
 import React from 'react'
-import HomePage from './src/pages/HomePage'
+import ProviderStaging from './src/services/ProviderStaging'
 
 const App = () => {
 
   return (
-    <HomePage />
+    <ProviderStaging />
   )
 }
 

@@ -1,13 +1,13 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-const HomePage = () => {
+const PasswordsScreen = () => {
 
   return (
     <View>
-      <Text>HI man</Text>
+      <Text>Password screen</Text>
     </View>
   )
 }
 
-export default HomePage
+export default PasswordsScreen

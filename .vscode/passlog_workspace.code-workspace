@@ -14,7 +14,6 @@
 		},
 	],
 	"settings": {
-		"files.autoSave": "afterDelay",
 		"editor.tabSize": 2,
 		"git.ignoreLimitWarning": true,
 	},
