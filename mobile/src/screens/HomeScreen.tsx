@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import CardsScreen from './CardsScreen'
 import SettingsScreen from './SettingsScreen'
 import { useTheme } from '@react-navigation/native'
+import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 
 const Tab = createBottomTabNavigator()
 
@@ -20,7 +21,7 @@ const HomeScreen = () => {
         tabBarInactiveBackgroundColor: theme.colors.background,
 
         tabBarActiveTintColor: theme.colors.text,
-        tabBarInactiveTintColor: theme.colors.card
+        tabBarInactiveTintColor: reduceIncrementColor(theme.colors.text, 'reduce', 150)
       }}
     >
       
