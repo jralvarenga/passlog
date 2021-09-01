@@ -4,16 +4,23 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import CardsScreen from './CardsScreen'
 import SettingsScreen from './SettingsScreen'
+import { useTheme } from '@react-navigation/native'
 
 const Tab = createBottomTabNavigator()
 
 const HomeScreen = () => {
+  const theme = useTheme()
 
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarLabelPosition: 'beside-icon',
+        tabBarActiveBackgroundColor: theme.colors.background,
+        tabBarInactiveBackgroundColor: theme.colors.background,
+
+        tabBarActiveTintColor: theme.colors.text,
+        tabBarInactiveTintColor: theme.colors.card
       }}
     >
       
@@ -26,6 +33,7 @@ const HomeScreen = () => {
             <Ionicons
               name={focused ? "key" : "key-outline"}
               size={size}
+              color={color}
             />
           )
         }}
@@ -36,10 +44,11 @@ const HomeScreen = () => {
         component={CardsScreen}
         options={{
           title: "Cards",
-          tabBarIcon: ({ focused, color }: any) => (
+          tabBarIcon: ({ focused, color, size }: any) => (
             <Ionicons
               name={focused ? "md-card-sharp" : "md-card-outline"}
-              size={25}
+              size={size}
+              color={color}
             />
           )
         }}
@@ -50,10 +59,11 @@ const HomeScreen = () => {
         component={SettingsScreen}
         options={{
           title: "Settings",
-          tabBarIcon: ({ focused, color }: any) => (
+          tabBarIcon: ({ focused, color, size }: any) => (
             <Ionicons
               name={focused ? "settings" : "settings-outline"}
-              size={25}
+              size={size}
+              color={color}
             />
           )
         }}
