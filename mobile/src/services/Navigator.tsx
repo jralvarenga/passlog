@@ -1,20 +1,29 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import React from 'react'
+import { createStackNavigator, TransitionPresets  } from '@react-navigation/stack'
+import CreatePasswordScreen from '../screens/CreatePasswordScreen';
 import HomeScreen from '../screens/HomeScreen';
+import { useTheme } from '@react-navigation/native';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 const Navigator = () => {
+  const theme = useTheme()
 
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: false,
+
+        ...TransitionPresets.SlideFromRightIOS
       }}
     >
       <Stack.Screen
         name="Home"
         component={HomeScreen}
+      />
+      <Stack.Screen
+        name="createPassword"
+        component={CreatePasswordScreen}
       />
     </Stack.Navigator>
   )

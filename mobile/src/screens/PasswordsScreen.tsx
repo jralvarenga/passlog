@@ -13,7 +13,11 @@ import { testPasswords } from '../data/testData'
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
 
-const PasswordsScreen = () => {
+interface PasswordContainer {
+  navigation: any
+}
+
+const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const [passwords, setPasswords] = useState<PasswordProps[]>([])
@@ -40,7 +44,7 @@ const PasswordsScreen = () => {
             changeInputValue={(value: string) => setSearchInput(value)}
             cancelInput={() => setSearchInput("")}
             buttonText="New"
-            buttonFunction={() => console.log('hi')}
+            buttonFunction={() => navigation.navigate('createPassword')}
           />
         }
         ListHeaderComponentStyle={{
