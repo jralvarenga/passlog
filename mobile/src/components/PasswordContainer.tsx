@@ -3,31 +3,56 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Text } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { passwordIcon } from '../lib/getPasswordIcon'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 
-const PasswordContainer = () => {
+interface PasswordContainerProps {
+  name: string
+  email: string
+  user: string
+  password: string
+}
+
+const PasswordContainer = ({ name, email, user, password }: PasswordContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+
+  const { icon, iconFamily } = passwordIcon(name)
 
   return (
     <View style={styles.container}>
       <View style={styles.profileName}>
         <View style={styles.profileNameInfo}>
-          <Text h4>Profile name</Text>
+          {user == '' ? (
+            <Text h3>{name}</Text>
+          ) : (
+            <Text h4>{name}</Text>
+          )}
           <Text style={{ color: reduceIncrementColor(theme.colors.text, 'reduce', 80) }}>
-            User name xdxd
+            {user}
           </Text>
         </View>
         <View style={styles.profileNameIcon}>
-          <Ionicons
-            name="logo-google"
-            size={30}
-            color={theme.colors.text}
-          />
+          {icon != '' && (
+            iconFamily == 'ionicons' ? (
+              <Ionicons
+                name={icon}
+                size={30}
+                color={theme.colors.text}
+              />
+            ) : (
+              <MaterialIcon
+                name={icon}
+                size={30}
+                color={theme.colors.text}
+              />
+            )
+          )}
         </View>
       </View>
       <View style={styles.profileInfo}>
-        <Text>emailemail123@email.com</Text>
+        <Text>{email}</Text>
       </View>
     </View>
   )

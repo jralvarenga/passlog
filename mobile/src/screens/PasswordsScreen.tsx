@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dimensions, FlatList, StyleSheet } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import PasswordContainer from '../components/PasswordContainer'
 import TopBar from '../components/TopBar'
-import HiddenFlatListView from '../components/HiddenFlatListView';
+import HiddenFlatListView from '../components/HiddenFlatListView'
+import { PasswordProps } from '../interface/interfaces'
+
+// Test data
+import { testPasswords } from '../data/testData'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -12,7 +16,12 @@ const windowHeight = Dimensions.get('window').height
 const PasswordsScreen = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const [passwords, setPasswords] = useState<PasswordProps[]>([])
   const [searchInput, setSearchInput] = useState("")
+
+  useEffect(() => {
+    setPasswords(testPasswords)
+  }, [])
 
   return (
     <SafeAreaView>
@@ -37,9 +46,15 @@ const PasswordsScreen = () => {
         ListHeaderComponentStyle={{
           paddingBottom: 15
         }}
-        data={[0, 1, 2,1,1,1,1,1,11,1,1,1]}
-        renderItem={() => (
-          <PasswordContainer />
+        data={passwords}
+        keyExtractor={(item: PasswordProps) => item.id}
+        renderItem={({ item }: { item: PasswordProps }) => (
+          <PasswordContainer
+            name={item.profileName}
+            email={item.email}
+            password={item.password}
+            user={item.user ? item.user : ""}
+          />
         )}
       />
     </SafeAreaView>
@@ -51,6 +66,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     width: '100%',
     paddingLeft: 20,
     paddingRight: 20,
+    marginBottom: 150
   },
   searchInputContainer: {
     width: '70%',
