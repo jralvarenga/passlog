@@ -2,10 +2,12 @@ import React from 'react'
 import PasswordsScreen from './PasswordsScreen'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import CardsScreen from './CardsScreen'
 import SettingsScreen from './SettingsScreen'
 import { useTheme } from '@react-navigation/native'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
+import { Dimensions } from 'react-native'
 
 const Tab = createBottomTabNavigator()
 
@@ -16,13 +18,27 @@ const HomeScreen = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarLabelPosition: 'beside-icon',
+        //tabBarLabelPosition: 'beside-icon',
+        tabBarActiveBackgroundColor: reduceIncrementColor(theme.colors.background, 'reduce', -25),
+        tabBarInactiveBackgroundColor: reduceIncrementColor(theme.colors.background, 'reduce', -15),
         tabBarLabelStyle: {
-          fontSize: 15,
+          fontSize: 16,
           fontFamily: 'poppins'
         },
         tabBarStyle: {
-          backgroundColor: theme.colors.background
+          height: 80,
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          padding: 0,
+          backgroundColor: reduceIncrementColor(theme.colors.background, 'reduce', -10)
+        },
+        tabBarItemStyle: {
+          borderRadius: 20,
+          margin: 5,
+          padding: 10,
         },
         tabBarActiveTintColor: theme.colors.text,
         tabBarInactiveTintColor: reduceIncrementColor(theme.colors.text, 'reduce', 150)
@@ -34,13 +50,13 @@ const HomeScreen = () => {
         component={PasswordsScreen}
         options={{
           title: "Passwords",
-          tabBarIcon: ({ focused, color, size }) => (
-            <Ionicons
+          /*tabBarIcon: ({ focused, color, size }) => (
+            <MaterialIcons
               name={focused ? "key" : "key-outline"}
               size={size}
               color={color}
             />
-          )
+          )*/
         }}
       />
 
@@ -49,13 +65,13 @@ const HomeScreen = () => {
         component={CardsScreen}
         options={{
           title: "Cards",
-          tabBarIcon: ({ focused, color, size }: any) => (
-            <Ionicons
-              name={focused ? "md-card-sharp" : "md-card-outline"}
+          /*tabBarIcon: ({ focused, color, size }: any) => (
+            <MaterialIcons
+              name={focused ? "credit-card" : "credit-card-outline"}
               size={size}
               color={color}
             />
-          )
+          )*/
         }}
       />
 
@@ -64,13 +80,13 @@ const HomeScreen = () => {
         component={SettingsScreen}
         options={{
           title: "Settings",
-          tabBarIcon: ({ focused, color, size }: any) => (
+          /*tabBarIcon: ({ focused, color, size }: any) => (
             <Ionicons
-              name={focused ? "settings" : "settings-outline"}
+              name={focused ? "md-settings-sharp" : "md-settings-outline"}
               size={size}
               color={color}
             />
-          )
+          )*/
         }}
       />
 
