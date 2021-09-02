@@ -23,7 +23,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   topBar: {
     width: '100%',
     padding: 20,
-    height: windowHeight * 0.18,
+    height: windowHeight * 0.20,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -31,7 +31,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   },
   text: {
     fontFamily: 'poppins-bold',
-    fontSize: 32,
+    fontSize: 35,
     color: theme.colors.text
   },
 })

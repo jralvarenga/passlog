@@ -5,12 +5,17 @@ import { Icon } from 'react-native-elements'
 
 interface HeaderNavigationBarProps {
   title: string
-  showMenuIcon?: boolean,
+  showIcon?: boolean
+  iconFunction?: Function
+  icon?: {
+    type: string
+    name: string
+  }
 }
 
 const windowHeight = Dimensions.get('window').height
 
-const HeaderNavigationBar = ({ title, showMenuIcon }: HeaderNavigationBarProps) => {
+const HeaderNavigationBar = ({ title, showIcon, icon, iconFunction }: HeaderNavigationBarProps) => {
   const theme = useTheme()
   const navigation = useNavigation()
   const styles = styleSheet(theme)
@@ -32,17 +37,21 @@ const HeaderNavigationBar = ({ title, showMenuIcon }: HeaderNavigationBarProps) 
             {title}
           </Text>
         </View>
-        
       </View>
       <View style={styles.headerOptions}>
-        {showMenuIcon && (
-          <Icon
-            name="menu"
-            type="ionicons"
-            color={theme.colors.text}
-            size={40}
-          />
-        )}
+        <View style={styles.goBackContainer}></View>
+        <View style={[styles.pageName, { alignItems: 'center', justifyContent: 'center' }]}>
+          {showIcon && (
+            <Icon
+              name={icon!.name}
+              type={icon!.type}
+              color={theme.colors.text}
+              /* @ts-ignore */
+              onPress={iconFunction}
+              size={30}
+            />
+          )}
+        </View>
       </View>
     </View>
   )
@@ -72,7 +81,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     height: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-end'
   },
   goBackContainer: {
     width: '100%',

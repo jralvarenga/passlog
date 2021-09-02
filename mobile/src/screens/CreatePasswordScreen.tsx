@@ -1,57 +1,96 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React from 'react'
-import { StatusBar, StyleSheet, View } from 'react-native'
-import { Button, Input } from 'react-native-elements'
+import React, { useState } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { Button } from 'react-native-elements'
+import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
 
 const CreatePasswordScreen = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const [name, setName] = useState("")
+  const [user, setUser] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [comments, setComments] = useState("")
+  const [eyeIcon, setEyeIcon] = useState("eye-off")
+  const [showPassword, setShowPassword] = useState(false)
+
+  const changePasswordVisibility = () => {
+    if (showPassword) {
+      setShowPassword(false)
+      setEyeIcon("eye")
+    } else {
+      setShowPassword(true)
+      setEyeIcon("eye-off")
+    }
+  }
 
   return (
     <View style={styles.container}>
-      <HeaderNavigationBar title="Create Password" />
+      <HeaderNavigationBar
+        title="Create Password"
+        showIcon
+        icon={{ type: 'ionicon', name: eyeIcon }}
+        iconFunction={changePasswordVisibility}
+      />
       <View style={styles.passwordInfoContainer}>
         <View style={styles.passwordNameContainer}>
-          <Input
+          <FormInput
             placeholder="Name"
             label="Password name"
-            containerStyle={{
-              width: '50%',
-            }}
-            leftIcon={{ type: 'foundation', name: 'key', color: theme.colors.text }}
+            width="50%"
+            icon={{ type: 'foundation', name: 'key' }}
+            value={name}
+            onChangeText={(value: string) => setName(value)}
           />
-          <Input
-            placeholder="my_username"
+          <FormInput
+            placeholder="my_user"
             label="User name"
-            containerStyle={{
-              width: '50%',
-            }}
-            leftIcon={{ type: 'font-awesome', name: 'user-circle', color: theme.colors.text }}
+            width="50%"
+            icon={{ type: 'font-awesome', name: 'user-circle' }}
+            value={user}
+            onChangeText={(value: string) => setUser(value)}
           />
         </View>
         <View>
-          <Input
+          <FormInput
             label="An email or credential"
-            focusable={true}
             placeholder="email132@adress.com"
-            leftIcon={{ type: 'ionicons', name: 'mail', color: theme.colors.text }}
+            icon={{ type: 'ionicons', name: 'mail' }}
+            value={email}
+            onChangeText={(value: string) => setEmail(value)}
+            inputProps={{
+              keyboardType: 'email-address',
+              autoCapitalize: 'none'
+            }}
           />
         </View>
         <View>
-          <Input
+          <FormInput
             label="The password"
             placeholder="your_password123"
-            leftIcon={{ type: 'material', name: 'lock', color: theme.colors.text }}
+            icon={{ type: 'material', name: 'lock' }}
+            value={password}
+            onChangeText={(value: string) => setPassword(value)}
+            inputProps={{
+              autoCapitalize: 'none',
+              autoCompleteType: 'off',
+              secureTextEntry: !showPassword
+            }}
           />
         </View>
         <View>
-          <Input
+          <FormInput
             label="Your comments"
             placeholder="Write your comments here..."
-            multiline={true}
-            numberOfLines={6}
-            leftIcon={{ type: 'font-awesome', name: 'comment', color: theme.colors.text }}
+            icon={{ type: 'font-awesome', name: 'comment', }}
+            value={comments}
+            onChangeText={(value: string) => setComments(value)}
+            inputProps={{
+              numberOfLines: 6,
+              multiline: true
+            }}
           />
         </View>
       </View>
@@ -82,7 +121,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   },
   passwordInfoContainer: {
     width: '100%',
-    padding: 15,
+    padding: 5,
     height: '70%',
     display: 'flex',
     justifyContent: 'space-evenly'
