@@ -1,7 +1,7 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Text } from 'react-native-elements'
+import { StyleSheet, View, Text } from 'react-native'
+import { Icon } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { passwordIcon } from '../lib/getPasswordIcon'
@@ -17,19 +17,28 @@ interface PasswordContainerProps {
 const PasswordContainer = ({ name, email, user, password }: PasswordContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-
   const { icon, iconFamily } = passwordIcon(name)
 
   return (
     <View style={styles.container}>
       <View style={styles.profileName}>
-        <View style={styles.profileNameInfo}>
+        <View style={[styles.profileNameInfo, user == '' && { flexDirection: 'row', alignItems: 'center' }]}>
           {user == '' ? (
-            <Text h3>{name}</Text>
+            <Text
+              style={[styles.text, { fontSize: 28, fontFamily: 'poppins-bold' }]}
+            >
+              {name}
+            </Text>
           ) : (
-            <Text h4>{name}</Text>
+            <Text
+              style={[styles.text, { fontSize: 25, fontFamily: 'poppins-bold' }]}
+            >
+              {name}
+            </Text>
           )}
-          <Text style={{ color: reduceIncrementColor(theme.colors.text, 'reduce', 80) }}>
+          <Text
+            style={[styles.text, { color: reduceIncrementColor(theme.colors.text, 'reduce', 80) }]}
+          >
             {user}
           </Text>
         </View>
@@ -52,7 +61,13 @@ const PasswordContainer = ({ name, email, user, password }: PasswordContainerPro
         </View>
       </View>
       <View style={styles.profileInfo}>
-        <Text>{email}</Text>
+        <Text style={[styles.text]}>{email}</Text>
+        <Icon
+          name="keyboard-arrow-down"
+          type="material"
+          color={reduceIncrementColor(theme.colors.text, 'reduce', 80)}
+          onPress={() => console.log('xd')}
+        />
       </View>
     </View>
   )
@@ -63,10 +78,15 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     flex: 1,
     width: '100%',
     height: 130,
-    padding: 12,
+    padding: 15,
     marginVertical: 12,
     backgroundColor: theme.colors.card,
     borderRadius: 20
+  },
+  text: {
+    fontFamily: 'poppins',
+    fontSize: 16,
+    color: theme.colors.text
   },
   profileName: {
     flex: 3,
@@ -76,7 +96,8 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     alignItems: 'center',
   },
   profileNameInfo: {
-    width: '80%'
+    width: '80%',
+    display: 'flex'
   },
   profileNameIcon: {
     width: '20%',
@@ -90,6 +111,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between'
   }
 })
 

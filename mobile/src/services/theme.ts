@@ -20,7 +20,6 @@ export const darkElementsTheme = {
     style: {
       color: darkTheme.colors.text,
       fontSize: 16,
-      fontFamily: 'inter-regular'
     }
   },
   Button: {

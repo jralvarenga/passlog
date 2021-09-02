@@ -1,7 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Dimensions, StyleSheet, View } from 'react-native'
-import { Text } from 'react-native-elements'
+import { Dimensions, StyleSheet, View, Text } from 'react-native'
 
 interface TopBarProps {
   title: string
@@ -15,7 +14,7 @@ const TopBar = ({ title }: TopBarProps) => {
 
   return (
     <View style={styles.topBar}>
-      <Text h2>{title}</Text>
+      <Text style={styles.text}>{title}</Text>
     </View>
   )
 }
@@ -29,7 +28,12 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
-  }
+  },
+  text: {
+    fontFamily: 'poppins-bold',
+    fontSize: 32,
+    color: theme.colors.text
+  },
 })
 
 export default TopBar

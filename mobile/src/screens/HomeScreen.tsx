@@ -17,9 +17,13 @@ const HomeScreen = () => {
       screenOptions={{
         headerShown: false,
         tabBarLabelPosition: 'beside-icon',
-        tabBarActiveBackgroundColor: theme.colors.background,
-        tabBarInactiveBackgroundColor: theme.colors.background,
-
+        tabBarLabelStyle: {
+          fontSize: 15,
+          fontFamily: 'poppins'
+        },
+        tabBarStyle: {
+          backgroundColor: theme.colors.background
+        },
         tabBarActiveTintColor: theme.colors.text,
         tabBarInactiveTintColor: reduceIncrementColor(theme.colors.text, 'reduce', 150)
       }}

@@ -31,6 +31,7 @@ const HiddenFlatListView = ({ inputValue, changeInputValue, inputPlaceHolder, ca
         inputContainerStyle={{
           backgroundColor: theme.colors.card
         }}
+        labelStyle={styles.text}
         /* @ts-ignore */
         onChangeText={changeInputValue}
         /* @ts-ignore */
@@ -43,6 +44,7 @@ const HiddenFlatListView = ({ inputValue, changeInputValue, inputPlaceHolder, ca
         containerStyle={{ width: '25%' }}
         /* @ts-ignore */
         onPress={buttonFunction}
+        titleStyle={styles.text}
         title={buttonText}
       />
     </View>
@@ -56,7 +58,12 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
-  },  
+  },
+  text: {
+    fontFamily: 'poppins',
+    fontSize: 16,
+    color: theme.colors.text
+  },
   searchInputContainer: {
     width: '70%',
     backgroundColor: theme.colors.background,
