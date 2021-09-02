@@ -5,7 +5,7 @@ import { Icon } from 'react-native-elements'
 
 interface HeaderNavigationBarProps {
   title: string
-  showMenuIcon?: boolean
+  showMenuIcon?: boolean,
 }
 
 const windowHeight = Dimensions.get('window').height
@@ -84,6 +84,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   pageName: {
     width: '100%',
     display: 'flex',
+    paddingLeft: 10,
     alignItems: 'flex-start',
     justifyContent: 'flex-end',
     height: '60%'
