@@ -9,6 +9,7 @@ import { PasswordProps } from '../interface/interfaces'
 
 // Test data
 import { testPasswords } from '../data/testData'
+import PasswordBottonSheet from '../components/PasswordBottonSheet'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -61,6 +62,8 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
           />
         )}
       />
+
+      <PasswordBottonSheet />
     </SafeAreaView>
   )
 }
