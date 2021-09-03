@@ -74,6 +74,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   labelStyle: {
     fontFamily: 'poppins-bold',
     fontSize: 17,
+    marginBottom: 5,
     color: reduceIncrementColor(theme.colors.text, 'reduce', 100)
   }
 })

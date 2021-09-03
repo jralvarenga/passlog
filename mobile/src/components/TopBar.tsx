@@ -1,6 +1,9 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
 import { Dimensions, StyleSheet, View, Text } from 'react-native'
+import { Icon, Tooltip } from 'react-native-elements'
+import PasslogLogo from './PasslogLogo'
+//import PasslogIcon from '../../assets/icons/passlog_logo.svg'
 
 interface TopBarProps {
   title: string
@@ -15,6 +18,12 @@ const TopBar = ({ title }: TopBarProps) => {
   return (
     <View style={styles.topBar}>
       <Text style={styles.text}>{title}</Text>
+      <Icon
+        name="key"
+        color={theme.colors.text}
+        size={60}
+        type="foundation"
+      />
     </View>
   )
 }
@@ -32,6 +41,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   text: {
     fontFamily: 'poppins-bold',
     fontSize: 35,
+    letterSpacing: 1.5,
     color: theme.colors.text
   },
 })

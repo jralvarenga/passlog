@@ -1,6 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -20,7 +20,7 @@ const PasswordContainer = ({ name, email, user, password }: PasswordContainerPro
   const { icon, iconFamily } = passwordIcon(name)
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity activeOpacity={0.7} style={styles.container}>
       <View style={styles.profileName}>
         <View style={[styles.profileNameInfo, user == '' && { flexDirection: 'row', alignItems: 'center' }]}>
           {user == '' ? (
@@ -69,7 +69,7 @@ const PasswordContainer = ({ name, email, user, password }: PasswordContainerPro
           onPress={() => console.log('xd')}
         />
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
