@@ -6,12 +6,13 @@ import PasslogLogo from './PasslogLogo'
 //import PasslogIcon from '../../assets/icons/passlog_logo.svg'
 
 interface TopBarProps {
-  title: string
+  title: string,
+  iconFunction: Function
 }
 
 const windowHeight = Dimensions.get('window').height
 
-const TopBar = ({ title }: TopBarProps) => {
+const TopBar = ({ title, iconFunction }: TopBarProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
 
@@ -19,10 +20,13 @@ const TopBar = ({ title }: TopBarProps) => {
     <View style={styles.topBar}>
       <Text style={styles.text}>{title}</Text>
       <Icon
-        name="key"
+        name="locked"
         color={theme.colors.text}
-        size={60}
-        type="foundation"
+        size={25}
+        type="fontisto"
+        containerStyle={styles.iconContainerStyle}
+        /* @ts-ignore */
+        onPress={iconFunction}
       />
     </View>
   )
@@ -44,6 +48,14 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     letterSpacing: 1.5,
     color: theme.colors.text
   },
+  iconContainerStyle: {
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.colors.card,
+    borderRadius: 100
+  }
 })
 
 export default TopBar

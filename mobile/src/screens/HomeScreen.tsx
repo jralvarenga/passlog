@@ -30,8 +30,6 @@ const HomeScreen = () => {
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
           padding: 0,
           backgroundColor: reduceIncrementColor(theme.colors.background, 'reduce', -10)
         },

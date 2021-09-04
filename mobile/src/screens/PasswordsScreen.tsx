@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Dimensions, FlatList, StyleSheet } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -6,10 +6,11 @@ import PasswordContainer from '../components/PasswordContainer'
 import TopBar from '../components/TopBar'
 import HiddenFlatListView from '../components/HiddenFlatListView'
 import { PasswordProps } from '../interface/interfaces'
+import BottomSheet from '@gorhom/bottom-sheet'
 
 // Test data
 import { testPasswords } from '../data/testData'
-import PasswordBottonSheet from '../components/PasswordBottonSheet'
+import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -23,6 +24,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   const styles = styleSheet(theme)
   const [passwords, setPasswords] = useState<PasswordProps[]>([])
   const [searchInput, setSearchInput] = useState("")
+  const generatePasswordSheetRef = useRef<BottomSheet>(null)
 
   useEffect(() => {
     setPasswords(testPasswords)
@@ -31,6 +33,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   return (
     <SafeAreaView>
       <TopBar
+        iconFunction={() => generatePasswordSheetRef.current?.snapToIndex(0)}
         title="Passwords"
       />
       <FlatList
@@ -63,7 +66,9 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
         )}
       />
 
-      <PasswordBottonSheet />
+      <GeneratePasswordSheet
+        bottomSheetRef={generatePasswordSheetRef}
+      />
     </SafeAreaView>
   )
 }
