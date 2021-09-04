@@ -1,11 +1,15 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
 
-const CreatePasswordScreen = () => {
+interface CreatePasswordScreenProps {
+  route: any
+}
+
+const CreatePasswordScreen = ({ route }: CreatePasswordScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const [name, setName] = useState("")
@@ -15,6 +19,15 @@ const CreatePasswordScreen = () => {
   const [comments, setComments] = useState("")
   const [eyeIcon, setEyeIcon] = useState("eye-off")
   const [showPassword, setShowPassword] = useState(false)
+
+  useEffect(() => {
+    if (route.params.generatedPassword) {
+      console.log(route.params.generatedPassword)
+      setPassword(route.params.generatedPassword)
+    } else {
+      console.log('xd')
+    }
+  }, [])
 
   const changePasswordVisibility = () => {
     if (showPassword) {

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { StyleSheet, Text, View } from 'react-native'
-import { Theme, useTheme } from '@react-navigation/native'
+import { Theme, useNavigation, useTheme } from '@react-navigation/native'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 import { Button, Icon } from 'react-native-elements'
 import { generatePassword } from '../lib/generatePassword'
@@ -11,11 +11,13 @@ import Snackbar from 'react-native-snackbar'
 interface GeneratePasswordSheetProps {
   bottomSheetRef: any,
   handleSheetChanges: any
+  goToScreen: Function
 }
 
-const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges }: GeneratePasswordSheetProps) => {
+const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen }: GeneratePasswordSheetProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const navigation = useNavigation()
   const snapPoints = useMemo(() => ['10%', '45%', '55%'], [])
   const [backdropPressBehavior, setBackdropPressBehavior] = useState<'none' | 'close' | 'collapse'>('collapse')
   const [password, setPassword] = useState(generatePassword())
@@ -35,8 +37,14 @@ const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges }: GenerateP
 
     Snackbar.show({
       text: 'Password copied',
-      textColor: theme.colors.primary,
+      textColor: theme.colors.text,
       backgroundColor: theme.colors.primary
+    })
+  }
+
+  const createNewPasswordProfile = () => {
+    goToScreen('createPassword', {
+      generatedPassword: password
     })
   }
 
@@ -85,6 +93,7 @@ const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges }: GenerateP
             <Button
               titleStyle={styles.text}
               title="Create password profile"
+              onPress={createNewPasswordProfile}
             />
           </View>
         </View>

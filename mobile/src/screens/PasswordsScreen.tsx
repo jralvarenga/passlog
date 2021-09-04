@@ -32,9 +32,15 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   }, [])
 
   const showBottomSheetHandler = () => {
-    console.log('render sheet')
     setShowBottomSheet(true)
     generatePasswordSheetRef.current?.snapToIndex(1)
+    generatePasswordSheetRef.current?.snapToIndex(1)
+  }
+
+  const goToScreen = (screen: string, params: any) => {
+    setShowBottomSheet(false)
+    generatePasswordSheetRef.current?.close()
+    navigation.navigate(screen, params)
   }
 
   const handleSheetChanges = useCallback((index: number) => {
@@ -62,7 +68,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
             changeInputValue={(value: string) => setSearchInput(value)}
             cancelInput={() => setSearchInput("")}
             buttonText="New"
-            buttonFunction={() => navigation.navigate('createPassword')}
+            buttonFunction={() => goToScreen('createPassword', {})}
           />
         }
         ListHeaderComponentStyle={{
@@ -81,6 +87,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
       />
       {showBottomSheet && (
         <GeneratePasswordSheet
+          goToScreen={goToScreen}
           handleSheetChanges={handleSheetChanges}
           bottomSheetRef={generatePasswordSheetRef}
         />
