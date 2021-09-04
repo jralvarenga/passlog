@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Dimensions, FlatList, StyleSheet } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -24,16 +24,30 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   const styles = styleSheet(theme)
   const [passwords, setPasswords] = useState<PasswordProps[]>([])
   const [searchInput, setSearchInput] = useState("")
+  const [showBottomSheet, setShowBottomSheet] = useState(false)
   const generatePasswordSheetRef = useRef<BottomSheet>(null)
 
   useEffect(() => {
     setPasswords(testPasswords)
   }, [])
 
+  const showBottomSheetHandler = () => {
+    console.log('render sheet')
+    setShowBottomSheet(true)
+    generatePasswordSheetRef.current?.snapToIndex(1)
+  }
+
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index)
+    if (index == -1) {
+      setShowBottomSheet(false)
+    }
+  }, [])
+
   return (
     <SafeAreaView>
       <TopBar
-        iconFunction={() => generatePasswordSheetRef.current?.snapToIndex(0)}
+        iconFunction={showBottomSheetHandler}
         title="Passwords"
       />
       <FlatList
@@ -65,10 +79,12 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
           />
         )}
       />
-
-      <GeneratePasswordSheet
-        bottomSheetRef={generatePasswordSheetRef}
-      />
+      {showBottomSheet && (
+        <GeneratePasswordSheet
+          handleSheetChanges={handleSheetChanges}
+          bottomSheetRef={generatePasswordSheetRef}
+        />
+      )}
     </SafeAreaView>
   )
 }

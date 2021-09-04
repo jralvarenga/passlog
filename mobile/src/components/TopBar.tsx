@@ -24,7 +24,7 @@ const TopBar = ({ title, iconFunction }: TopBarProps) => {
         color={theme.colors.text}
         size={25}
         type="fontisto"
-        containerStyle={styles.iconContainerStyle}
+        iconStyle={styles.iconContainerStyle}
         /* @ts-ignore */
         onPress={iconFunction}
       />
@@ -49,10 +49,9 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     color: theme.colors.text
   },
   iconContainerStyle: {
-    width: 60,
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 18,
+    paddingRight: 20,
+    paddingLeft: 20,
     backgroundColor: theme.colors.card,
     borderRadius: 100
   }

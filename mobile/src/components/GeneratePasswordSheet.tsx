@@ -1,35 +1,43 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
-import BottomSheet, { BottomSheetBackdropProps } from '@gorhom/bottom-sheet'
+import React, { useCallback, useMemo, useState } from 'react'
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { StyleSheet, Text, View } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
-import Animated, { Extrapolate, interpolate, useAnimatedStyle } from 'react-native-reanimated'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 import { Button, Icon } from 'react-native-elements'
 import { generatePassword } from '../lib/generatePassword'
+import Clipboard from '@react-native-clipboard/clipboard'
+import Snackbar from 'react-native-snackbar'
 
 interface GeneratePasswordSheetProps {
-  bottomSheetRef: any
+  bottomSheetRef: any,
+  handleSheetChanges: any
 }
 
-const GeneratePasswordSheet = ({ bottomSheetRef }: GeneratePasswordSheetProps) => {
+const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges }: GeneratePasswordSheetProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  //const bottomSheetRef = useRef<BottomSheet>(null)
-  const snapPoints = useMemo(() => ['45%', '55%'], [])
+  const snapPoints = useMemo(() => ['10%', '45%', '55%'], [])
   const [backdropPressBehavior, setBackdropPressBehavior] = useState<'none' | 'close' | 'collapse'>('collapse')
   const [password, setPassword] = useState(generatePassword())
 
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index)
-  }, [])
 
   const renderBackdrop = useCallback((props) => (
-    <CustomBackdrop {...props} pressBehavior={backdropPressBehavior} />
+    <BottomSheetBackdrop {...props} pressBehavior={backdropPressBehavior} />
   ), [backdropPressBehavior])
 
   const refreshPassword = () => {
     const newPassword = generatePassword()
     setPassword(newPassword)
+  }
+
+  const copyPassword = () => {
+    //Clipboard.setString(password)
+
+    Snackbar.show({
+      text: 'Password copied',
+      textColor: theme.colors.primary,
+      backgroundColor: theme.colors.primary
+    })
   }
 
   return (
@@ -42,7 +50,7 @@ const GeneratePasswordSheet = ({ bottomSheetRef }: GeneratePasswordSheetProps) =
         onChange={handleSheetChanges}
         backgroundStyle={{ backgroundColor: reduceIncrementColor(theme.colors.background, 'reduce', -10) }}
         handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
-        //backdropComponent={renderBackdrop}
+        backdropComponent={renderBackdrop}
       >
         <View style={styles.contentContainer}>
           <View style={{ flex: 1}}>
@@ -66,6 +74,7 @@ const GeneratePasswordSheet = ({ bottomSheetRef }: GeneratePasswordSheetProps) =
                 <Icon
                   name="copy"
                   color={theme.colors.text}
+                  onPress={copyPassword}
                   containerStyle={[styles.iconContainerStyle, { marginRight: 10 }]}
                   type="ionicon"
                 />
@@ -81,27 +90,6 @@ const GeneratePasswordSheet = ({ bottomSheetRef }: GeneratePasswordSheetProps) =
         </View>
       </BottomSheet>
   )
-}
-
-const CustomBackdrop = ({ animatedIndex, style }: BottomSheetBackdropProps) => {
-  const containerAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(
-      animatedIndex.value,
-      [0, 1],
-      [0, 1],
-      Extrapolate.CLAMP
-    ),
-  }))
-
-  const containerStyle = useMemo(() => 
-    [style, { backgroundColor: "#000000AA" }, containerAnimatedStyle],
-    [style, containerAnimatedStyle]
-  )
-
-  return (
-    <Animated.View style={containerStyle} />
-  )
-
 }
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
