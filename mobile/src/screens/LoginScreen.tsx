@@ -9,7 +9,7 @@ import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 const windowHeight = Dimensions.get('window').height
 const windowWidth = Dimensions.get('window').width
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }: any) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const [email, setEmail] = useState("")
@@ -88,7 +88,10 @@ const LoginScreen = () => {
           />
           </View>*/}
         <View style={styles.dontHaveAccountContainer}>
-          <Text style={[styles.text, { fontSize: 14, textAlign: 'center' }]}>
+          <Text
+          onPress={() => navigation.navigate('createAccount')}
+            style={[styles.text, { fontSize: 14, textAlign: 'center' }]}
+          >
             ¿Don't have an account? <Text style={{ fontFamily: 'poppins-bold', color: theme.colors.primary, textDecorationLine: 'underline' }}>Create one</Text>
           </Text>
         </View>
