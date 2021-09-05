@@ -1,8 +1,9 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
 import { Dimensions, StyleSheet, View, Text } from 'react-native'
-import { Icon, Tooltip } from 'react-native-elements'
+import { Icon } from 'react-native-elements'
 import PasslogIcon from '../../assets/icons/passlog_logo.svg'
+import LottieView from 'lottie-react-native'
 
 interface TopBarProps {
   title: string,
@@ -17,6 +18,11 @@ const TopBar = ({ title, iconFunction }: TopBarProps) => {
 
   return (
     <View style={styles.topBar}>
+      <LottieView
+        source={require('../../assets/animations/topbar-bg.json')}
+        autoPlay
+        loop
+      />
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <PasslogIcon style={{ marginLeft: -45, marginRight: -30 }}  width={140} height={60} />
         <Text style={styles.text}>{title}</Text>
@@ -38,11 +44,15 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   topBar: {
     width: '100%',
     padding: 20,
-    height: windowHeight * 0.20,
+    height: windowHeight * 0.16,
+    borderBottomLeftRadius: 35,
+    borderBottomRightRadius: 35,
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: theme.colors.primary
   },
   text: {
     fontFamily: 'poppins-bold',

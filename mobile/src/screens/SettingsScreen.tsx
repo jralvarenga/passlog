@@ -3,6 +3,7 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 
 interface SettingsScreenProps {
   navigation: any
@@ -14,6 +15,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <FocusAwareStatusBar backgroundColor={theme.colors.background} />
       <View style={styles.userInfoContainer}>
         <View style={{ width: '100%' }}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 30 }]}>
@@ -57,14 +59,14 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         <Button
           title="App Settings"
           onPress={() => navigation.navigate('login')}
-          buttonStyle={{ justifyContent: 'flex-start', padding: 15 }}
+          buttonStyle={{ justifyContent: 'flex-start', padding: 15, backgroundColor: theme.colors.card }}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           icon={{ name: "settings", type: "ionicon", color: theme.colors.text, size: 25 }}
         />
         <Button
           title="Account settings"
           containerStyle={{ marginTop: 15 }}
-          buttonStyle={{ justifyContent: 'flex-start', padding: 15 }}
+          buttonStyle={{ justifyContent: 'flex-start', padding: 15, backgroundColor: theme.colors.card }}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           icon={{ name: "account-settings", type: "material-community", color: theme.colors.text, size: 25 }}
         />

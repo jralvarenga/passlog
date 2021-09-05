@@ -11,6 +11,7 @@ import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 
 // Test data
 import { testPasswords } from '../data/testData'
+import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -51,7 +52,8 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   }, [])
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <FocusAwareStatusBar backgroundColor={theme.colors.primary} />
       <TopBar
         iconFunction={showBottomSheetHandler}
         title="Passwords"
@@ -96,10 +98,9 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   scrollView: {
-    width: '100%',
     paddingLeft: 20,
     paddingRight: 20,
-    marginBottom: 150
+    marginTop: 15
   },
   searchInputContainer: {
     width: '70%',
