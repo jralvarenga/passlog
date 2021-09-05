@@ -66,7 +66,7 @@ const CardsScreen = ({ navigation }: PasswordContainer) => {
         ListHeaderComponent={
           <HiddenFlatListView
             inputValue={searchInput}
-            inputPlaceHolder="Search password..."
+            inputPlaceHolder="Search card..."
             changeInputValue={(value: string) => setSearchInput(value)}
             cancelInput={() => setSearchInput("")}
             buttonText="New"
@@ -101,7 +101,6 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     width: '100%',
     paddingLeft: 20,
     paddingRight: 20,
-    marginBottom: 150,
     marginTop: 15
   },
   searchInputContainer: {

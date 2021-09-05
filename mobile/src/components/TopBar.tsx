@@ -4,15 +4,17 @@ import { Dimensions, StyleSheet, View, Text } from 'react-native'
 import { Icon } from 'react-native-elements'
 import PasslogIcon from '../../assets/icons/passlog_logo.svg'
 import LottieView from 'lottie-react-native'
+import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 
 interface TopBarProps {
   title: string,
+  showIcon?: boolean
   iconFunction: Function
 }
 
 const windowHeight = Dimensions.get('window').height
 
-const TopBar = ({ title, iconFunction }: TopBarProps) => {
+const TopBar = ({ title, iconFunction, showIcon }: TopBarProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
 
@@ -27,15 +29,17 @@ const TopBar = ({ title, iconFunction }: TopBarProps) => {
         <PasslogIcon style={{ marginLeft: -45, marginRight: -30 }}  width={140} height={60} />
         <Text style={styles.text}>{title}</Text>
       </View>
-      <Icon
-        name="locked"
-        color={theme.colors.text}
-        size={25}
-        type="fontisto"
-        iconStyle={styles.iconContainerStyle}
-        /* @ts-ignore */
-        onPress={iconFunction}
-      />
+      {showIcon && (
+        <Icon
+          name="locked"
+          color={theme.colors.text}
+          size={25}
+          type="fontisto"
+          iconStyle={styles.iconContainerStyle}
+          /* @ts-ignore */
+          onPress={iconFunction}
+        />
+      )}
     </View>
   )
 }
@@ -63,7 +67,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     padding: 18,
     paddingRight: 20,
     paddingLeft: 20,
-    backgroundColor: theme.colors.card,
+    backgroundColor: reduceIncrementColor(theme.colors.primary, 'reduce', 20),
     borderRadius: 100
   }
 })

@@ -55,6 +55,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
     <SafeAreaView style={{ flex: 1 }}>
       <FocusAwareStatusBar backgroundColor={theme.colors.primary} />
       <TopBar
+        showIcon
         iconFunction={showBottomSheetHandler}
         title="Passwords"
       />
