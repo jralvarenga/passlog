@@ -124,7 +124,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     marginTop: 20
   },
   signOutButton: {
-    backgroundColor: 'red',
+    backgroundColor: '#ff2e2e',
   },
   signOutButtonContainer: {
     width: '40%',

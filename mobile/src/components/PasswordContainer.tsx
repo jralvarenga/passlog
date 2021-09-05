@@ -4,42 +4,45 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { PasswordProps } from '../interface/interfaces'
 import { passwordIcon } from '../lib/getPasswordIcon'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 
 interface PasswordContainerProps {
-  name: string
-  email: string
-  user: string
-  password: string
+  password: PasswordProps
+  goToScreen: Function
 }
 
-const PasswordContainer = ({ name, email, user, password }: PasswordContainerProps) => {
+const PasswordContainer = ({ password, goToScreen }: PasswordContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { icon, iconFamily } = passwordIcon(name)
+  const { icon, iconFamily } = passwordIcon(password.profileName)
 
   return (
-    <TouchableOpacity activeOpacity={0.7} style={styles.container}>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.container}
+      onPress={() => goToScreen('passwordInfo', { passwordInfo: password })}
+    >
       <View style={styles.profileName}>
-        <View style={[styles.profileNameInfo, user == '' && { flexDirection: 'row', alignItems: 'center' }]}>
-          {user == '' ? (
-            <Text
-              style={[styles.text, { fontSize: 28, fontFamily: 'poppins-bold' }]}
-            >
-              {name}
-            </Text>
-          ) : (
+        <View style={[styles.profileNameInfo, password.user == '' && { flexDirection: 'row', alignItems: 'center' }]}>
+          {password.user || password.user != '' ? (
             <Text
               style={[styles.text, { fontSize: 25, fontFamily: 'poppins-bold' }]}
             >
-              {name}
+              {password.profileName}
+            </Text>
+          ) : (
+            <Text
+              style={[styles.text, { fontSize: 28, fontFamily: 'poppins-bold' }]}
+            >
+              {password.profileName}
             </Text>
           )}
           <Text
             style={[styles.text, { color: reduceIncrementColor(theme.colors.text, 'reduce', 80) }]}
           >
-            {user}
+            {password.user}
           </Text>
         </View>
         <View style={styles.profileNameIcon}>
@@ -61,7 +64,7 @@ const PasswordContainer = ({ name, email, user, password }: PasswordContainerPro
         </View>
       </View>
       <View style={styles.profileInfo}>
-        <Text style={[styles.text]}>{email}</Text>
+        <Text style={[styles.text]}>{password.email}</Text>
         <Icon
           name="keyboard-arrow-down"
           type="material"

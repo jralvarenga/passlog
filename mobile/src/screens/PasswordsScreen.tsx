@@ -78,10 +78,8 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
         keyExtractor={(item: PasswordProps) => item.id}
         renderItem={({ item }: { item: PasswordProps }) => (
           <PasswordContainer
-            name={item.profileName}
-            email={item.email}
-            password={item.password}
-            user={item.user ? item.user : ""}
+            password={item}
+            goToScreen={goToScreen}
           />
         )}
       />

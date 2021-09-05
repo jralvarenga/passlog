@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { StyleSheet, Text, View } from 'react-native'
-import { Theme, useNavigation, useTheme } from '@react-navigation/native'
+import { Theme, useTheme } from '@react-navigation/native'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 import { Button, Icon } from 'react-native-elements'
 import { generatePassword } from '../lib/generatePassword'
@@ -17,7 +17,6 @@ interface GeneratePasswordSheetProps {
 const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen }: GeneratePasswordSheetProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const navigation = useNavigation()
   const snapPoints = useMemo(() => ['10%', '45%', '55%'], [])
   const [backdropPressBehavior, setBackdropPressBehavior] = useState<'none' | 'close' | 'collapse'>('collapse')
   const [password, setPassword] = useState(generatePassword())
@@ -33,10 +32,11 @@ const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen 
   }
 
   const copyPassword = () => {
-    //Clipboard.setString(password)
+    Clipboard.setString(password)
 
     Snackbar.show({
       text: 'Password copied',
+      fontFamily: 'poppins',
       textColor: theme.colors.text,
       backgroundColor: theme.colors.primary
     })
@@ -56,7 +56,7 @@ const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen 
         enablePanDownToClose
         snapPoints={snapPoints}
         onChange={handleSheetChanges}
-        backgroundStyle={{ backgroundColor: reduceIncrementColor(theme.colors.background, 'reduce', -10) }}
+        backgroundStyle={{ backgroundColor: theme.colors.background }}
         handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
         backdropComponent={renderBackdrop}
       >
@@ -105,7 +105,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   contentContainer: {
     flex: 1,
     padding: 12,
-    backgroundColor: reduceIncrementColor(theme.colors.background, 'reduce', -10)
+    backgroundColor: theme.colors.background
   },
   text: {
     fontFamily: 'poppins',

@@ -3,6 +3,7 @@ import { createStackNavigator, TransitionPresets  } from '@react-navigation/stac
 import CreatePasswordScreen from '../screens/CreatePasswordScreen';
 import HomeScreen from '../screens/HomeScreen';
 import { useTheme } from '@react-navigation/native';
+import PasswordInfoScreen from '../screens/PasswordInfoScreen';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,10 @@ const Navigator = () => {
       <Stack.Screen
         name="createPassword"
         component={CreatePasswordScreen}
+      />
+      <Stack.Screen
+        name="passwordInfo"
+        component={PasswordInfoScreen}
       />
     </Stack.Navigator>
   )

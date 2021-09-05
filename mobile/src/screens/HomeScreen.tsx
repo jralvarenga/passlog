@@ -31,7 +31,7 @@ const HomeScreen = () => {
           flexDirection: 'row',
           alignItems: 'center',
           padding: 0,
-          backgroundColor: reduceIncrementColor(theme.colors.background, 'reduce', -10)
+          backgroundColor: theme.colors.background
         },
         tabBarItemStyle: {
           borderRadius: 20,
