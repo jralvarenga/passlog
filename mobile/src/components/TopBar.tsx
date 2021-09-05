@@ -2,8 +2,7 @@ import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
 import { Dimensions, StyleSheet, View, Text } from 'react-native'
 import { Icon, Tooltip } from 'react-native-elements'
-import PasslogLogo from './PasslogLogo'
-//import PasslogIcon from '../../assets/icons/passlog_logo.svg'
+import PasslogIcon from '../../assets/icons/passlog_logo.svg'
 
 interface TopBarProps {
   title: string,
@@ -18,7 +17,10 @@ const TopBar = ({ title, iconFunction }: TopBarProps) => {
 
   return (
     <View style={styles.topBar}>
-      <Text style={styles.text}>{title}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <PasslogIcon style={{ marginLeft: -45, marginRight: -30 }}  width={140} height={60} />
+        <Text style={styles.text}>{title}</Text>
+      </View>
       <Icon
         name="locked"
         color={theme.colors.text}
@@ -44,8 +46,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   },
   text: {
     fontFamily: 'poppins-bold',
-    fontSize: 35,
-    letterSpacing: 1.5,
+    fontSize: 32,
     color: theme.colors.text
   },
   iconContainerStyle: {

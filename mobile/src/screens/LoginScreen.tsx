@@ -76,7 +76,7 @@ const LoginScreen = () => {
         </View>
       </View>
       <View style={styles.noAccountContainer}>
-        <View style={styles.accountProviders}>
+        {/*<View style={styles.accountProviders}>
           <SocialIcon
             type="google"
           />
@@ -86,7 +86,7 @@ const LoginScreen = () => {
           <SocialIcon
             type="facebook"
           />
-        </View>
+          </View>*/}
         <View style={styles.dontHaveAccountContainer}>
           <Text style={[styles.text, { fontSize: 14, textAlign: 'center' }]}>
             ¿Don't have an account? <Text style={{ fontFamily: 'poppins-bold', color: theme.colors.primary, textDecorationLine: 'underline' }}>Create one</Text>
