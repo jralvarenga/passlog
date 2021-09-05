@@ -4,6 +4,7 @@ import CreatePasswordScreen from '../screens/CreatePasswordScreen';
 import HomeScreen from '../screens/HomeScreen';
 import { useTheme } from '@react-navigation/native';
 import PasswordInfoScreen from '../screens/PasswordInfoScreen';
+import LoginScreen from '../screens/LoginScreen';
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,13 @@ const Navigator = () => {
       <Stack.Screen
         name="passwordInfo"
         component={PasswordInfoScreen}
+      />
+      <Stack.Screen
+        name="login"
+        options={{
+          ...TransitionPresets.ModalSlideFromBottomIOS
+        }}
+        component={LoginScreen}
       />
     </Stack.Navigator>
   )

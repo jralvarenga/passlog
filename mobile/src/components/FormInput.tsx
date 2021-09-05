@@ -1,5 +1,5 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { StyleSheet, TextInputProps } from 'react-native'
 import { Input } from 'react-native-elements'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
@@ -18,13 +18,14 @@ interface FormInputProps {
   onChangeText: Function
 }
 
-const FormInput = ({ label, value, placeholder, icon, width, error, inputProps, onChangeText }: FormInputProps) => {
+const FormInput = forwardRef(({ label, value, placeholder, icon, width, error, inputProps, onChangeText }: FormInputProps, ref: any) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
 
   return (
     <Input
       label={label}
+      ref={ref}
       value={value}
       placeholder={placeholder}
       containerStyle={[
@@ -45,7 +46,7 @@ const FormInput = ({ label, value, placeholder, icon, width, error, inputProps, 
       {...inputProps}
     />
   )
-}
+})
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   text: {

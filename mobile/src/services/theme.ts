@@ -24,7 +24,7 @@ export const darkElementsTheme = {
   },
   Button: {
     buttonStyle: {
-      borderRadius: 10,
+      borderRadius: 15,
       backgroundColor: darkTheme.colors.primary
     }
   }

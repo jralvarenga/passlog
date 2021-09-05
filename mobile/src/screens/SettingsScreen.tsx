@@ -4,7 +4,11 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const SettingsScreen = () => {
+interface SettingsScreenProps {
+  navigation: any
+}
+
+const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
 
@@ -52,13 +56,15 @@ const SettingsScreen = () => {
       <View style={styles.appSettingsContainer}>
         <Button
           title="App Settings"
+          onPress={() => navigation.navigate('login')}
           buttonStyle={{ justifyContent: 'flex-start', padding: 15 }}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           icon={{ name: "settings", type: "ionicon", color: theme.colors.text, size: 25 }}
         />
         <Button
           title="Account settings"
-          buttonStyle={{ justifyContent: 'flex-start', padding: 15, marginTop: 15 }}
+          containerStyle={{ marginTop: 15 }}
+          buttonStyle={{ justifyContent: 'flex-start', padding: 15 }}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           icon={{ name: "account-settings", type: "material-community", color: theme.colors.text, size: 25 }}
         />
