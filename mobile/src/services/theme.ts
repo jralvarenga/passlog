@@ -5,12 +5,12 @@ export const darkTheme: NavigationThemeProps = {
   dark: true,
   colors: {
     ...NavigationDarkTheme.colors,
-    primary: 'rgb(242, 75, 122)',
+    primary: 'rgb(142, 68, 173)',
     background: 'rgb(20, 20, 20)',
     card: 'rgb(50, 50, 50)',
     text: 'rgb(255, 255, 255)',
     border: 'rgb(20, 20, 20)',
-    notification: 'rgb(242, 75, 122)',
+    notification: 'rgb(142, 68, 173)',
 
   },
 }
