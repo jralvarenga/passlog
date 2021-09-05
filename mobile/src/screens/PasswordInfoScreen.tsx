@@ -1,11 +1,13 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Icon } from 'react-native-elements'
-import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import { PasswordProps } from '../interface/interfaces'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
+import BottomSheet from '@gorhom/bottom-sheet'
+import PasswordInfoOptions from '../components/PasswordInfoOptions'
+import Snackbar from 'react-native-snackbar'
 
 interface PasswordInfoScreenProps {
   route: any
@@ -15,6 +17,32 @@ const PasswordInfoScreen = ({ route }: PasswordInfoScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const [passwordInfo, setPasswordInfo] = useState<PasswordProps>(route.params.passwordInfo)
+  const [showBottomSheet, setShowBottomSheet] = useState(false)
+  const passwordOptionsSheetRef = useRef<BottomSheet>(null)
+
+  const showBottomSheetHandler = () => {
+    setShowBottomSheet(true)
+    passwordOptionsSheetRef.current?.snapToIndex(1)
+  }
+
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index == -1 || index == 0) {
+      setShowBottomSheet(false)
+      passwordOptionsSheetRef.current?.close()
+    }
+  }, [])
+
+  const savePasswordChanges = (newData: PasswordProps) => {
+    setPasswordInfo(newData)
+    setShowBottomSheet(false)
+    passwordOptionsSheetRef.current?.close()
+
+    Snackbar.show({
+      text: 'Saved changes',
+      textColor: theme.colors.text,
+      backgroundColor: theme.colors.primary
+    })
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -22,6 +50,7 @@ const PasswordInfoScreen = ({ route }: PasswordInfoScreenProps) => {
         title={passwordInfo!.profileName}
         showIcon
         icon={{ name: "menu", type: 'feather' }}
+        iconFunction={showBottomSheetHandler}
       />
       {passwordInfo.user != '' && (
         <Text
@@ -99,6 +128,14 @@ const PasswordInfoScreen = ({ route }: PasswordInfoScreenProps) => {
           )}
         </View>
       </View>
+      {showBottomSheet && (
+        <PasswordInfoOptions
+          savePasswordChanges={savePasswordChanges}
+          bottomSheetRef={passwordOptionsSheetRef}
+          passwordInfo={passwordInfo}
+          handleSheetChanges={handleSheetChanges}
+        />
+      )}
     </View>
   )
 }

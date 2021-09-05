@@ -7,10 +7,10 @@ import TopBar from '../components/TopBar'
 import HiddenFlatListView from '../components/HiddenFlatListView'
 import { PasswordProps } from '../interface/interfaces'
 import BottomSheet from '@gorhom/bottom-sheet'
+import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 
 // Test data
 import { testPasswords } from '../data/testData'
-import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -44,9 +44,9 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   }
 
   const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index)
-    if (index == -1) {
+    if (index == -1 || index == 0) {
       setShowBottomSheet(false)
+      generatePasswordSheetRef.current?.close()
     }
   }, [])
 
