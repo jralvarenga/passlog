@@ -23,6 +23,9 @@ export const darkElementsTheme = {
     }
   },
   Button: {
+    containerStyle: {
+      borderRadius: 15,
+    },
     buttonStyle: {
       borderRadius: 15,
       backgroundColor: darkTheme.colors.primary
