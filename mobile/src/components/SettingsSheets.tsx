@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { ReactElement, useCallback, useMemo, useState } from 'react'
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { Theme, useTheme } from '@react-navigation/native'
 import { StyleSheet, Text, View } from 'react-native'
@@ -7,10 +7,10 @@ import { Button, Switch } from 'react-native-elements'
 interface SettingSheetsProps {
   bottomSheetRef: any,
   handleSheetChanges: any
-  goToScreen: Function
+  children: ReactElement
 }
 
-export const AppSettingsSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen }: SettingSheetsProps) => {
+export const SettingsSheets = ({ bottomSheetRef, handleSheetChanges, children }: SettingSheetsProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const snapPoints = useMemo(() => ['5%', '25%', '25%'], [])
@@ -32,67 +32,59 @@ export const AppSettingsSheet = ({ bottomSheetRef, handleSheetChanges, goToScree
       handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
       backdropComponent={renderBackdrop}
     >
-      <View style={styles.contentContainer}>
-        <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-          App Settings
-        </Text>
-        <View style={styles.appSettingsContainer}>
-          <Button
-            containerStyle={{ width: '47%' }}
-            titleStyle={styles.text}
-            title="On Start Security"
-          />
-          <Button
-            containerStyle={{ width: '47%' }}
-            titleStyle={styles.text}
-            buttonStyle={{ backgroundColor: '#ff2e2e' }}
-            title="Wipe data"
-          />
-        </View>
-      </View>
+      {children}
     </BottomSheet>
   )
 }
 
-export const CloudSettingsSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen }: SettingSheetsProps) => {
+export const AppSettingsSheet = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const snapPoints = useMemo(() => ['5%', '25%', '25%'], [])
-  const [backdropPressBehavior, setBackdropPressBehavior] = useState<'none' | 'close' | 'collapse'>('collapse')
-  const [enabledSync, setEnabledSync] = useState(false)
-
-  const renderBackdrop = useCallback((props) => (
-    <BottomSheetBackdrop {...props} pressBehavior={backdropPressBehavior} />
-  ), [backdropPressBehavior])
 
   return (
-    <BottomSheet
-      /* @ts-ignore */
-      ref={bottomSheetRef}
-      index={-1}
-      enablePanDownToClose
-      snapPoints={snapPoints}
-      onChange={handleSheetChanges}
-      backgroundStyle={{ backgroundColor: theme.colors.background }}
-      handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
-      backdropComponent={renderBackdrop}
-    >
-      <View style={styles.contentContainer}>
-        <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-          App Settings
-        </Text>
-        <View style={styles.appSettingsContainer}>
-          <Text style={styles.text}>
-            Enable Back Up
-          </Text>
-          <Switch
-            value={enabledSync}
-            onChange={() => setEnabledSync(!enabledSync)}
-            color={theme.colors.primary}
-          />
-        </View>
+    <View style={styles.contentContainer}>
+      <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
+        App Settings
+      </Text>
+      <View style={styles.appSettingsContainer}>
+        <Button
+          containerStyle={{ width: '47%' }}
+          titleStyle={styles.text}
+          title="On Start Security"
+        />
+        <Button
+          containerStyle={{ width: '47%' }}
+          titleStyle={styles.text}
+          buttonStyle={{ backgroundColor: '#ff2e2e' }}
+          title="Wipe data"
+        />
       </View>
-    </BottomSheet>
+    </View>
+  )
+}
+
+export const CloudSettingsSheet = () => {
+  const theme = useTheme()
+  const styles = styleSheet(theme)
+  const [enabledSync, setEnabledSync] = useState(false)
+
+
+  return (
+    <View style={styles.contentContainer}>
+      <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
+        Cloud Settings
+      </Text>
+      <View style={styles.appSettingsContainer}>
+        <Text style={styles.text}>
+          Enable Back Up
+        </Text>
+        <Switch
+          value={enabledSync}
+          onChange={() => setEnabledSync(!enabledSync)}
+          color={theme.colors.primary}
+        />
+      </View>
+    </View>
   )
 }
 
@@ -115,3 +107,5 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     justifyContent: 'space-between'
   }
 })
+
+export default SettingsSheets

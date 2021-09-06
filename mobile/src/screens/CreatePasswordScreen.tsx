@@ -53,7 +53,7 @@ const CreatePasswordScreen = ({ route }: CreatePasswordScreenProps) => {
             placeholder="Name"
             label="Password name"
             width="50%"
-            icon={{ type: 'foundation', name: 'key' }}
+            icon={{ type: 'font-awesome', name: 'user-circle' }}
             value={name}
             onChangeText={(value: string) => setName(value)}
           />

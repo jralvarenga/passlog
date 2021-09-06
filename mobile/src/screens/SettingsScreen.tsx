@@ -1,11 +1,11 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useCallback, useRef, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Linking, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import BottomSheet from '@gorhom/bottom-sheet'
-import { AppSettingsSheet, CloudSettingsSheet } from '../components/SettingsSheets'
+import SettingsSheets, { AppSettingsSheet, CloudSettingsSheet } from '../components/SettingsSheets'
 
 interface SettingsScreenProps {
   navigation: any
@@ -14,37 +14,35 @@ interface SettingsScreenProps {
 const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const user = "null";
+  const user = null
   const appSettingsSheetRef = useRef<BottomSheet>(null)
-  const [showAppSettingsSheet, setShowAppSettingsSheet] = useState(false)
+  const [showSettingsSheet, setShowSettingsSheet] = useState(false)
   const cloudSettingsSheetRef = useRef<BottomSheet>(null)
-  const [showCloudSettingsSheet, setShowCloudSettingsSheet] = useState(false)
+  const [showInSheet, setShowInSheet] = useState("")
 
   const goToScreen = (screen: string, params: any) => {
-    setShowAppSettingsSheet(false)
-    setShowCloudSettingsSheet(false)
+    setShowSettingsSheet(false)
     appSettingsSheetRef.current?.close()
     cloudSettingsSheetRef.current?.close()
     navigation.navigate(screen, params)
   }
 
-  const handleAppSettingsSheetChanges = useCallback((index: number) => {
+  const handleSettingsSheetChanges = useCallback((index: number) => {
     if (index == -1 || index == 0) {
-      setShowAppSettingsSheet(false)
+      setShowSettingsSheet(false)
       appSettingsSheetRef.current?.close()
     }
   }, [])
 
-  const handleCloudSettingsSheetChanges = useCallback((index: number) => {
-    if (index == -1 || index == 0) {
-      setShowCloudSettingsSheet(false)
-      cloudSettingsSheetRef.current?.close()
-    }
-  }, [])
-
-  const showAppSettingsSheetHandler = () => {
-    setShowAppSettingsSheet(true)
+  const showSettingsSheetHandler = (page: string) => {
+    setShowInSheet(page)
+    console.log(showInSheet)
+    setShowSettingsSheet(true)
     appSettingsSheetRef.current?.snapToIndex(1)
+  }
+
+  const goToGoogleSavedPassword = () => {
+    Linking.openURL('https://passwords.google.com/')
   }
 
   return (
@@ -87,11 +85,13 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
             <>
             <Button
               containerStyle={{ width: '49%' }}
+              onPress={() => showSettingsSheetHandler('cloudSettings')}
               title="Cloud settings"
               titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
             />
             <Button
               containerStyle={{ width: '49%' }}
+              onPress={goToGoogleSavedPassword}
               buttonStyle={{ backgroundColor: "#fff" }}
               titleStyle={{ color: "#1a1a1a", fontFamily: 'poppins-bold' }}
               title="Saved password"
@@ -104,7 +104,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
       <View style={styles.appSettingsContainer}>
         <Button
           title="App Settings"
-          onPress={showAppSettingsSheetHandler}
+          onPress={() => showSettingsSheetHandler('appSettings')}
           buttonStyle={{ justifyContent: 'flex-start', padding: 15, backgroundColor: theme.colors.card }}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           icon={{ name: "settings", type: "ionicon", color: theme.colors.text, size: 25 }}
@@ -139,19 +139,20 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           />
         )}
       </View>
-      {showAppSettingsSheet && (
-        <AppSettingsSheet
+      {showSettingsSheet && (
+        <SettingsSheets
           bottomSheetRef={appSettingsSheetRef}
-          handleSheetChanges={handleAppSettingsSheetChanges}
-          goToScreen={goToScreen}
-        />
-      )}
-      {showCloudSettingsSheet && (
-        <CloudSettingsSheet
-          bottomSheetRef={cloudSettingsSheetRef}
-          handleSheetChanges={handleCloudSettingsSheetChanges}
-          goToScreen={goToScreen}
-        />
+          handleSheetChanges={handleSettingsSheetChanges}
+        >
+          <>
+            {showInSheet == 'appSettings' && (
+              <AppSettingsSheet />
+            )}
+            {showInSheet == 'cloudSettings' && (
+              <CloudSettingsSheet />
+            )}
+          </>
+        </SettingsSheets>
       )}
     </SafeAreaView>
   )
@@ -211,7 +212,12 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     width: '40%',
     marginBottom: 20,
     marginRight: 15
-  }
+  },
+  contentContainer: {
+    flex: 1,
+    padding: 12,
+    backgroundColor: theme.colors.background
+  },
 })
 
 export default SettingsScreen
