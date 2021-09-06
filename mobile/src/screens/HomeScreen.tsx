@@ -1,13 +1,12 @@
 import React from 'react'
 import PasswordsScreen from './PasswordsScreen'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import CardsScreen from './CardsScreen'
 import SettingsScreen from './SettingsScreen'
 import { useTheme } from '@react-navigation/native'
-import { reduceIncrementColor } from '../lib/reduceIncrementColor'
-import { Dimensions } from 'react-native'
+import { View } from 'react-native'
+import { TabBar } from '../components/bottomTabBar/TabBar'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const Tab = createBottomTabNavigator()
 
@@ -15,80 +14,26 @@ const HomeScreen = () => {
   const theme = useTheme()
 
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        //tabBarLabelPosition: 'beside-icon',
-        tabBarActiveBackgroundColor: reduceIncrementColor(theme.colors.background, 'reduce', -25),
-        tabBarInactiveBackgroundColor: reduceIncrementColor(theme.colors.background, 'reduce', -15),
-        tabBarLabelStyle: {
-          fontSize: 16,
-          fontFamily: 'poppins'
-        },
-        tabBarStyle: {
-          height: 80,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: 0,
-          backgroundColor: theme.colors.background
-        },
-        tabBarItemStyle: {
-          borderRadius: 20,
-          margin: 5,
-          padding: 10,
-        },
-        tabBarActiveTintColor: theme.colors.text,
-        tabBarInactiveTintColor: reduceIncrementColor(theme.colors.text, 'reduce', 150)
-      }}
-    >
-      
-      <Tab.Screen
-        name="Passwords"
-        component={PasswordsScreen}
-        options={{
-          title: "Passwords",
-          /*tabBarIcon: ({ focused, color, size }) => (
-            <MaterialIcons
-              name={focused ? "key" : "key-outline"}
-              size={size}
-              color={color}
-            />
-          )*/
+    <View style={{ flex: 1, position: "relative" }}>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false
         }}
-      />
-
-      <Tab.Screen
-        name="Cards"
-        component={CardsScreen}
-        options={{
-          title: "Cards",
-          /*tabBarIcon: ({ focused, color, size }: any) => (
-            <MaterialIcons
-              name={focused ? "credit-card" : "credit-card-outline"}
-              size={size}
-              color={color}
-            />
-          )*/
-        }}
-      />
-
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          title: "Settings",
-          /*tabBarIcon: ({ focused, color, size }: any) => (
-            <Ionicons
-              name={focused ? "md-settings-sharp" : "md-settings-outline"}
-              size={size}
-              color={color}
-            />
-          )*/
-        }}
-      />
-
-    </Tab.Navigator>
+        tabBar={(props: BottomTabBarProps) => <TabBar {...props} />}
+      >
+        <Tab.Screen name="key-outline" component={PasswordsScreen} />
+        <Tab.Screen name="card-outline" component={CardsScreen} />
+        <Tab.Screen name="settings-outline" component={SettingsScreen} />
+      </Tab.Navigator>
+      {useSafeAreaInsets().bottom > 0 && (
+        <View
+          style={{
+            height: useSafeAreaInsets().bottom - 5,
+            backgroundColor: "white",
+          }}
+        />
+      )}
+    </View>
   )
 }
 
