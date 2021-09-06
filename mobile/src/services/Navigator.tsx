@@ -35,6 +35,7 @@ const Navigator = () => {
       <Stack.Screen
         name="login"
         options={{
+          gestureEnabled: true,
           ...TransitionPresets.ModalSlideFromBottomIOS
         }}
         component={LoginScreen}
