@@ -4,50 +4,42 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { PasswordProps } from '../interface/interfaces'
-import { passwordIcon } from '../lib/getPasswordIcon'
+import { CardProps } from '../interface/interfaces'
+import { cardIcon } from '../lib/getCardIcon'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 
-interface PasswordContainerProps {
-  password: PasswordProps
+interface CardContainerProps {
+  card: CardProps
   goToScreen: Function
 }
 
-const PasswordContainer = ({ password, goToScreen }: PasswordContainerProps) => {
+const CardContainer = ({ card, goToScreen }: CardContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { icon, iconFamily } = passwordIcon(password.profileName)
+  const { icon, iconFamily } = cardIcon(card.type)
 
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      onPress={() => goToScreen('passwordInfo', { passwordInfo: password })}
+      onPress={() => goToScreen('passwordInfo', { passwordInfo: card })}
     >
       <LinearGradient
         colors={[theme.colors.card, theme.colors.background]}
         style={styles.container}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+        start={{ x: 1, y: 0 }}
+        end={{ x: 0, y: 1 }}
       >
         <View style={styles.profileName}>
-          <View style={[styles.profileNameInfo, password.user == '' && { flexDirection: 'row', alignItems: 'center' }]}>
-            {password.user || password.user != '' ? (
+          <View style={[styles.profileNameInfo]}>
               <Text
                 style={[styles.text, { fontSize: 25, fontFamily: 'poppins-bold' }]}
               >
-                {password.profileName}
+                {card.cardName}
               </Text>
-            ) : (
-              <Text
-                style={[styles.text, { fontSize: 28, fontFamily: 'poppins-bold' }]}
-              >
-                {password.profileName}
-              </Text>
-            )}
             <Text
               style={[styles.text, { color: reduceIncrementColor(theme.colors.text, 'reduce', 80) }]}
             >
-              {password.user}
+              {card.type}
             </Text>
           </View>
           <View style={styles.profileNameIcon}>
@@ -69,7 +61,7 @@ const PasswordContainer = ({ password, goToScreen }: PasswordContainerProps) => 
           </View>
         </View>
         <View style={styles.profileInfo}>
-          <Text style={[styles.text]}>{password.email}</Text>
+          <Text style={[styles.text]}>{card.holder}</Text>
         </View>
       </LinearGradient>
     </TouchableOpacity>
@@ -118,4 +110,4 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   }
 })
 
-export default PasswordContainer
+export default CardContainer

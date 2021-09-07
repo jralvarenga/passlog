@@ -7,3 +7,13 @@ export interface PasswordProps {
   user: string
   date: string
 }
+
+export interface CardProps {
+  addedInfo: string
+  cardName: string
+  date: string
+  holder: string
+  id: string
+  number: string
+  type: string
+}

@@ -36,6 +36,8 @@ export const passwordIcon = (name: string): PasswordIconResponse => {
     return { icon: 'wifi', iconFamily: 'ionicons' }
   } else if (name.includes('file')) {
     return { icon: 'file-outline', iconFamily: 'ionicons' }
+  } else if (name.includes('adobe')) {
+    return { icon: 'adobe', iconFamily: 'material' }
   } else  {
     return { icon: '', iconFamily: '' }
   }

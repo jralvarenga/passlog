@@ -1,4 +1,4 @@
-import { PasswordProps } from '../interface/interfaces'
+import { CardProps, PasswordProps } from '../interface/interfaces'
 
 export const testPasswords: PasswordProps[] = [
   {
@@ -64,4 +64,52 @@ export const testPasswords: PasswordProps[] = [
     id: "78945465v4564",
     date: "27/01/21"
   }
+]
+
+export const testCards: CardProps[] = [
+  {
+    cardName: "ID",
+    addedInfo: "A test",
+    date: "27/05/21",
+    holder: "Jorge Rigoberto ALvarenga Flores",
+    id: "dhuwigfwe7w8r2g3fe4",
+    number: "78319t723g82471",
+    type: "ID"
+  },
+  {
+    cardName: "Credit card",
+    addedInfo: "jajajaja",
+    date: "27/05/21",
+    holder: "Jorge ALvarenga",
+    id: "dhuwigfwe7eew8r234",
+    number: "78319t723g82471",
+    type: "Credit"
+  },
+  {
+    cardName: "Debit card",
+    addedInfo: "A test",
+    date: "27/05/21",
+    holder: "Jorge Rigoberto ALvarenga Flores",
+    id: "dhuwigfwwed78fewr234",
+    number: "78319t723g82471",
+    type: "Debit"
+  },
+  {
+    cardName: "Licence",
+    addedInfo: "A test",
+    date: "27/05/21",
+    holder: "Jorge Rigoberto ALvarenga Flores",
+    id: "dhuwigfwea78qwr234",
+    number: "78319t723g82471",
+    type: "Licence"
+  },
+  {
+    cardName: "Discound card",
+    addedInfo: "A test",
+    date: "27/05/21",
+    holder: "Jorge Rigoberto ALvarenga Flores",
+    id: "dhuwigfweb78vr234",
+    number: "78319t723g82471",
+    type: "Other"
+  },
 ]
