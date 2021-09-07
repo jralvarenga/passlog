@@ -6,6 +6,7 @@ import { useTheme } from '@react-navigation/native';
 import PasswordInfoScreen from '../screens/PasswordInfoScreen';
 import LoginScreen from '../screens/LoginScreen';
 import CreateAccountScreen from '../screens/CreateAccountScreen';
+import CreateCardScreen from '../screens/CreateCardScreen';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,10 @@ const Navigator = () => {
       <Stack.Screen
         name="createAccount"
         component={CreateAccountScreen}
+      />
+      <Stack.Screen
+        name="createCard"
+        component={CreateCardScreen}
       />
     </Stack.Navigator>
   )

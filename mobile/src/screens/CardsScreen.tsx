@@ -53,7 +53,7 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
             changeInputValue={(value: string) => setSearchInput(value)}
             cancelInput={() => setSearchInput("")}
             buttonText="New"
-            buttonFunction={() => goToScreen('createPassword', {})}
+            buttonFunction={() => goToScreen('createCard', {})}
           />
         }
         ListHeaderComponentStyle={{
