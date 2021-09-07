@@ -14,7 +14,7 @@ interface SettingsScreenProps {
 const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const user = null
+  const user = ""
   const appSettingsSheetRef = useRef<BottomSheet>(null)
   const [showSettingsSheet, setShowSettingsSheet] = useState(false)
   const cloudSettingsSheetRef = useRef<BottomSheet>(null)
