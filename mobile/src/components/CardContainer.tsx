@@ -21,7 +21,7 @@ const CardContainer = ({ card, goToScreen }: CardContainerProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
-      onPress={() => goToScreen('passwordInfo', { passwordInfo: card })}
+      onPress={() => goToScreen('cardInfo', { cardInfo: card })}
     >
       <LinearGradient
         colors={[theme.colors.card, theme.colors.background]}
@@ -29,8 +29,8 @@ const CardContainer = ({ card, goToScreen }: CardContainerProps) => {
         start={{ x: 1, y: 0 }}
         end={{ x: 0, y: 1 }}
       >
-        <View style={styles.profileName}>
-          <View style={[styles.profileNameInfo]}>
+        <View style={styles.cardName}>
+          <View style={[styles.cardNameInfo]}>
               <Text
                 style={[styles.text, { fontSize: 25, fontFamily: 'poppins-bold' }]}
               >
@@ -42,7 +42,7 @@ const CardContainer = ({ card, goToScreen }: CardContainerProps) => {
               {card.type}
             </Text>
           </View>
-          <View style={styles.profileNameIcon}>
+          <View style={styles.cardNameIcon}>
             {icon != '' && (
               iconFamily == 'ionicons' ? (
                 <Ionicons
@@ -83,18 +83,18 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     fontSize: 16,
     color: theme.colors.text
   },
-  profileName: {
+  cardName: {
     flex: 3,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  profileNameInfo: {
+  cardNameInfo: {
     width: '80%',
     display: 'flex'
   },
-  profileNameIcon: {
+  cardNameIcon: {
     width: '20%',
     display: 'flex',
     alignItems: 'center',
