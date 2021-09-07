@@ -1,7 +1,7 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { forwardRef } from 'react'
 import { StyleSheet, TextInputProps } from 'react-native'
-import { Input } from 'react-native-elements'
+import { Input, InputProps } from 'react-native-elements'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 
 interface FormInputProps {
@@ -14,7 +14,7 @@ interface FormInputProps {
   }
   width?: string
   error?: string
-  inputProps?: TextInputProps
+  inputProps?: InputProps | TextInputProps
   onChangeText: Function
 }
 

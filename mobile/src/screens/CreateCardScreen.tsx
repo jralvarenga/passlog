@@ -1,9 +1,11 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
+import BottomSheet from '@gorhom/bottom-sheet'
+import SelectCardTypeSheet from '../components/SelectCardTypeSheet'
 
 interface CreateCardScreenProps {
   route: any
@@ -18,6 +20,25 @@ const CreateCardScreen = ({ route }: CreateCardScreenProps) => {
   const [numbers, setNumbers] = useState("")
   const [extraInfo, setExtraInfo] = useState("")
   const [extraInfoData, setExtraInfoData] = useState("")
+  const cardTypeSheetRef = useRef<BottomSheet>()
+  const [showBottomSheet, setShowBottomSheet] = useState(false)
+
+  const handleSheetChanges = useCallback((index: number) => {
+    if (index == -1 || index == 0) {
+      setShowBottomSheet(false)
+      cardTypeSheetRef.current?.close()
+    }
+  }, [])
+
+  const showBottomSheetHandler = () => {
+    setShowBottomSheet(true)
+    cardTypeSheetRef.current?.snapToIndex(1)
+  }
+
+  const changeCardType = (type: { name: string, value: string }) => {
+    setType(type.name)
+    cardTypeSheetRef.current?.close()
+  }
 
   return (
     <View style={styles.container}>
@@ -35,12 +56,16 @@ const CreateCardScreen = ({ route }: CreateCardScreenProps) => {
             onChangeText={(value: string) => setName(value)}
           />
           <FormInput
-            placeholder="my_user"
+            placeholder="card, promo..."
             label="Card type"
             width="50%"
             icon={{ type: 'ionicon', name: 'card' }}
             value={type}
             onChangeText={(value: string) => setType(value)}
+            inputProps={{
+              onPressIn: showBottomSheetHandler,
+              showSoftInputOnFocus: false
+            }}
           />
         </View>
         <View>
@@ -65,7 +90,7 @@ const CreateCardScreen = ({ route }: CreateCardScreenProps) => {
             }}
           />
         </View>
-        <View>
+      <View>
           
         </View>
       </View>
@@ -78,6 +103,12 @@ const CreateCardScreen = ({ route }: CreateCardScreenProps) => {
           }}
         />
       </View>
+      <SelectCardTypeSheet
+        bottomSheetRef={cardTypeSheetRef}
+        type={type}
+        changeCardType={changeCardType}
+        handleSheetChanges={handleSheetChanges}
+      />
     </View>
   )
 }
