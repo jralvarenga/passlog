@@ -1,17 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Dimensions, FlatList, StyleSheet } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import TopBar from '../components/TopBar'
 import HiddenFlatListView from '../components/HiddenFlatListView'
-import { CardProps, PasswordProps } from '../interface/interfaces'
-import BottomSheet from '@gorhom/bottom-sheet'
-import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
+import { CardProps, PasslogUserDataProps } from '../interface/interfaces'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import CardContainer from '../components/CardContainer'
-
-// Test data
-import { testCards } from '../data/testData'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -23,12 +19,8 @@ interface PasswordContainerProps {
 const CardsScreen = ({ navigation }: PasswordContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const [cards, setCards] = useState<CardProps[]>([])
+  const { cards, setCards }: PasslogUserDataProps = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
-
-  useEffect(() => {
-    setCards(testCards)
-  }, [])
 
   const goToScreen = (screen: string, params: any) => {
     navigation.navigate(screen, params)

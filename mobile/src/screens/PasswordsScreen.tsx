@@ -5,13 +5,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import PasswordContainer from '../components/PasswordContainer'
 import TopBar from '../components/TopBar'
 import HiddenFlatListView from '../components/HiddenFlatListView'
-import { PasswordProps } from '../interface/interfaces'
+import { PasslogUserDataProps, PasswordProps } from '../interface/interfaces'
 import BottomSheet from '@gorhom/bottom-sheet'
 import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
-
-// Test data
-import { testPasswords } from '../data/testData'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -23,14 +21,10 @@ interface PasswordContainer {
 const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const [passwords, setPasswords] = useState<PasswordProps[]>([])
+  const { passwords, setPasswords }: PasslogUserDataProps = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const generatePasswordSheetRef = useRef<BottomSheet>(null)
-
-  useEffect(() => {
-    setPasswords(testPasswords)
-  }, [])
 
   const showBottomSheetHandler = () => {
     setShowBottomSheet(true)

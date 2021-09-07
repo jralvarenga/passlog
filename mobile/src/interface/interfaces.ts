@@ -17,3 +17,10 @@ export interface CardProps {
   number: string
   type: string
 }
+
+export interface PasslogUserDataProps {
+  passwords?: PasswordProps[]
+  setPasswords?: Function
+  cards?: CardProps[]
+  setCards?: Function
+}
