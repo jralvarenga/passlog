@@ -1,5 +1,5 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
@@ -10,6 +10,7 @@ import PasswordInfoOptions from '../components/PasswordInfoOptions'
 import Snackbar from 'react-native-snackbar'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import { setPasswordsInStorage } from '../lib/asyncStorage'
+import Clipboard from '@react-native-clipboard/clipboard'
 
 interface PasswordInfoScreenProps {
   route: any
@@ -23,6 +24,12 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
   const [passwordInfo, setPasswordInfo] = useState<PasswordProps>(route.params.passwordInfo)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const passwordOptionsSheetRef = useRef<BottomSheet>(null)
+
+  useEffect(() => {
+    Clipboard.addListener(() => console.log('changed clipboard'))
+    
+    return Clipboard.removeAllListeners()
+  }, [])
 
   const showBottomSheetHandler = () => {
     setShowBottomSheet(true)
@@ -68,7 +75,33 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
     await setPasswordsInStorage(passwords!)
     renderPasslogDataHandler!()
     navigation.goBack()
+  }
 
+  const copyPasswordInfo = (info: string) => {
+    Clipboard.addListener(() => console.log('clipboard'))
+    switch (info) {
+      case 'email':
+        Clipboard.setString(passwordInfo.email)
+        Snackbar.show({
+          text: 'Email copied',
+          fontFamily: 'poppins',
+          textColor: theme.colors.text,
+          backgroundColor: theme.colors.primary
+        })
+      break
+      case 'password':
+        Clipboard.setString(passwordInfo.password)
+        Snackbar.show({
+          text: 'Password copied',
+          fontFamily: 'poppins',
+          textColor: theme.colors.text,
+          backgroundColor: theme.colors.primary
+        })
+      break
+      default:
+      break
+    }
+    Clipboard.removeAllListeners()
   }
 
   return (
@@ -110,6 +143,7 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
           <Icon
             name="copy"
             color={theme.colors.text}
+            onPress={() => copyPasswordInfo('email')}
             containerStyle={[styles.copyIconContainerStyle]}
             type="ionicon"
           />
@@ -133,6 +167,7 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
           </View>
           <Icon
             name="copy"
+            onPress={() => copyPasswordInfo('password')}
             color={theme.colors.text}
             containerStyle={[styles.copyIconContainerStyle]}
             type="ionicon"
