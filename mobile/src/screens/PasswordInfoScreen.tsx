@@ -3,19 +3,23 @@ import React, { useCallback, useRef, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
-import { PasswordProps } from '../interface/interfaces'
+import { PasslogUserDataProps, PasswordProps } from '../interface/interfaces'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 import BottomSheet from '@gorhom/bottom-sheet'
 import PasswordInfoOptions from '../components/PasswordInfoOptions'
 import Snackbar from 'react-native-snackbar'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
+import { setPasswordsInStorage } from '../lib/asyncStorage'
 
 interface PasswordInfoScreenProps {
   route: any
+  navigation: any
 }
 
-const PasswordInfoScreen = ({ route }: PasswordInfoScreenProps) => {
+const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { passwords, setPasswords, renderPasslogDataHandler }: PasslogUserDataProps = usePasslogUserData()
   const [passwordInfo, setPasswordInfo] = useState<PasswordProps>(route.params.passwordInfo)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const passwordOptionsSheetRef = useRef<BottomSheet>(null)
@@ -32,8 +36,18 @@ const PasswordInfoScreen = ({ route }: PasswordInfoScreenProps) => {
     }
   }, [])
 
-  const savePasswordChanges = (newData: PasswordProps) => {
+  const savePasswordChanges = async(newData: PasswordProps) => {
+    const newPasswords = passwords?.map((password) => {
+      if (password.id == newData.id) {
+        return newData
+      } else {
+        return password
+      }
+    })
     setPasswordInfo(newData)
+    setPasswords!(newPasswords)
+    await setPasswordsInStorage(newPasswords!)
+    renderPasslogDataHandler!()
     setShowBottomSheet(false)
     passwordOptionsSheetRef.current?.close()
 
@@ -42,6 +56,19 @@ const PasswordInfoScreen = ({ route }: PasswordInfoScreenProps) => {
       textColor: theme.colors.text,
       backgroundColor: theme.colors.primary
     })
+  }
+
+  const deletePassword = async() => {
+    passwordOptionsSheetRef.current?.close()
+    const id = passwordInfo.id
+    const index = passwords!.map((password) => password.id).indexOf(id)
+    passwords!.splice(index, 1)
+    setPasswords!(passwords)
+
+    await setPasswordsInStorage(passwords!)
+    renderPasslogDataHandler!()
+    navigation.goBack()
+
   }
 
   return (
@@ -133,6 +160,7 @@ const PasswordInfoScreen = ({ route }: PasswordInfoScreenProps) => {
         bottomSheetRef={passwordOptionsSheetRef}
         passwordInfo={passwordInfo}
         handleSheetChanges={handleSheetChanges}
+        deletePassword={deletePassword}
       />
     </View>
   )

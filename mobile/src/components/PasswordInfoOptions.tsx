@@ -11,9 +11,10 @@ interface PasswordInfoOptionsProps {
   handleSheetChanges: any
   passwordInfo: PasswordProps
   savePasswordChanges: Function
+  deletePassword: Function
 }
 
-const PasswordInfoOptions = ({ bottomSheetRef, handleSheetChanges, passwordInfo, savePasswordChanges }: PasswordInfoOptionsProps) => {
+const PasswordInfoOptions = ({ bottomSheetRef, handleSheetChanges, passwordInfo, savePasswordChanges, deletePassword }: PasswordInfoOptionsProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const snapPoints = useMemo(() => ['5%', '80%'], [])
@@ -122,6 +123,8 @@ const PasswordInfoOptions = ({ bottomSheetRef, handleSheetChanges, passwordInfo,
             <Button
               buttonStyle={{ backgroundColor: '#ff2e2e' }}
               titleStyle={styles.text}
+              /* @ts-ignore */
+              onPress={deletePassword}
               title="Delete password"
             />
           </View>
