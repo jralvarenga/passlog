@@ -1,3 +1,5 @@
+import { exp } from "react-native-reanimated";
+
 export interface PasswordProps {
   profileName: string
   password: string
@@ -23,4 +25,11 @@ export interface PasslogUserDataProps {
   setPasswords?: Function
   cards?: CardProps[]
   setCards?: Function
+  renderPasslogDataHandler?: Function
+}
+
+export interface SettingsProps {
+  useBiometrics?: boolean
+  usePin?: boolean
+  pinNumber?: string
 }

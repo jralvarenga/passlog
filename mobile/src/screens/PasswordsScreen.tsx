@@ -10,6 +10,7 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
+import EmptyDataView from '../components/EmptyDataView'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -53,33 +54,40 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
         iconFunction={showBottomSheetHandler}
         title="Passwords"
       />
-      <FlatList
-        style={styles.scrollView}
-        contentContainerStyle={{ minHeight: windowHeight }}
-        contentOffset={{ y: 60, x: windowWidth }}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          <HiddenFlatListView
-            inputValue={searchInput}
-            inputPlaceHolder="Search password..."
-            changeInputValue={(value: string) => setSearchInput(value)}
-            cancelInput={() => setSearchInput("")}
-            buttonText="New"
-            buttonFunction={() => goToScreen('createPassword', {})}
-          />
-        }
-        ListHeaderComponentStyle={{
-          paddingBottom: 15
-        }}
-        data={passwords}
-        keyExtractor={(item: PasswordProps) => item.id}
-        renderItem={({ item }: { item: PasswordProps }) => (
-          <PasswordContainer
-            password={item}
-            goToScreen={goToScreen}
-          />
-        )}
-      />
+      {passwords?.length != 0 ? (
+        <FlatList
+          style={styles.scrollView}
+          contentContainerStyle={{ minHeight: windowHeight }}
+          contentOffset={{ y: 60, x: windowWidth }}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            <HiddenFlatListView
+              inputValue={searchInput}
+              inputPlaceHolder="Search password..."
+              changeInputValue={(value: string) => setSearchInput(value)}
+              cancelInput={() => setSearchInput("")}
+              buttonText="New"
+              buttonFunction={() => goToScreen('createPassword', {})}
+            />
+          }
+          ListHeaderComponentStyle={{
+            paddingBottom: 15
+          }}
+          data={passwords}
+          keyExtractor={(item: PasswordProps) => item.id}
+          renderItem={({ item }: { item: PasswordProps }) => (
+            <PasswordContainer
+              password={item}
+              goToScreen={goToScreen}
+            />
+          )}
+        />
+      ) : (
+        <EmptyDataView
+          item="Password"
+          buttonFunction={() => goToScreen('createPassword', {})}
+        />
+      )}
       <GeneratePasswordSheet
         goToScreen={goToScreen}
         handleSheetChanges={handleSheetChanges}

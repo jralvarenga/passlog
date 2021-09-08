@@ -8,6 +8,7 @@ import { CardProps, PasslogUserDataProps } from '../interface/interfaces'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import CardContainer from '../components/CardContainer'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
+import EmptyDataView from '../components/EmptyDataView'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -27,49 +28,54 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <FocusAwareStatusBar backgroundColor={theme.colors.primary} />
       <TopBar
         iconFunction={() => console.log('xd')}
         title="Cards"
       />
-      <FlatList
-        style={styles.scrollView}
-        contentContainerStyle={{ minHeight: windowHeight }}
-        contentOffset={{ y: 60, x: windowWidth }}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          <HiddenFlatListView
-            inputValue={searchInput}
-            inputPlaceHolder="Search card..."
-            changeInputValue={(value: string) => setSearchInput(value)}
-            cancelInput={() => setSearchInput("")}
-            buttonText="New"
-            buttonFunction={() => goToScreen('createCard', {})}
-          />
-        }
-        ListHeaderComponentStyle={{
-          paddingBottom: 15
-        }}
-        data={cards}
-        keyExtractor={(item: CardProps) => item.id}
-        renderItem={({ item }: { item: CardProps }) => (
-          <CardContainer
-            card={item}
-            goToScreen={goToScreen}
-          />
-        )}
-      />
+      {cards?.length != 0 ? (
+        <FlatList
+          style={styles.scrollView}
+          contentContainerStyle={{ minHeight: windowHeight }}
+          contentOffset={{ y: 60, x: windowWidth }}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            <HiddenFlatListView
+              inputValue={searchInput}
+              inputPlaceHolder="Search card..."
+              changeInputValue={(value: string) => setSearchInput(value)}
+              cancelInput={() => setSearchInput("")}
+              buttonText="New"
+              buttonFunction={() => goToScreen('createCard', {})}
+            />
+          }
+          ListHeaderComponentStyle={{
+            paddingBottom: 15
+          }}
+          data={cards}
+          keyExtractor={(item: CardProps) => item.id}
+          renderItem={({ item }: { item: CardProps }) => (
+            <CardContainer
+              card={item}
+              goToScreen={goToScreen}
+            />
+          )}
+        />
+      ) : (
+        <EmptyDataView
+          item="Card"
+          buttonFunction={() => goToScreen('createCard', {})}
+        />
+      )}
     </SafeAreaView>
   )
 }
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   scrollView: {
-    width: '100%',
     paddingLeft: 20,
     paddingRight: 20,
-    marginBottom: 130,
     marginTop: 15
   },
   searchInputContainer: {
