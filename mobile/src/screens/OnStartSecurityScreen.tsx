@@ -1,20 +1,21 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import { Switch } from 'react-native-elements'
 import InputCode, {InputCodeHandler} from '../components/InputCode'
+import ReactNativeBiometrics from 'react-native-biometrics'
 
-const OnStartSecurity = () => {
+const OnStartSecurityScreen = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const [usePin, setUsePin] = useState(true)
+  const [usePin, setUsePin] = useState(false)
+  const [canUseBiometrics, setCanUseBiometrics] = useState(false)
   const [useBiometrics, setUseBiometrics] = useState(false)
   const [code, setCode] = useState("")
   const inputCodeRef = useRef<InputCodeHandler>(null)
 
   const onChangeCode = useCallback((value) => {
-    console.log(value)
     setCode(value)
   }, [])
 
@@ -25,6 +26,17 @@ const OnStartSecurity = () => {
       inputCodeRef.current!.focus()
     }, 100)
   }, [inputCodeRef])
+
+  const biometricExists = async() => {
+    const { available, biometryType } = await ReactNativeBiometrics.isSensorAvailable()
+    if (available) {
+      setCanUseBiometrics(true)
+    }
+  }
+
+  useEffect(() => {
+    biometricExists()
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -42,16 +54,18 @@ const OnStartSecurity = () => {
             color={theme.colors.primary}
           />
         </View>
-        <View style={styles.optionBox}>
-          <Text style={[styles.text, { fontSize: 18, fontFamily: 'poppins-bold' }]}>
-            Use biometrics
-          </Text>
-          <Switch
-            value={useBiometrics}
-            onChange={() => setUseBiometrics(!useBiometrics)}
-            color={theme.colors.primary}
-          />
-        </View>
+        {canUseBiometrics && (
+          <View style={styles.optionBox}>
+            <Text style={[styles.text, { fontSize: 18, fontFamily: 'poppins-bold' }]}>
+              Use biometrics
+            </Text>
+            <Switch
+              value={useBiometrics}
+              onChange={() => setUseBiometrics(!useBiometrics)}
+              color={theme.colors.primary}
+            />
+          </View>
+        )}
       </View>
       <View style={styles.inputPinContainer}>
         <View>
@@ -104,4 +118,4 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   }
 })
 
-export default OnStartSecurity
+export default OnStartSecurityScreen
