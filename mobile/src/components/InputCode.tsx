@@ -112,8 +112,10 @@ const stylesSheet = (theme: Theme) => StyleSheet.create({
     alignItems: 'center',
     width: 50,
     height: 50,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: theme.colors.card,
+    borderRadius: 20,
+    marginHorizontal: 3
   },
   text: {
     fontFamily: 'poppins',
@@ -125,8 +127,10 @@ const stylesSheet = (theme: Theme) => StyleSheet.create({
     alignItems: 'center',
     width: 50,
     height: 50,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: theme.colors.card,
+    borderRadius: 20,
+    marginHorizontal: 3
   },
   inputStyle: {
     fontSize: 0,

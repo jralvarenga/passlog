@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
-import { Switch } from 'react-native-elements'
+import { Button, Switch } from 'react-native-elements'
 import InputCode, {InputCodeHandler} from '../components/InputCode'
 import ReactNativeBiometrics from 'react-native-biometrics'
 
@@ -14,17 +14,14 @@ const OnStartSecurityScreen = () => {
   const [useBiometrics, setUseBiometrics] = useState(false)
   const [code, setCode] = useState("")
   const inputCodeRef = useRef<InputCodeHandler>(null)
+  const [saveCodeButton, setSaveCodeButton] = useState(false)
 
   const onChangeCode = useCallback((value) => {
     setCode(value)
   }, [])
 
   const onFullFill = useCallback((value) => {
-    console.log(value)
-    setTimeout(() => {
-      setCode('')
-      inputCodeRef.current!.focus()
-    }, 100)
+    setSaveCodeButton(true)
   }, [inputCodeRef])
 
   const biometricExists = async() => {
@@ -32,6 +29,10 @@ const OnStartSecurityScreen = () => {
     if (available) {
       setCanUseBiometrics(true)
     }
+  }
+
+  const saveCode = async() => {
+    console.log('Saved')
   }
 
   useEffect(() => {
@@ -68,6 +69,9 @@ const OnStartSecurityScreen = () => {
         )}
       </View>
       <View style={styles.inputPinContainer}>
+        <Text style={[styles.text, { fontFamily: 'poppins-bold', marginBottom: 10 }]}>
+          Set or change your pin
+        </Text>
         <View>
           {usePin && (
             <InputCode
@@ -81,6 +85,14 @@ const OnStartSecurityScreen = () => {
             />
           )}
         </View>
+        {saveCodeButton && (
+          <Button
+            containerStyle={{ width: 150 }}
+            titleStyle={styles.text}
+            onPress={saveCode}
+            title="Save pin"
+          />
+        )}
       </View>
     </View>
   )
@@ -98,7 +110,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   },
   optionsContainer: {
     width: '95%',
-    flex: 2,
+    flex: 1.2,
   },
   optionBox: {
     padding: 15,
@@ -115,6 +127,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     flex: 3,
     width: '95%',
     alignItems: 'center',
+    justifyContent: 'flex-start',
   }
 })
 
