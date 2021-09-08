@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { StyleSheet, Text, View } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
@@ -20,7 +20,6 @@ const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen 
   const [backdropPressBehavior, setBackdropPressBehavior] = useState<'none' | 'close' | 'collapse'>('collapse')
   const [password, setPassword] = useState(generatePassword())
 
-
   const renderBackdrop = useCallback((props) => (
     <BottomSheetBackdrop {...props} pressBehavior={backdropPressBehavior} />
   ), [backdropPressBehavior])
@@ -29,6 +28,12 @@ const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen 
     const newPassword = generatePassword()
     setPassword(newPassword)
   }
+
+  useEffect(() => {
+    Clipboard.addListener(() => console.log('changed clipboard'))
+    
+    return Clipboard.removeAllListeners()
+  }, [])
 
   const copyPassword = () => {
     Clipboard.setString(password)
