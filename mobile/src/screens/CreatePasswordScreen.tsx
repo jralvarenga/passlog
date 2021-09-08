@@ -15,7 +15,6 @@ interface CreatePasswordScreenProps {
 }
 
 const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) => {
-  const currentDate = new Date()
   const theme = useTheme()
   const styles = styleSheet(theme)
   const { passwords, setPasswords, renderPasslogDataHandler }: PasslogUserDataProps = usePasslogUserData()
@@ -45,6 +44,7 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
   }
 
   const createPassword = async() => {
+    const currentDate = new Date()
     const newPasswordInfo: PasswordProps = {
       id: createId(),
       profileName: name,
@@ -55,10 +55,10 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
       date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
     }
 
-    console.log(newPasswordInfo)
     passwords!.push(newPasswordInfo)
     setPasswords!(passwords)
     await setPasswordsInStorage(passwords!)
+    renderPasslogDataHandler!()
     navigation.goBack()
   }
 

@@ -6,20 +6,27 @@ import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import BottomSheet from '@gorhom/bottom-sheet'
 import SelectCardTypeSheet from '../components/SelectCardTypeSheet'
+import { CardProps, PasslogUserDataProps } from '../interface/interfaces'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
+import { createId } from '../lib/createId'
+import { setCardsInStorage } from '../lib/asyncStorage'
 
 interface CreateCardScreenProps {
   route: any
+  navigation: any
 }
 
-const CreateCardScreen = ({ route }: CreateCardScreenProps) => {
+const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { cards, setCards, renderPasslogDataHandler }: PasslogUserDataProps = usePasslogUserData()
   const [name, setName] = useState("")
   const [type, setType] = useState("")
+  const [typeValue, setTypeValue] = useState("")
   const [holder, setHolder] = useState("")
   const [numbers, setNumbers] = useState("")
-  const [extraInfo, setExtraInfo] = useState("")
-  const [extraInfoData, setExtraInfoData] = useState("")
+  //const [extraInfo, setExtraInfo] = useState("")
+  //const [extraInfoData, setExtraInfoData] = useState("")
   const cardTypeSheetRef = useRef<BottomSheet>()
   const [showBottomSheet, setShowBottomSheet] = useState(false)
 
@@ -37,7 +44,27 @@ const CreateCardScreen = ({ route }: CreateCardScreenProps) => {
 
   const changeCardType = (type: { name: string, value: string }) => {
     setType(type.name)
+    setTypeValue(type.value)
     cardTypeSheetRef.current?.close()
+  }
+
+  const createCard = async() => {
+    const currentDate = new Date()
+    const newCard: CardProps = {
+      id: createId(),
+      cardName: name,
+      type: typeValue,
+      holder: holder,
+      number: numbers,
+      addedInfo: "",
+      date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
+    }
+
+    cards!.push(newCard)
+    setCards!(cards)
+    await setCardsInStorage(cards!)
+    renderPasslogDataHandler!()
+    navigation.goBack()
   }
 
   return (
@@ -97,6 +124,7 @@ const CreateCardScreen = ({ route }: CreateCardScreenProps) => {
       <View style={styles.createButtonContainer}>
         <Button
           title="Create"
+          onPress={createCard}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           containerStyle={{
             width: '45%',
