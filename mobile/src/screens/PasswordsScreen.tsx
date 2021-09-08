@@ -80,13 +80,11 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
           />
         )}
       />
-      {showBottomSheet && (
-        <GeneratePasswordSheet
-          goToScreen={goToScreen}
-          handleSheetChanges={handleSheetChanges}
-          bottomSheetRef={generatePasswordSheetRef}
-        />
-      )}
+      <GeneratePasswordSheet
+        goToScreen={goToScreen}
+        handleSheetChanges={handleSheetChanges}
+        bottomSheetRef={generatePasswordSheetRef}
+      />
     </SafeAreaView>
   )
 }

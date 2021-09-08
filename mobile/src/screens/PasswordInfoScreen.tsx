@@ -128,14 +128,12 @@ const PasswordInfoScreen = ({ route }: PasswordInfoScreenProps) => {
           )}
         </View>
       </View>
-      {showBottomSheet && (
-        <PasswordInfoOptions
-          savePasswordChanges={savePasswordChanges}
-          bottomSheetRef={passwordOptionsSheetRef}
-          passwordInfo={passwordInfo}
-          handleSheetChanges={handleSheetChanges}
-        />
-      )}
+      <PasswordInfoOptions
+        savePasswordChanges={savePasswordChanges}
+        bottomSheetRef={passwordOptionsSheetRef}
+        passwordInfo={passwordInfo}
+        handleSheetChanges={handleSheetChanges}
+      />
     </View>
   )
 }

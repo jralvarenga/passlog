@@ -139,23 +139,21 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           />
         )}
       </View>
-      {showSettingsSheet && (
-        <SettingsSheets
-          bottomSheetRef={appSettingsSheetRef}
-          handleSheetChanges={handleSettingsSheetChanges}
-        >
-          <>
-            {showInSheet == 'appSettings' && (
-              <AppSettingsSheet
-                goToScreen={goToScreen}
-              />
-            )}
-            {showInSheet == 'cloudSettings' && (
-              <CloudSettingsSheet />
-            )}
-          </>
-        </SettingsSheets>
-      )}
+      <SettingsSheets
+        bottomSheetRef={appSettingsSheetRef}
+        handleSheetChanges={handleSettingsSheetChanges}
+      >
+        <>
+          {showInSheet == 'appSettings' && (
+            <AppSettingsSheet
+              goToScreen={goToScreen}
+            />
+          )}
+          {showInSheet == 'cloudSettings' && (
+            <CloudSettingsSheet />
+          )}
+        </>
+      </SettingsSheets>
     </SafeAreaView>
   )
 }
