@@ -4,14 +4,21 @@ import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
+import { PasslogUserDataProps, PasswordProps } from '../interface/interfaces'
+import { setPasswordsInStorage } from '../lib/asyncStorage'
+import { createId } from '../lib/createId'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 interface CreatePasswordScreenProps {
   route: any
+  navigation: any
 }
 
-const CreatePasswordScreen = ({ route }: CreatePasswordScreenProps) => {
+const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) => {
+  const currentDate = new Date()
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { passwords, setPasswords, renderPasslogDataHandler }: PasslogUserDataProps = usePasslogUserData()
   const [name, setName] = useState("")
   const [user, setUser] = useState("")
   const [email, setEmail] = useState("")
@@ -24,8 +31,6 @@ const CreatePasswordScreen = ({ route }: CreatePasswordScreenProps) => {
     if (route.params.generatedPassword) {
       console.log(route.params.generatedPassword)
       setPassword(route.params.generatedPassword)
-    } else {
-      console.log('xd')
     }
   }, [])
 
@@ -37,6 +42,24 @@ const CreatePasswordScreen = ({ route }: CreatePasswordScreenProps) => {
       setShowPassword(true)
       setEyeIcon("eye-off")
     }
+  }
+
+  const createPassword = async() => {
+    const newPasswordInfo: PasswordProps = {
+      id: createId(),
+      profileName: name,
+      user: user,
+      email: email,
+      password: password,
+      comments: comments,
+      date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
+    }
+
+    console.log(newPasswordInfo)
+    passwords!.push(newPasswordInfo)
+    setPasswords!(passwords)
+    await setPasswordsInStorage(passwords!)
+    navigation.goBack()
   }
 
   return (
@@ -110,6 +133,7 @@ const CreatePasswordScreen = ({ route }: CreatePasswordScreenProps) => {
       <View style={styles.createButtonContainer}>
         <Button
           title="Create"
+          onPress={createPassword}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           containerStyle={{
             width: '45%',
