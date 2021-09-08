@@ -1,156 +1,140 @@
-import React, {useCallback, useImperativeHandle, useRef} from 'react'
-import {
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  ViewStyle,
-  TextStyle,
-  Keyboard,
-  InteractionManager,
-  StyleSheet,
-} from 'react-native'
+import React, { useCallback, useImperativeHandle, useRef } from 'react'
+import { Theme, useTheme } from '@react-navigation/native'
+import { Text, View, TextInput, TouchableOpacity, ViewStyle, TextStyle, Keyboard, InteractionManager, StyleSheet } from 'react-native'
 
 export type InputCodeHandler = {
   focus(): void
 }
 
-type Props = {
+type InputCodeProps = {
   code: string
   length: number
   onChangeCode?: (code: string) => void | Promise<void>
   onFullFill?: (code: string) => void | Promise<void>
-
   passcode?: boolean
   passcodeChar?: string
   autoFocus?: boolean
   oneTimeCode?: boolean
-
   style?: ViewStyle
   codeContainerStyle?: ViewStyle
   codeContainerCaretStyle?: ViewStyle
   codeTextStyle?: TextStyle
-
   testID?: string
 }
 
-const InputCode = React.forwardRef<InputCodeHandler, Props>(
-  (
-    {
-      code,
-      length,
-      onChangeCode,
-      onFullFill,
-      passcode,
-      passcodeChar,
-      autoFocus,
-      oneTimeCode,
-      style,
-      codeContainerStyle,
-      codeContainerCaretStyle,
-      codeTextStyle,
-      testID,
-    },
-    ref,
-  ) => {
-    const textInputCode = useRef<TextInput>(null)
+const InputCode = React.forwardRef<InputCodeHandler, InputCodeProps>(({ code, length, onChangeCode, onFullFill, passcode, passcodeChar, autoFocus, oneTimeCode, style, codeContainerStyle, codeContainerCaretStyle, codeTextStyle, testID }, ref) => {
+  const theme = useTheme()
+  const styles = stylesSheet(theme)
+  const textInputCode = useRef<TextInput>(null)
 
-    useImperativeHandle(ref, () => ({
-      focus: () => {
-        textInputCode.current!.focus()
-      },
-    }))
-
-    const onPressCode = useCallback(() => {
+  useImperativeHandle(ref, () => ({
+    focus: () => {
       textInputCode.current!.focus()
-    }, [])
+    },
+  }))
 
-    const onChangeText = useCallback(
-      (value: string) => {
-        const newCode = value.replace(/[^0-9]/g, '')
-        if (code === newCode) return
+  const onPressCode = useCallback(() => {
+    textInputCode.current!.focus()
+  }, [])
 
-        onChangeCode && onChangeCode(newCode)
+  const onChangeText = useCallback((value: string) => {
+    const newCode = value.replace(/[^0-9]/g, '')
+    if (code === newCode) return
 
-        if (newCode.length === length) {
-          Keyboard.dismiss()
-          InteractionManager.runAfterInteractions(() => {
-            onFullFill && onFullFill(newCode)
-          })
-        }
-      },
-      [code, length, onChangeCode, onFullFill],
-    )
+    onChangeCode && onChangeCode(newCode)
 
-    const extractCode = (index: number) => {
-      if (code.length <= index) return ''
+    if (newCode.length === length) {
+      Keyboard.dismiss()
+      InteractionManager.runAfterInteractions(() => {
+        onFullFill && onFullFill(newCode)
+      })
+    }
+  }, [code, length, onChangeCode, onFullFill])
 
-      if (passcode) {
-        return passcodeChar || '*'
-      }
+  const extractCode = (index: number) => {
+    if (code.length <= index) return ''
 
-      return code.substr(index, 1)
+    if (passcode) {
+      return passcodeChar || '*'
     }
 
-    const renderCode = (index: number) => (
-      <View
-        style={
-          code.length === index
-            ? [styles.codeContainerCaret, codeContainerCaretStyle]
-            : [styles.codeContainer, codeContainerStyle]
-        }
-        key={'input-code-' + index.toString()}>
-        <Text style={{fontSize: 30, ...codeTextStyle}}>{extractCode(index)}</Text>
+    return code.substr(index, 1)
+  }
+
+  const renderCode = (index: number) => (
+    <View
+      style={
+        code.length === index
+          ? [styles.codeContainerCaret, codeContainerCaretStyle]
+          : [styles.codeContainer, codeContainerStyle]
+      }
+      key={'input-code-' + index.toString()}>
+      <Text style={[styles.text, {fontSize: 30, ...codeTextStyle}]}>
+        {extractCode(index)}
+      </Text>
+    </View>
+  )
+
+  return (
+    <>
+      <View style={style}>
+        <TouchableOpacity
+          onPress={onPressCode}
+          style={{alignItems: 'stretch'}}
+          activeOpacity={1}
+        >
+          <View
+            style={{flexDirection: 'row', justifyContent: 'space-around'}}
+          >
+            {Array(length).fill(0).map((item, index) => renderCode(index))}
+          </View>
+        </TouchableOpacity>
       </View>
-    )
+      <TextInput
+        value={code}
+        onChangeText={onChangeText}
+        ref={textInputCode}
+        maxLength={length}
+        autoFocus={autoFocus}
+        caretHidden={true}
+        textContentType={oneTimeCode ? 'oneTimeCode' : undefined}
+        keyboardType="number-pad"
+        style={styles.inputStyle}
+        testID={testID}
+      />
+    </>
+  )
+})
 
-    return (
-      <>
-        <View style={style}>
-          <TouchableOpacity onPress={onPressCode} style={{alignItems: 'stretch'}} activeOpacity={1}>
-            <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-              {Array(length)
-                .fill(0)
-                .map((item, index) => renderCode(index))}
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <TextInput
-          value={code}
-          onChangeText={onChangeText}
-          ref={textInputCode}
-          maxLength={length}
-          autoFocus={autoFocus}
-          caretHidden={true}
-          textContentType={oneTimeCode ? 'oneTimeCode' : undefined}
-          keyboardType="number-pad"
-          style={{fontSize: 0, height: 1, opacity: 0, margin: 0, padding: 0}}
-          testID={testID}
-        />
-      </>
-    )
-  },
-)
-
-const styles = StyleSheet.create({
+const stylesSheet = (theme: Theme) => StyleSheet.create({
   codeContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     width: 50,
     height: 50,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: theme.colors.card,
   },
-
+  text: {
+    fontFamily: 'poppins',
+    fontSize: 16,
+    color: theme.colors.text
+  },
   codeContainerCaret: {
     justifyContent: 'center',
     alignItems: 'center',
     width: 50,
     height: 50,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: theme.colors.card,
   },
+  inputStyle: {
+    fontSize: 0,
+    height: 1,
+    opacity: 0,
+    margin: 0,
+    padding: 0
+  }
 })
 
 InputCode.defaultProps = {
