@@ -1,3 +1,4 @@
 react-native-icons
 react-native-reanimated
 bottom-sheet
+biometrics

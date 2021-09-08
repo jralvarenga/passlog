@@ -37,7 +37,9 @@ export const SettingsSheets = ({ bottomSheetRef, handleSheetChanges, children }:
   )
 }
 
-export const AppSettingsSheet = () => {
+
+
+export const AppSettingsSheet = ({ goToScreen }: any) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
 
@@ -51,6 +53,7 @@ export const AppSettingsSheet = () => {
           containerStyle={{ width: '47%' }}
           titleStyle={styles.text}
           title="On Start Security"
+          onPress={() => goToScreen('onStartSecurity')}
         />
         <Button
           containerStyle={{ width: '47%' }}

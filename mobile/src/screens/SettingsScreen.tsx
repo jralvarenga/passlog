@@ -146,7 +146,9 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         >
           <>
             {showInSheet == 'appSettings' && (
-              <AppSettingsSheet />
+              <AppSettingsSheet
+                goToScreen={goToScreen}
+              />
             )}
             {showInSheet == 'cloudSettings' && (
               <CloudSettingsSheet />
