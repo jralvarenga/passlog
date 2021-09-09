@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { StyleSheet, Text, View } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import { Button, Chip, Icon } from 'react-native-elements'
@@ -47,13 +46,8 @@ const SelectCardTypeSheet = ({ bottomSheetRef, handleSheetChanges, type, changeC
     }
   ]
 
-  const renderBackdrop = useCallback((props) => (
-    <BottomSheetBackdrop {...props} pressBehavior={backdropPressBehavior} />
-  ), [backdropPressBehavior])
-
   return (
-      <BottomSheet
-        /* @ts-ignore */
+      {/*<BottomSheet
         ref={bottomSheetRef}
         index={-1}
         enablePanDownToClose
@@ -84,7 +78,7 @@ const SelectCardTypeSheet = ({ bottomSheetRef, handleSheetChanges, type, changeC
             </View>
           </View>
         </View>
-      </BottomSheet>
+      </BottomSheet>*/}
   )
 }
 

@@ -1,14 +1,8 @@
-import React, { useState, useEffect } from "react"
-import {
-  View,
-  TouchableOpacity,
-  Dimensions,
-  Animated,
-  StyleSheet,
-} from "react-native"
-import { BottomTabBarProps } from "@react-navigation/bottom-tabs"
-import { BottomMenuItem } from "./BottomMenuItem"
-import { Theme, useTheme } from "@react-navigation/native"
+import React, { useState, useEffect } from 'react'
+import { View, TouchableOpacity, Dimensions, Animated, StyleSheet } from 'react-native'
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import { BottomMenuItem } from './BottomMenuItem'
+import { Theme, useTheme } from '@react-navigation/native'
 
 export const TabBar = ({ state, descriptors, navigation}: BottomTabBarProps) => {
   const theme = useTheme()

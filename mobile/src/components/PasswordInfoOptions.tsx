@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import BottomSheet, { BottomSheetBackdrop, BottomSheetTextInput } from '@gorhom/bottom-sheet'
 import { StyleSheet, Text, View } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
@@ -39,13 +38,8 @@ const PasswordInfoOptions = ({ bottomSheetRef, handleSheetChanges, passwordInfo,
     savePasswordChanges(newData)
   }
 
-  const renderBackdrop = useCallback((props) => (
-    <BottomSheetBackdrop {...props} pressBehavior={backdropPressBehavior} />
-  ), [backdropPressBehavior])
-
   return (
-      <BottomSheet
-        /* @ts-ignore */
+      {/*<BottomSheet
         ref={bottomSheetRef}
         index={-1}
         enablePanDownToClose
@@ -123,13 +117,12 @@ const PasswordInfoOptions = ({ bottomSheetRef, handleSheetChanges, passwordInfo,
             <Button
               buttonStyle={{ backgroundColor: '#ff2e2e' }}
               titleStyle={styles.text}
-              /* @ts-ignore */
               onPress={deletePassword}
               title="Delete password"
             />
           </View>
         </View>
-      </BottomSheet>
+      </BottomSheet>*/}
   )
 }
 

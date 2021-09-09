@@ -1,28 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
-import { StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import { Button, Icon } from 'react-native-elements'
 import { generatePassword } from '../lib/generatePassword'
 import Clipboard from '@react-native-clipboard/clipboard'
 import Snackbar from 'react-native-snackbar'
+import BottomSheet from './BottomSheet'
 
 interface GeneratePasswordSheetProps {
-  bottomSheetRef: any,
-  handleSheetChanges: any
   goToScreen: Function
+  visible: boolean
+  setVisible: Function
 }
 
-const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen }: GeneratePasswordSheetProps) => {
+const windowHeight = Dimensions.get('window').height
+const bottomSheetPercentage = 0.35
+
+const GeneratePasswordSheet = ({ goToScreen, visible, setVisible }: GeneratePasswordSheetProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const snapPoints = useMemo(() => ['10%', '45%', '55%'], [])
-  const [backdropPressBehavior, setBackdropPressBehavior] = useState<'none' | 'close' | 'collapse'>('collapse')
   const [password, setPassword] = useState(generatePassword())
-
-  const renderBackdrop = useCallback((props) => (
-    <BottomSheetBackdrop {...props} pressBehavior={backdropPressBehavior} />
-  ), [backdropPressBehavior])
 
   const refreshPassword = () => {
     const newPassword = generatePassword()
@@ -54,15 +51,9 @@ const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen 
 
   return (
       <BottomSheet
-        /* @ts-ignore */
-        ref={bottomSheetRef}
-        index={-1}
-        enablePanDownToClose
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        backgroundStyle={{ backgroundColor: theme.colors.background }}
-        handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
-        backdropComponent={renderBackdrop}
+        visible={visible}
+        setVisible={setVisible}
+        heightPercentage={1 - bottomSheetPercentage}
       >
         <View style={styles.contentContainer}>
           <View style={{ flex: 1}}>
@@ -93,7 +84,7 @@ const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen 
               </View>
             </View>
           </View>
-          <View style={{ flex: 4, alignItems: 'flex-end' }}>
+          <View style={styles.buttonContainer}>
             <Button
               titleStyle={styles.text}
               title="Create password profile"
@@ -107,9 +98,12 @@ const GeneratePasswordSheet = ({ bottomSheetRef, handleSheetChanges, goToScreen 
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   contentContainer: {
+    height: windowHeight * bottomSheetPercentage,
     flex: 1,
-    padding: 12,
-    backgroundColor: theme.colors.background
+    padding: 15,
+    backgroundColor: theme.colors.background,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25
   },
   text: {
     fontFamily: 'poppins',
@@ -130,6 +124,11 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: theme.colors.card,
     borderRadius: 100,
+  },
+  buttonContainer: {
+    flex: 4,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end'
   }
 })
 

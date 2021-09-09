@@ -1,5 +1,4 @@
 import React, { ReactElement, useCallback, useMemo, useState } from 'react'
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
 import { Theme, useTheme } from '@react-navigation/native'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button, Switch } from 'react-native-elements'
@@ -16,13 +15,8 @@ export const SettingsSheets = ({ bottomSheetRef, handleSheetChanges, children }:
   const snapPoints = useMemo(() => ['5%', '25%', '25%'], [])
   const [backdropPressBehavior, setBackdropPressBehavior] = useState<'none' | 'close' | 'collapse'>('collapse')
 
-  const renderBackdrop = useCallback((props) => (
-    <BottomSheetBackdrop {...props} pressBehavior={backdropPressBehavior} />
-  ), [backdropPressBehavior])
-
   return (
-    <BottomSheet
-      /* @ts-ignore */
+    {/*<BottomSheet
       ref={bottomSheetRef}
       index={-1}
       enablePanDownToClose
@@ -33,7 +27,7 @@ export const SettingsSheets = ({ bottomSheetRef, handleSheetChanges, children }:
       backdropComponent={renderBackdrop}
     >
       {children}
-    </BottomSheet>
+    </BottomSheet>*/}
   )
 }
 

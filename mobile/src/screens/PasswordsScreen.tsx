@@ -6,7 +6,6 @@ import PasswordContainer from '../components/PasswordContainer'
 import TopBar from '../components/TopBar'
 import HiddenFlatListView from '../components/HiddenFlatListView'
 import { PasslogUserDataProps, PasswordProps } from '../interface/interfaces'
-import BottomSheet from '@gorhom/bottom-sheet'
 import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
@@ -25,33 +24,18 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   const { passwords, setPasswords }: PasslogUserDataProps = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
   const [showBottomSheet, setShowBottomSheet] = useState(false)
-  const generatePasswordSheetRef = useRef<BottomSheet>(null)
-
-  const showBottomSheetHandler = () => {
-    setShowBottomSheet(true)
-    generatePasswordSheetRef.current?.snapToIndex(1)
-    generatePasswordSheetRef.current?.snapToIndex(1)
-  }
 
   const goToScreen = (screen: string, params: any) => {
     setShowBottomSheet(false)
-    generatePasswordSheetRef.current?.close()
     navigation.navigate(screen, params)
   }
-
-  const handleSheetChanges = useCallback((index: number) => {
-    if (index == -1 || index == 0) {
-      setShowBottomSheet(false)
-      generatePasswordSheetRef.current?.close()
-    }
-  }, [])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <FocusAwareStatusBar backgroundColor={theme.colors.primary} />
       <TopBar
         showIcon
-        iconFunction={showBottomSheetHandler}
+        iconFunction={() => setShowBottomSheet(true)}
         title="Passwords"
       />
       {passwords?.length != 0 ? (
@@ -90,8 +74,8 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
       )}
       <GeneratePasswordSheet
         goToScreen={goToScreen}
-        handleSheetChanges={handleSheetChanges}
-        bottomSheetRef={generatePasswordSheetRef}
+        visible={showBottomSheet}
+        setVisible={setShowBottomSheet}
       />
     </SafeAreaView>
   )
