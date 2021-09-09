@@ -4,7 +4,6 @@ import { Linking, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
-import BottomSheet from '@gorhom/bottom-sheet'
 import SettingsSheets, { AppSettingsSheet, CloudSettingsSheet } from '../components/SettingsSheets'
 
 interface SettingsScreenProps {
@@ -15,30 +14,17 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const user = ""
-  const appSettingsSheetRef = useRef<BottomSheet>(null)
   const [showSettingsSheet, setShowSettingsSheet] = useState(false)
-  const cloudSettingsSheetRef = useRef<BottomSheet>(null)
   const [showInSheet, setShowInSheet] = useState("")
 
   const goToScreen = (screen: string, params: any) => {
     setShowSettingsSheet(false)
-    appSettingsSheetRef.current?.close()
-    cloudSettingsSheetRef.current?.close()
     navigation.navigate(screen, params)
   }
 
-  const handleSettingsSheetChanges = useCallback((index: number) => {
-    if (index == -1 || index == 0) {
-      setShowSettingsSheet(false)
-      appSettingsSheetRef.current?.close()
-    }
-  }, [])
-
   const showSettingsSheetHandler = (page: string) => {
     setShowInSheet(page)
-    console.log(showInSheet)
     setShowSettingsSheet(true)
-    appSettingsSheetRef.current?.snapToIndex(1)
   }
 
   const goToGoogleSavedPassword = () => {
@@ -140,8 +126,8 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         )}
       </View>
       <SettingsSheets
-        bottomSheetRef={appSettingsSheetRef}
-        handleSheetChanges={handleSettingsSheetChanges}
+        visible={showSettingsSheet}
+        setVisible={setShowSettingsSheet}
       >
         <>
           {showInSheet == 'appSettings' && (

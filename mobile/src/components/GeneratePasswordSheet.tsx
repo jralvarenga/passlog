@@ -53,7 +53,7 @@ const GeneratePasswordSheet = ({ goToScreen, visible, setVisible }: GeneratePass
       <BottomSheet
         visible={visible}
         setVisible={setVisible}
-        heightPercentage={1 - bottomSheetPercentage}
+        bottomSheetHeight={bottomSheetPercentage}
       >
         <View style={styles.contentContainer}>
           <View style={{ flex: 1}}>
@@ -102,8 +102,8 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     flex: 1,
     padding: 15,
     backgroundColor: theme.colors.background,
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30
   },
   text: {
     fontFamily: 'poppins',

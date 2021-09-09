@@ -1,33 +1,30 @@
 import React, { ReactElement, useCallback, useMemo, useState } from 'react'
 import { Theme, useTheme } from '@react-navigation/native'
-import { StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Button, Switch } from 'react-native-elements'
+import BottomSheet from './BottomSheet'
 
 interface SettingSheetsProps {
-  bottomSheetRef: any,
-  handleSheetChanges: any
+  visible: boolean
+  setVisible: Function
   children: ReactElement
 }
 
-export const SettingsSheets = ({ bottomSheetRef, handleSheetChanges, children }: SettingSheetsProps) => {
+const windowHeight = Dimensions.get('window').height
+const bottomSheetHeight = 0.25
+
+export const SettingsSheets = ({ visible, setVisible, children }: SettingSheetsProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const snapPoints = useMemo(() => ['5%', '25%', '25%'], [])
-  const [backdropPressBehavior, setBackdropPressBehavior] = useState<'none' | 'close' | 'collapse'>('collapse')
 
   return (
-    {/*<BottomSheet
-      ref={bottomSheetRef}
-      index={-1}
-      enablePanDownToClose
-      snapPoints={snapPoints}
-      onChange={handleSheetChanges}
-      backgroundStyle={{ backgroundColor: theme.colors.background }}
-      handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
-      backdropComponent={renderBackdrop}
+    <BottomSheet
+      visible={visible}
+      setVisible={setVisible}
+      bottomSheetHeight={bottomSheetHeight}
     >
       {children}
-    </BottomSheet>*/}
+    </BottomSheet>
   )
 }
 
@@ -87,9 +84,12 @@ export const CloudSettingsSheet = () => {
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   contentContainer: {
+    height: windowHeight * bottomSheetHeight,
     flex: 1,
     padding: 12,
-    backgroundColor: theme.colors.background
+    backgroundColor: theme.colors.background,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30
   },
   text: {
     fontFamily: 'poppins',

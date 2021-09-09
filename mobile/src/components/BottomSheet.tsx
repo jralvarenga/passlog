@@ -8,12 +8,12 @@ interface BottomSheetProps {
   setVisible?: Function
   children: ReactElement
   props?: RNEBottomSheetProps
-  heightPercentage: number
+  bottomSheetHeight: number
 }
 
 const windowHeight = Dimensions.get('window').height
 
-const BottomSheet = ({ visible, setVisible, children, props, heightPercentage }: BottomSheetProps) => {
+const BottomSheet = ({ visible, setVisible, children, props, bottomSheetHeight }: BottomSheetProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
 
@@ -31,7 +31,7 @@ const BottomSheet = ({ visible, setVisible, children, props, heightPercentage }:
         onPress={() => setVisible!(false)}
       >
         <View
-          style={{ height: windowHeight * (heightPercentage - 0.05) }}
+          style={{ height: windowHeight * (0.95 - bottomSheetHeight) }}
         />
       </TouchableWithoutFeedback>
       {children}
