@@ -1,23 +1,25 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
-import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 import { Button } from 'react-native-elements'
 import { PasswordProps } from '../interface/interfaces'
+import BottomSheet from './BottomSheet'
+import FormInput from './FormInput'
 
 interface PasswordInfoOptionsProps {
-  bottomSheetRef: any,
-  handleSheetChanges: any
+  visible: boolean
+  setVisible: Function
   passwordInfo: PasswordProps
   savePasswordChanges: Function
   deletePassword: Function
 }
 
-const PasswordInfoOptions = ({ bottomSheetRef, handleSheetChanges, passwordInfo, savePasswordChanges, deletePassword }: PasswordInfoOptionsProps) => {
+const windowHeight = Dimensions.get('window').height
+const bottomSheetHeight = 0.85
+
+const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordChanges, deletePassword }: PasswordInfoOptionsProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const snapPoints = useMemo(() => ['5%', '80%'], [])
-  const [backdropPressBehavior, setBackdropPressBehavior] = useState<'none' | 'close' | 'collapse'>('collapse')
   const [name, setName] = useState("")
   const [user, setUser] = useState("")
   const [email, setEmail] = useState("")
@@ -39,15 +41,10 @@ const PasswordInfoOptions = ({ bottomSheetRef, handleSheetChanges, passwordInfo,
   }
 
   return (
-      {/*<BottomSheet
-        ref={bottomSheetRef}
-        index={-1}
-        enablePanDownToClose
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        backgroundStyle={{ backgroundColor: theme.colors.background }}
-        handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
-        backdropComponent={renderBackdrop}
+      <BottomSheet
+        visible={visible}
+        setVisible={setVisible}
+        bottomSheetHeight={bottomSheetHeight}
       >
         <View style={styles.contentContainer}>
           <View style={{ flex: 0.7 }}>
@@ -57,55 +54,59 @@ const PasswordInfoOptions = ({ bottomSheetRef, handleSheetChanges, passwordInfo,
           </View>
           <View style={{ flex: 5 }}>
             <View style={styles.formInputContainer}>
-              <BottomSheetTextInput
-                style={[styles.inputStyle, { width: '47%' }]}
-                placeholderTextColor={reduceIncrementColor(theme.colors.text, 'reduce', 100)}
+              <FormInput
+                label="New Name"
                 value={name}
-                onChangeText={(value) => setName(value)}
-                placeholder={`Change ${passwordInfo.profileName}`}
+                width="47%"
+                onChangeText={(value: string) => setName(value)}
+                placeholder={passwordInfo.profileName}
               />
-              <BottomSheetTextInput
-                style={[styles.inputStyle, { width: '47%' }]}
-                placeholderTextColor={reduceIncrementColor(theme.colors.text, 'reduce', 100)}
+              <FormInput
+                label="New User"
                 value={user}
-                onChangeText={(value) => setUser(value)}
-                placeholder={passwordInfo.user != '' ? `Change ${passwordInfo.user}` : 'New user'}
+                width="47%"
+                onChangeText={(value: string) => setUser(value)}
+                placeholder={passwordInfo.user != '' ? `${passwordInfo.user}` : 'New user'}
               />
             </View>
             <View style={styles.formInputContainer}>
-              <BottomSheetTextInput
-                style={styles.inputStyle}
-                placeholderTextColor={reduceIncrementColor(theme.colors.text, 'reduce', 100)}
+              <FormInput
+                label="New Email"
                 value={email}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                onChangeText={(value) => setEmail(value)}
-                placeholder={`Change ${passwordInfo.email}`}
+                onChangeText={(value: string) => setEmail(value)}
+                placeholder={passwordInfo.email}
+                inputProps={{
+                  keyboardType: "email-address",
+                  autoCapitalize: 'none'
+                }}
               />
             </View>
             <View style={styles.formInputContainer}>
-              <BottomSheetTextInput
-                style={styles.inputStyle}
-                placeholderTextColor={reduceIncrementColor(theme.colors.text, 'reduce', 100)}
+              <FormInput
+                label="New Password"
                 value={password}
-                autoCapitalize="none"
-                autoCompleteType="off"
-                onChangeText={(value) => setPassword(value)}
-                placeholder={`Change ${passwordInfo.password}`}
+                onChangeText={(value: string) => setPassword(value)}
+                placeholder={passwordInfo.password}
+                inputProps={{
+                  autoCapitalize: 'none',
+                  autoCompleteType: 'off',
+                  secureTextEntry: false
+                }}
               />
             </View>
             <View style={styles.formInputContainer}>
-              <BottomSheetTextInput
-                style={styles.inputStyle}
-                placeholderTextColor={reduceIncrementColor(theme.colors.text, 'reduce', 100)}
+              <FormInput
+                label="New Comments"
                 value={comments}
-                onChangeText={(value) => setComments(value)}
-                multiline
-                numberOfLines={4}
-                placeholder={`Add Comments`}
+                onChangeText={(value: string) => setComments(value)}
+                placeholder="Add Comments"
+                inputProps={{
+                  multiline: true,
+                  numberOfLines: 4
+                }}
               />
             </View>
-            <View style={[styles.formInputContainer, { justifyContent: 'center' }]}>
+            <View style={[styles.formInputContainer, { justifyContent: 'center', marginTop: 10 }]}>
               <Button
                 titleStyle={styles.text}
                 onPress={addNewChanges}
@@ -117,53 +118,34 @@ const PasswordInfoOptions = ({ bottomSheetRef, handleSheetChanges, passwordInfo,
             <Button
               buttonStyle={{ backgroundColor: '#ff2e2e' }}
               titleStyle={styles.text}
+              /* @ts-ignore */
               onPress={deletePassword}
               title="Delete password"
             />
           </View>
         </View>
-      </BottomSheet>*/}
+      </BottomSheet>
   )
 }
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   contentContainer: {
     flex: 1,
-    padding: 12,
-    backgroundColor: theme.colors.background
+    height: windowHeight * bottomSheetHeight,
+    padding: 10,
+    backgroundColor: theme.colors.background,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30
   },
   text: {
     fontFamily: 'poppins',
     fontSize: 16,
     color: theme.colors.text
   },
-  passwordContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 35
-  },
-  iconContainerStyle: {
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.colors.card,
-    borderRadius: 100,
-  },
-  inputStyle: {
-    width: '100%',
-    borderRadius: 10,
-    fontSize: 16,
-    fontFamily: 'poppins',
-    color: theme.colors.text,
-    backgroundColor: theme.colors.card
-  },
   formInputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 10
+    marginVertical: -10
   }
 })
 

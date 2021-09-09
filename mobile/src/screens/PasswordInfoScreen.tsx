@@ -5,7 +5,6 @@ import { Icon } from 'react-native-elements'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import { PasslogUserDataProps, PasswordProps } from '../interface/interfaces'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
-import BottomSheet from '@gorhom/bottom-sheet'
 import PasswordInfoOptions from '../components/PasswordInfoOptions'
 import Snackbar from 'react-native-snackbar'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
@@ -23,7 +22,6 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
   const { passwords, setPasswords, renderPasslogDataHandler }: PasslogUserDataProps = usePasslogUserData()
   const [passwordInfo, setPasswordInfo] = useState<PasswordProps>(route.params.passwordInfo)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
-  const passwordOptionsSheetRef = useRef<BottomSheet>(null)
 
   useEffect(() => {
     Clipboard.addListener(() => console.log('changed clipboard'))
@@ -33,15 +31,7 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
 
   const showBottomSheetHandler = () => {
     setShowBottomSheet(true)
-    passwordOptionsSheetRef.current?.snapToIndex(1)
   }
-
-  const handleSheetChanges = useCallback((index: number) => {
-    if (index == -1 || index == 0) {
-      setShowBottomSheet(false)
-      passwordOptionsSheetRef.current?.close()
-    }
-  }, [])
 
   const savePasswordChanges = async(newData: PasswordProps) => {
     const newPasswords = passwords?.map((password) => {
@@ -56,7 +46,6 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
     await setPasswordsInStorage(newPasswords!)
     renderPasslogDataHandler!()
     setShowBottomSheet(false)
-    passwordOptionsSheetRef.current?.close()
 
     Snackbar.show({
       text: 'Saved changes',
@@ -66,7 +55,7 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
   }
 
   const deletePassword = async() => {
-    passwordOptionsSheetRef.current?.close()
+    setShowBottomSheet(false)
     const id = passwordInfo.id
     const index = passwords!.map((password) => password.id).indexOf(id)
     passwords!.splice(index, 1)
@@ -191,10 +180,10 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
         </View>
       </View>
       <PasswordInfoOptions
+        visible={showBottomSheet}
+        setVisible={setShowBottomSheet}
         savePasswordChanges={savePasswordChanges}
-        bottomSheetRef={passwordOptionsSheetRef}
         passwordInfo={passwordInfo}
-        handleSheetChanges={handleSheetChanges}
         deletePassword={deletePassword}
       />
     </View>

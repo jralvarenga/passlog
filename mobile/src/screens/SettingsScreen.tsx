@@ -5,6 +5,9 @@ import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import SettingsSheets, { AppSettingsSheet, CloudSettingsSheet } from '../components/SettingsSheets'
+import { PasslogUserDataProps } from '../interface/interfaces'
+import { objectMemorySize } from '../lib/objectMemorySize'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 interface SettingsScreenProps {
   navigation: any
@@ -13,6 +16,7 @@ interface SettingsScreenProps {
 const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { passwords, cards }: PasslogUserDataProps = usePasslogUserData()
   const user = ""
   const [showSettingsSheet, setShowSettingsSheet] = useState(false)
   const [showInSheet, setShowInSheet] = useState("")
@@ -51,14 +55,14 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         </View>
         <View style={{ marginTop: 20 }}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold' }]}>
-            13 passwords & 5 cards in Passlog
+            {passwords?.length} passwords & {cards?.length} cards in Passlog
           </Text>
         </View>
       </View>
       <View style={styles.backUpContainer}>
         <View style={styles.backupSpaceContainer}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', textAlign: 'center' }]}>
-            986 KiB used in Storage
+            {objectMemorySize({ psw: passwords, crd: cards })} used in Storage
           </Text>
           {user != null && (
             <Text style={[styles.text, { fontFamily: 'poppins-bold', textAlign: 'center' }]}>

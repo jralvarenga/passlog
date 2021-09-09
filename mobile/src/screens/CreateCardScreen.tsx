@@ -4,7 +4,6 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
-import BottomSheet from '@gorhom/bottom-sheet'
 import SelectCardTypeSheet from '../components/SelectCardTypeSheet'
 import { CardProps, PasslogUserDataProps } from '../interface/interfaces'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
@@ -27,25 +26,16 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   const [numbers, setNumbers] = useState("")
   //const [extraInfo, setExtraInfo] = useState("")
   //const [extraInfoData, setExtraInfoData] = useState("")
-  const cardTypeSheetRef = useRef<BottomSheet>()
   const [showBottomSheet, setShowBottomSheet] = useState(false)
-
-  const handleSheetChanges = useCallback((index: number) => {
-    if (index == -1 || index == 0) {
-      setShowBottomSheet(false)
-      cardTypeSheetRef.current?.close()
-    }
-  }, [])
 
   const showBottomSheetHandler = () => {
     setShowBottomSheet(true)
-    cardTypeSheetRef.current?.snapToIndex(1)
   }
 
   const changeCardType = (type: { name: string, value: string }) => {
+    setShowBottomSheet(false)
     setType(type.name)
     setTypeValue(type.value)
-    cardTypeSheetRef.current?.close()
   }
 
   const createCard = async() => {
@@ -132,10 +122,10 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
         />
       </View>
       <SelectCardTypeSheet
-        bottomSheetRef={cardTypeSheetRef}
+        visible={showBottomSheet}
+        setVisible={setShowBottomSheet}
         type={type}
         changeCardType={changeCardType}
-        handleSheetChanges={handleSheetChanges}
       />
     </View>
   )

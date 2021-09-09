@@ -1,23 +1,25 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import { Button, Chip, Icon } from 'react-native-elements'
 import { generatePassword } from '../lib/generatePassword'
 import Clipboard from '@react-native-clipboard/clipboard'
 import Snackbar from 'react-native-snackbar'
+import BottomSheet from './BottomSheet'
 
 interface SelectCardTypeSheetProps {
-  bottomSheetRef: any,
-  handleSheetChanges: any
+  visible: boolean
+  setVisible: Function
   type: string
   changeCardType: Function
 }
 
-const SelectCardTypeSheet = ({ bottomSheetRef, handleSheetChanges, type, changeCardType }: SelectCardTypeSheetProps) => {
+const windowHeight = Dimensions.get('window').height
+const bottomSheetHeight = 0.35
+
+const SelectCardTypeSheet = ({ visible, setVisible, type, changeCardType }: SelectCardTypeSheetProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const snapPoints = useMemo(() => ['10%', '35%', '35%'], [])
-  const [backdropPressBehavior, setBackdropPressBehavior] = useState<'none' | 'close' | 'collapse'>('collapse')
 
   const cardTypes = [
     {
@@ -47,15 +49,10 @@ const SelectCardTypeSheet = ({ bottomSheetRef, handleSheetChanges, type, changeC
   ]
 
   return (
-      {/*<BottomSheet
-        ref={bottomSheetRef}
-        index={-1}
-        enablePanDownToClose
-        snapPoints={snapPoints}
-        onChange={handleSheetChanges}
-        backgroundStyle={{ backgroundColor: theme.colors.background }}
-        handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
-        backdropComponent={renderBackdrop}
+      <BottomSheet
+        visible={visible}
+        setVisible={setVisible}
+        bottomSheetHeight={bottomSheetHeight}
       >
         <View style={styles.contentContainer}>
           <View style={{ flex: 1}}>
@@ -78,15 +75,18 @@ const SelectCardTypeSheet = ({ bottomSheetRef, handleSheetChanges, type, changeC
             </View>
           </View>
         </View>
-      </BottomSheet>*/}
+      </BottomSheet>
   )
 }
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   contentContainer: {
     flex: 1,
+    height: windowHeight * bottomSheetHeight,
     padding: 12,
-    backgroundColor: theme.colors.background
+    backgroundColor: theme.colors.background,
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30
   },
   text: {
     fontFamily: 'poppins',
