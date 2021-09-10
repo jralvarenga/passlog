@@ -105,6 +105,19 @@ const OnStartSecuritySettingsScreen = () => {
     }
   }
 
+  const useBiometricsHandler = (state: boolean) => {
+    if (usePin && code != '') {
+      if (state) {
+        setUseBiometrics(true)
+        setSaveCodeButton(true)
+      } else {
+        setUseBiometrics(false)
+      }
+    } else {
+      setUseBiometrics(state)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <HeaderNavigationBar
@@ -128,7 +141,7 @@ const OnStartSecuritySettingsScreen = () => {
             </Text>
             <Switch
               value={useBiometrics}
-              onChange={() => setUseBiometrics(!useBiometrics)}
+              onChange={() => useBiometricsHandler(!useBiometrics)}
               color={theme.colors.primary}
             />
           </View>

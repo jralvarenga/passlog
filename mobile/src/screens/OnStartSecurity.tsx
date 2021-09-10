@@ -1,6 +1,8 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import ReactNativeBiometrics from 'react-native-biometrics'
+import { Button } from 'react-native-elements'
 import Snackbar from 'react-native-snackbar'
 import InputCode, { InputCodeHandler } from '../components/InputCode'
 import { getSettings } from '../lib/asyncStorage'
@@ -19,11 +21,32 @@ const OnStartSecurity = ({ setOnStartSecurity }: OnStartSecurityProps) => {
 
   const getSavedPin = async() => {
     const { pinNumber } = await getSettings()
-    console.log(pinNumber)
     return pinNumber
   }
 
+  const getBiometricConfirmation = async() => {
+    const { useBiometrics } = await getSettings()
+    if (useBiometrics) {
+      try {
+        const { success } = await ReactNativeBiometrics.simplePrompt({ promptMessage: 'Enter Your Biometrics' })
+        if (success) {
+          setOnStartSecurity(false)
+        } else {
+          Snackbar.show({
+            text: 'Biometrics cancelled',
+            fontFamily: 'poppins',
+            textColor: theme.colors.text,
+            backgroundColor: theme.colors.primary
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      } 
+    }
+  }
+
   useEffect(() => {
+    getBiometricConfirmation()
   }, [])
 
   const compareCodes = async(entered: string) => {
@@ -68,6 +91,21 @@ const OnStartSecurity = ({ setOnStartSecurity }: OnStartSecurityProps) => {
           ref={inputCodeRef}
           onChangeCode={onChangeCode}
           onFullFill={onFullFillCode}
+        />
+      </View>
+      <View style={styles.buttonsContainer}>
+        <Button
+          containerStyle={styles.buttonContainerStyle}
+          buttonStyle={{ borderWidth: 2, borderColor: theme.colors.primary }}
+          titleStyle={styles.text}
+          title="Use Biometric"
+        />
+        <Button
+          containerStyle={styles.buttonContainerStyle}
+          onPress={() => setCode("")}
+          buttonStyle={styles.clearButtonStyle}
+          titleStyle={styles.text}
+          title="Clear"
         />
       </View>
     </View>
@@ -122,7 +160,21 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   inputContainer: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: '15%'
+    justifyContent: 'center'
+  },
+  buttonsContainer: {
+    flex: 4,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  buttonContainerStyle: {
+    width: '40%',
+    marginHorizontal: 5
+  },
+  clearButtonStyle: {
+    backgroundColor: theme.colors.background,
+    borderWidth: 2,
+    borderColor: theme.colors.primary
   }
 })
 
