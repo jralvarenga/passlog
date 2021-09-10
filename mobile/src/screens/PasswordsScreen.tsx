@@ -51,7 +51,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
       <FocusAwareStatusBar backgroundColor={theme.colors.primary} />
       <TopBar
         showIcon
-        iconFunction={() => setShowBottomSheet(true)}
+        iconFunction={() => goToScreen('createPassword', {})}
         icon={{ name: 'add', type: 'material' }}
         title="Passwords"
       />
@@ -69,7 +69,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
               changeInputValue={(value: string) => setSearchInput(value)}
               cancelInput={() => setSearchInput("")}
               buttonText="Generate"
-              buttonFunction={() => goToScreen('createPassword', {})}
+              buttonFunction={() => setShowBottomSheet(true)}
             />
           }
           ListHeaderComponentStyle={{
