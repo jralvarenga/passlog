@@ -30,12 +30,29 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
     navigation.navigate(screen, params)
   }
 
+  const sortedPasswords = passwords?.sort((a: PasswordProps, b: PasswordProps) => {
+    if (a.profileName > b.profileName) {
+      return 1
+    }
+    if (a.profileName < b.profileName) {
+      return -1
+    }
+    return 0
+  })
+
+  const filteredPasswords = sortedPasswords?.filter((profiles: PasswordProps) =>
+    profiles.profileName.toLowerCase().includes(searchInput.toLowerCase()) ||
+    profiles.email.toLowerCase().includes(searchInput.toLowerCase()) ||
+    profiles.user.toLowerCase().includes(searchInput.toLowerCase())
+  )
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <FocusAwareStatusBar backgroundColor={theme.colors.primary} />
       <TopBar
         showIcon
         iconFunction={() => setShowBottomSheet(true)}
+        icon={{ name: 'add', type: 'material' }}
         title="Passwords"
       />
       {passwords?.length != 0 ? (
@@ -46,18 +63,19 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <HiddenFlatListView
+              showButton
               inputValue={searchInput}
               inputPlaceHolder="Search password..."
               changeInputValue={(value: string) => setSearchInput(value)}
               cancelInput={() => setSearchInput("")}
-              buttonText="New"
+              buttonText="Generate"
               buttonFunction={() => goToScreen('createPassword', {})}
             />
           }
           ListHeaderComponentStyle={{
             paddingBottom: 15
           }}
-          data={passwords}
+          data={filteredPasswords}
           keyExtractor={(item: PasswordProps) => item.id}
           renderItem={({ item }: { item: PasswordProps }) => (
             <PasswordContainer

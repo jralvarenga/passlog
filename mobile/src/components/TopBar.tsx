@@ -10,11 +10,12 @@ interface TopBarProps {
   title: string,
   showIcon?: boolean
   iconFunction: Function
+  icon?: { name: string, type: string }
 }
 
 const windowHeight = Dimensions.get('window').height
 
-const TopBar = ({ title, iconFunction, showIcon }: TopBarProps) => {
+const TopBar = ({ title, iconFunction, showIcon, icon }: TopBarProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
 
@@ -31,10 +32,10 @@ const TopBar = ({ title, iconFunction, showIcon }: TopBarProps) => {
       </View>
       {showIcon && (
         <Icon
-          name="locked"
+          name={icon!.name}
           color={theme.colors.text}
-          size={25}
-          type="fontisto"
+          size={40}
+          type={icon!.type}
           iconStyle={styles.iconContainerStyle}
           /* @ts-ignore */
           onPress={iconFunction}
@@ -64,9 +65,9 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     color: theme.colors.text
   },
   iconContainerStyle: {
-    padding: 18,
-    paddingRight: 20,
-    paddingLeft: 20,
+    padding: 12,
+    paddingRight: 14,
+    paddingLeft: 14,
     backgroundColor: reduceIncrementColor(theme.colors.primary, 'reduce', 20),
     borderRadius: 100
   }

@@ -4,22 +4,38 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import { CardProps } from '../interface/interfaces'
+import { setCardsInStorage } from '../lib/asyncStorage'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 interface CardInfoScreenProps {
   route: any
+  navigation: any
 }
 
-const CardInfoScreen = ({ route }: CardInfoScreenProps) => {
+const CardInfoScreen = ({ route, navigation }: CardInfoScreenProps) => {
+  const { cards, setCards, renderPasslogDataHandler } = usePasslogUserData()
   const [cardInfo, setCardInfo] = useState<CardProps>(route.params.cardInfo)
   const theme = useTheme()
   const styles = styleSheet(theme)
+
+  const deleteCard = async() => {
+    const id = cardInfo.id
+    const index = cards!.map((card) => card.id).indexOf(id)
+    cards!.splice(index, 1)
+    setCards!(cards)
+    
+    await setCardsInStorage(cards!)
+    renderPasslogDataHandler!()
+    navigation.goBack()
+  }
 
   return (
     <View style={{ flex: 1 }}>
       <HeaderNavigationBar
         title={cardInfo.cardName}
-        /*showIcon
-        icon={{ name: "menu", type: 'feather' }}*/
+        showIcon
+        icon={{ name: "trash-2", type: 'feather' }}
+        iconFunction={deleteCard}
       />
       <Text
           selectable

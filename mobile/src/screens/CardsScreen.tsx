@@ -27,11 +27,29 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
     navigation.navigate(screen, params)
   }
 
+  const sortedCards = cards?.sort((a: CardProps, b: CardProps) => {
+    if (a.cardName > b.cardName) {
+      return 1
+    }
+    if (a.cardName < b.cardName) {
+      return -1
+    }
+    return 0
+  })
+
+  const filteredCards = sortedCards?.filter((profiles: CardProps) =>
+    profiles.cardName.toLowerCase().includes(searchInput.toLowerCase()) ||
+    profiles.holder.toLowerCase().includes(searchInput.toLowerCase()) ||
+    profiles.type.toLowerCase().includes(searchInput.toLowerCase())
+  )
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <FocusAwareStatusBar backgroundColor={theme.colors.primary} />
       <TopBar
-        iconFunction={() => console.log('xd')}
+        showIcon
+        iconFunction={() => goToScreen('createCard', {})}
+        icon={{ name: 'add', type: 'material' }}
         title="Cards"
       />
       {cards?.length != 0 ? (
@@ -47,13 +65,13 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
               changeInputValue={(value: string) => setSearchInput(value)}
               cancelInput={() => setSearchInput("")}
               buttonText="New"
-              buttonFunction={() => goToScreen('createCard', {})}
+              buttonFunction={() => console.log('xd')}
             />
           }
           ListHeaderComponentStyle={{
             paddingBottom: 15
           }}
-          data={cards}
+          data={filteredCards}
           keyExtractor={(item: CardProps) => item.id}
           renderItem={({ item }: { item: CardProps }) => (
             <CardContainer

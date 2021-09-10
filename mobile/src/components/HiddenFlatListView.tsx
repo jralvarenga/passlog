@@ -10,9 +10,10 @@ interface HiddenFlatListViewProps {
   inputPlaceHolder: string,
   buttonText: string,
   buttonFunction: Function
+  showButton?: boolean
 }
 
-const HiddenFlatListView = ({ inputValue, changeInputValue, inputPlaceHolder, cancelInput, buttonText, buttonFunction }: HiddenFlatListViewProps) => {
+const HiddenFlatListView = ({ inputValue, changeInputValue, inputPlaceHolder, cancelInput, buttonText, buttonFunction, showButton }: HiddenFlatListViewProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
 
@@ -22,7 +23,7 @@ const HiddenFlatListView = ({ inputValue, changeInputValue, inputPlaceHolder, ca
         platform="default"
         value={inputValue}
         containerStyle={{
-          width: '70%',
+          width: showButton ? '65%' : '100%',
           backgroundColor: theme.colors.background,
           padding: 0,
           borderBottomWidth: 0,
@@ -39,14 +40,15 @@ const HiddenFlatListView = ({ inputValue, changeInputValue, inputPlaceHolder, ca
         round={true}
         placeholder={inputPlaceHolder}
       />
-
-      <Button
-        containerStyle={{ width: '25%' }}
-        /* @ts-ignore */
-        onPress={buttonFunction}
-        titleStyle={styles.text}
-        title={buttonText}
-      />
+      {showButton && (
+        <Button
+          containerStyle={{ width: '30%' }}
+          /* @ts-ignore */
+          onPress={buttonFunction}
+          titleStyle={styles.text}
+          title={buttonText}
+        />
+      )}
     </View>
   )
 }
