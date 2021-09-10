@@ -14,7 +14,6 @@ const OnStartSecurityScreen = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const { settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
-  const [useOnStartSecurity, setUseOnStartSecurity] = useState(false)
   const [usePin, setUsePin] = useState(false)
   const [canUseBiometrics, setCanUseBiometrics] = useState(false)
   const [useBiometrics, setUseBiometrics] = useState(false)
@@ -47,7 +46,6 @@ const OnStartSecurityScreen = () => {
       pinNumber: code,
       /* @ts-ignore */
       biometricType: biometricType.toLowerCase().replace(' ', '-'),
-      onStartSecurity: useOnStartSecurity
     }
     setSettings!(newSettings)
     renderPasslogDataHandler!()
@@ -64,7 +62,6 @@ const OnStartSecurityScreen = () => {
 
   useEffect(() => {
     biometricExists()
-    setUseOnStartSecurity(settings?.onStartSecurity ? settings?.onStartSecurity : false)
     setUsePin(settings?.usePin ? settings?.usePin : false)
     setUseBiometrics(settings?.useBiometrics ? settings?.useBiometrics : false)
     setCode(settings?.pinNumber ? settings?.pinNumber : 'false')
@@ -78,8 +75,34 @@ const OnStartSecurityScreen = () => {
     setSaveCodeButton(true)
   }, [inputCodeRef])
 
-  const saveCode = async() => {
-    await saveNewSettings()
+  const usePinCodeHandler = async(state: boolean) => {
+    if (state == true) {
+      setUsePin(true)
+    } else {
+      console.log('unsubcribe')
+      setUsePin(false)
+      setUseBiometrics(false)
+      setCode('')
+
+      const newSettings: SettingsProps = {
+        usePin: false,
+        useBiometrics: false,
+        pinNumber: "",
+        /* @ts-ignore */
+        biometricType: 'none',
+      }
+      setSettings!(newSettings)
+      renderPasslogDataHandler!()
+  
+      await setSettingsInStorage(newSettings)
+  
+      Snackbar.show({
+        text: 'Settings changed',
+        fontFamily: 'poppins',
+        textColor: theme.colors.text,
+        backgroundColor: theme.colors.primary
+      })
+    }
   }
 
   return (
@@ -90,48 +113,25 @@ const OnStartSecurityScreen = () => {
       <View style={styles.optionsContainer}>
         <View style={styles.optionBox}>
           <Text style={[styles.text, { fontSize: 18, fontFamily: 'poppins-bold' }]}>
-            On start security
+            Use pin code
           </Text>
           <Switch
-            value={useOnStartSecurity}
-            onChange={() => {
-              setUseOnStartSecurity(!useOnStartSecurity)
-              saveNewSettings()
-            }}
+            value={usePin}
+            onChange={() => usePinCodeHandler(!usePin)}
             color={theme.colors.primary}
           />
         </View>
-        {useOnStartSecurity && (
-          <>
+        {canUseBiometrics && (
           <View style={styles.optionBox}>
             <Text style={[styles.text, { fontSize: 18, fontFamily: 'poppins-bold' }]}>
-              Use pin code
+              Use {biometricType}
             </Text>
             <Switch
-              value={usePin}
-              onChange={() => {
-                setUsePin(!usePin)
-                saveNewSettings()
-              }}
+              value={useBiometrics}
+              onChange={() => setUseBiometrics(!useBiometrics)}
               color={theme.colors.primary}
             />
           </View>
-          {canUseBiometrics && (
-            <View style={styles.optionBox}>
-              <Text style={[styles.text, { fontSize: 18, fontFamily: 'poppins-bold' }]}>
-                Use {biometricType}
-              </Text>
-              <Switch
-                value={useBiometrics}
-                onChange={() => {
-                  setUseBiometrics(!useBiometrics)
-                  saveNewSettings()
-                }}
-                color={theme.colors.primary}
-              />
-            </View>
-          )}
-          </>
         )}
       </View>
       {usePin && (
@@ -152,10 +152,10 @@ const OnStartSecurityScreen = () => {
           </View>
           {saveCodeButton && (
             <Button
-              containerStyle={{ width: 150, marginBottom: '20%' }}
+              containerStyle={{ width: 180, marginBottom: '20%' }}
               titleStyle={styles.text}
-              onPress={saveCode}
-              title="Save pin"
+              onPress={saveNewSettings}
+              title="Save Settings"
             />
           )}
         </View>
