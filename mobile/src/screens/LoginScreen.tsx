@@ -4,6 +4,7 @@ import { Dimensions, Image, StatusBar, StyleSheet, Text, View } from 'react-nati
 import { Button, SocialIcon } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FormInput from '../components/FormInput'
+import { loginInFirebaseAuth } from '../lib/firebase'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 
 const windowHeight = Dimensions.get('window').height
@@ -16,6 +17,16 @@ const LoginScreen = ({ navigation }: any) => {
   const [password, setPassword] = useState("")
   const emailRef = useRef()
   const passwordRef = useRef()
+
+  const loginHandler = async() => {
+    try {
+      const result = await loginInFirebaseAuth(email, password)
+      navigation.navigate('Home')
+      console.log(result)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -69,6 +80,7 @@ const LoginScreen = ({ navigation }: any) => {
         </View>
         <View style={styles.loginButtonContainer}>
           <Button
+            onPress={loginHandler}
             buttonStyle={{ padding: 12 }}
             titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
             title="Log In"

@@ -1,3 +1,4 @@
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { exp } from "react-native-reanimated";
 
 export interface PasswordProps {
@@ -28,6 +29,8 @@ export interface PasslogUserDataProps {
   renderPasslogDataHandler?: Function
   settings?: SettingsProps
   setSettings?: Function
+  user?: FirebaseAuthTypes.User | null
+  setUser?: Function
 }
 
 export interface SettingsProps {

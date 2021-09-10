@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import SettingsSheets, { AppSettingsSheet, CloudSettingsSheet } from '../components/SettingsSheets'
+import { signOutHandler } from '../lib/firebase'
 import { objectMemorySize } from '../lib/objectMemorySize'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
@@ -15,8 +16,7 @@ interface SettingsScreenProps {
 const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { passwords, cards }= usePasslogUserData()
-  const user = ""
+  const { passwords, cards, user, setUser, renderPasslogDataHandler }= usePasslogUserData()
   const [showSettingsSheet, setShowSettingsSheet] = useState(false)
   const [showInSheet, setShowInSheet] = useState("")
 
@@ -34,6 +34,12 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
     Linking.openURL('https://passwords.google.com/')
   }
 
+  const signOutButtonHandler = async() => {
+    await signOutHandler()
+    setUser!(null)
+    renderPasslogDataHandler!()
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <FocusAwareStatusBar backgroundColor={theme.colors.background} />
@@ -41,14 +47,14 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         <View style={{ width: '100%' }}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 30 }]}>
             {user != null ? (
-              "Steve Dolphin"
+              user.displayName
             ) : (
               "Anounimous"
             )}
           </Text>
           {user != null ?? (
             <Text style={[styles.text]}>
-              stevedolphin123@email.com
+              {user?.email}
             </Text>
           )}
         </View>
@@ -121,6 +127,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         {user != null && (
           <Button
             title="Sign out"
+            onPress={signOutButtonHandler}
             buttonStyle={styles.signOutButton}
             containerStyle={styles.signOutButtonContainer}
             titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
