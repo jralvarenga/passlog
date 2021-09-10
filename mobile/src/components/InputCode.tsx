@@ -1,6 +1,7 @@
 import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { Theme, useTheme } from '@react-navigation/native'
 import { Text, View, TextInput, TouchableOpacity, ViewStyle, TextStyle, Keyboard, InteractionManager, StyleSheet } from 'react-native'
+import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 
 export type InputCodeHandler = {
   focus(): void
@@ -113,7 +114,7 @@ const stylesSheet = (theme: Theme) => StyleSheet.create({
     width: 50,
     height: 50,
     borderWidth: 2,
-    borderColor: theme.colors.card,
+    borderColor: reduceIncrementColor(theme.colors.card, 'reduce', -60),
     borderRadius: 15,
     marginHorizontal: 2
   },
@@ -128,7 +129,7 @@ const stylesSheet = (theme: Theme) => StyleSheet.create({
     width: 50,
     height: 50,
     borderWidth: 2,
-    borderColor: theme.colors.card,
+    borderColor: reduceIncrementColor(theme.colors.card, 'reduce', -60),
     borderRadius: 15,
     marginHorizontal: 2
   },

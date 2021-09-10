@@ -8,7 +8,7 @@ import LoginScreen from '../screens/LoginScreen';
 import CreateAccountScreen from '../screens/CreateAccountScreen';
 import CreateCardScreen from '../screens/CreateCardScreen';
 import CardInfoScreen from '../screens/CardInfoScreen';
-import OnStartSecurityScreen from '../screens/OnStartSecurityScreen';
+import OnStartSecuritySettingsScreen from '../screens/OnStartSecuritySettingsScreen';
 
 const Stack = createStackNavigator();
 
@@ -57,7 +57,7 @@ const Navigator = () => {
       />
       <Stack.Screen
         name="onStartSecurity"
-        component={OnStartSecurityScreen}
+        component={OnStartSecuritySettingsScreen}
       />
     </Stack.Navigator>
   )

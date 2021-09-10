@@ -10,7 +10,7 @@ import { SettingsProps } from '../interface/interfaces'
 import { setSettingsInStorage } from '../lib/asyncStorage'
 import Snackbar from 'react-native-snackbar'
 
-const OnStartSecurityScreen = () => {
+const OnStartSecuritySettingsScreen = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const { settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
@@ -64,7 +64,7 @@ const OnStartSecurityScreen = () => {
     biometricExists()
     setUsePin(settings?.usePin ? settings?.usePin : false)
     setUseBiometrics(settings?.useBiometrics ? settings?.useBiometrics : false)
-    setCode(settings?.pinNumber ? settings?.pinNumber : 'false')
+    setCode(settings?.pinNumber ? settings?.pinNumber : '')
   }, [])
 
   const onChangeCode = useCallback((value) => {
@@ -198,4 +198,4 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   }
 })
 
-export default OnStartSecurityScreen
+export default OnStartSecuritySettingsScreen
