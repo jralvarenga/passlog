@@ -5,10 +5,13 @@ import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import { Button, Switch } from 'react-native-elements'
 import InputCode, {InputCodeHandler} from '../components/InputCode'
 import ReactNativeBiometrics from 'react-native-biometrics'
+import { PasslogUserDataProps } from '../interface/interfaces'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 const OnStartSecurityScreen = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { settings, setSettings }: PasslogUserDataProps = usePasslogUserData()
   const [usePin, setUsePin] = useState(false)
   const [canUseBiometrics, setCanUseBiometrics] = useState(false)
   const [useBiometrics, setUseBiometrics] = useState(false)
@@ -68,12 +71,12 @@ const OnStartSecurityScreen = () => {
           </View>
         )}
       </View>
-      <View style={styles.inputPinContainer}>
-        <Text style={[styles.text, { fontFamily: 'poppins-bold', marginBottom: 10 }]}>
-          Set or change your pin
-        </Text>
-        <View>
-          {usePin && (
+      {usePin && (
+        <View style={styles.inputPinContainer}>
+          <View>
+            <Text style={[styles.text, { fontFamily: 'poppins-bold', marginBottom: 10, textAlign: 'center' }]}>
+              Set or change your pin
+            </Text>
             <InputCode
               code={code}
               length={4}
@@ -83,17 +86,17 @@ const OnStartSecurityScreen = () => {
               //passcode
               //passcodeChar="*"
             />
+          </View>
+          {saveCodeButton && (
+            <Button
+              containerStyle={{ width: 150, marginBottom: '20%' }}
+              titleStyle={styles.text}
+              onPress={saveCode}
+              title="Save pin"
+            />
           )}
         </View>
-        {saveCodeButton && (
-          <Button
-            containerStyle={{ width: 150 }}
-            titleStyle={styles.text}
-            onPress={saveCode}
-            title="Save pin"
-          />
-        )}
-      </View>
+      )}
     </View>
   )
 }
@@ -127,7 +130,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     flex: 3,
     width: '95%',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
   }
 })
 

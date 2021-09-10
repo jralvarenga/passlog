@@ -1,6 +1,6 @@
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react'
-import { CardProps, PasswordProps } from '../interface/interfaces'
-import { getCardsFromStorage, getPasswordsFromStorage } from '../lib/asyncStorage'
+import { CardProps, PasswordProps, SettingsProps } from '../interface/interfaces'
+import { getCardsFromStorage, getPasswordsFromStorage, getSettings } from '../lib/asyncStorage'
 
 interface PasslogUserDataProviderProps {
   children: ReactElement
@@ -12,10 +12,12 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
   const [renderPasslogData, setRenderPasslogData] = useState(0)
   const [passwords, setPasswords] = useState<PasswordProps[]>([])
   const [cards, setCards] = useState<CardProps[]>([])
+  const [settings, setSettings] = useState<SettingsProps>({})
 
   const getData = async() => {
     const passwords: PasswordProps[] = await getPasswordsFromStorage()
     const cards: CardProps[] = await getCardsFromStorage()
+    const settings: SettingsProps = await getSettings()
     setPasswords(passwords)
     setCards(cards)
   }
@@ -29,7 +31,7 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
   }
 
   return (
-    <PasslogUserDataContext.Provider value={{ passwords, setPasswords, cards, setCards, renderPasslogDataHandler }}>
+    <PasslogUserDataContext.Provider value={{ passwords, setPasswords, cards, setCards, renderPasslogDataHandler, settings, setSettings }}>
       {children}
     </PasslogUserDataContext.Provider>
   )

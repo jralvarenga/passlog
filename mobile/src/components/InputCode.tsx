@@ -114,11 +114,11 @@ const stylesSheet = (theme: Theme) => StyleSheet.create({
     height: 50,
     borderWidth: 2,
     borderColor: theme.colors.card,
-    borderRadius: 20,
-    marginHorizontal: 3
+    borderRadius: 15,
+    marginHorizontal: 2
   },
   text: {
-    fontFamily: 'poppins',
+    fontFamily: 'poppins-bold',
     fontSize: 16,
     color: theme.colors.text
   },

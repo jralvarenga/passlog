@@ -26,9 +26,12 @@ export interface PasslogUserDataProps {
   cards?: CardProps[]
   setCards?: Function
   renderPasslogDataHandler?: Function
+  settings?: SettingsProps
+  setSettings?: Function
 }
 
 export interface SettingsProps {
+  onStartSecurity?: boolean
   useBiometrics?: boolean
   usePin?: boolean
   pinNumber?: string
