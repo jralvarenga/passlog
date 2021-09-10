@@ -85,7 +85,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   scrollView: {
     paddingLeft: 20,
     paddingRight: 20,
-    marginTop: 15
+    marginTop: 15,
   },
   searchInputContainer: {
     width: '70%',

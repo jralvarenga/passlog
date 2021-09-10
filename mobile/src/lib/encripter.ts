@@ -1,8 +1,6 @@
 import CryptoES from 'crypto-es'
+import { CRYPTO_IV, CRYPTO_KEY } from '../../crypto_keys'
 import { CardProps, PasswordProps } from '../interface/interfaces'
-
-const CRYPTO_KEY = 'defgt4gyfgv747fv474v4rg974v4t7yt'
-const CRYPTO_IV = 'fiuewgf48fbgw3y8aopfhnuew8h4yugh'
 
 const key = CryptoES.enc.Hex.parse(CRYPTO_KEY)
 const iv = CryptoES.enc.Hex.parse(CRYPTO_IV)
