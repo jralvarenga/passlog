@@ -1,11 +1,9 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import { CardProps } from '../interface/interfaces'
-import { cardIcon } from '../lib/getCardIcon'
-import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 
 interface CardInfoScreenProps {
   route: any

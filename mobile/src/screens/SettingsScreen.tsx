@@ -1,11 +1,10 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Linking, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import SettingsSheets, { AppSettingsSheet, CloudSettingsSheet } from '../components/SettingsSheets'
-import { PasslogUserDataProps } from '../interface/interfaces'
 import { objectMemorySize } from '../lib/objectMemorySize'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
@@ -16,7 +15,7 @@ interface SettingsScreenProps {
 const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { passwords, cards }: PasslogUserDataProps = usePasslogUserData()
+  const { passwords, cards }= usePasslogUserData()
   const user = ""
   const [showSettingsSheet, setShowSettingsSheet] = useState(false)
   const [showInSheet, setShowInSheet] = useState("")

@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
-import { PasslogUserDataProps, PasswordProps } from '../interface/interfaces'
+import { PasswordProps } from '../interface/interfaces'
 import { setPasswordsInStorage } from '../lib/asyncStorage'
 import { createId } from '../lib/createId'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
@@ -17,7 +17,7 @@ interface CreatePasswordScreenProps {
 const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { passwords, setPasswords, renderPasslogDataHandler }: PasslogUserDataProps = usePasslogUserData()
+  const { passwords, setPasswords, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [user, setUser] = useState("")
   const [email, setEmail] = useState("")

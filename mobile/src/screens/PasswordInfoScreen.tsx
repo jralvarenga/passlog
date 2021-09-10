@@ -1,9 +1,9 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
-import { PasslogUserDataProps, PasswordProps } from '../interface/interfaces'
+import { PasswordProps } from '../interface/interfaces'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 import PasswordInfoOptions from '../components/PasswordInfoOptions'
 import Snackbar from 'react-native-snackbar'
@@ -19,7 +19,7 @@ interface PasswordInfoScreenProps {
 const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { passwords, setPasswords, renderPasslogDataHandler }: PasslogUserDataProps = usePasslogUserData()
+  const { passwords, setPasswords, renderPasslogDataHandler }= usePasslogUserData()
   const [passwordInfo, setPasswordInfo] = useState<PasswordProps>(route.params.passwordInfo)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
 

@@ -18,7 +18,7 @@ interface CreateCardScreenProps {
 const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { cards, setCards, renderPasslogDataHandler }: PasslogUserDataProps = usePasslogUserData()
+  const { cards, setCards, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [type, setType] = useState("")
   const [typeValue, setTypeValue] = useState("")

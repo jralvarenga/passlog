@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Dimensions, FlatList, StyleSheet } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import PasswordContainer from '../components/PasswordContainer'
 import TopBar from '../components/TopBar'
 import HiddenFlatListView from '../components/HiddenFlatListView'
-import { PasslogUserDataProps, PasswordProps } from '../interface/interfaces'
+import { PasswordProps } from '../interface/interfaces'
 import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
@@ -21,7 +21,7 @@ interface PasswordContainer {
 const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { passwords, setPasswords }: PasslogUserDataProps = usePasslogUserData()
+  const { passwords, setPasswords } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
   const [showBottomSheet, setShowBottomSheet] = useState(false)
 

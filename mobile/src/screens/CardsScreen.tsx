@@ -20,7 +20,7 @@ interface PasswordContainerProps {
 const CardsScreen = ({ navigation }: PasswordContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { cards, setCards }: PasslogUserDataProps = usePasslogUserData()
+  const { cards, setCards } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
 
   const goToScreen = (screen: string, params: any) => {

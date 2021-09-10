@@ -11,7 +11,7 @@ import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 const OnStartSecurityScreen = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { settings, setSettings }: PasslogUserDataProps = usePasslogUserData()
+  const { settings, setSettings } = usePasslogUserData()
   const [usePin, setUsePin] = useState(false)
   const [canUseBiometrics, setCanUseBiometrics] = useState(false)
   const [useBiometrics, setUseBiometrics] = useState(false)

@@ -1,5 +1,5 @@
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react'
-import { CardProps, PasswordProps, SettingsProps } from '../interface/interfaces'
+import { CardProps, PasslogUserDataProps, PasswordProps, SettingsProps } from '../interface/interfaces'
 import { getCardsFromStorage, getPasswordsFromStorage, getSettings } from '../lib/asyncStorage'
 
 interface PasslogUserDataProviderProps {
@@ -37,4 +37,4 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
   )
 }
 
-export const usePasslogUserData = () => useContext(PasslogUserDataContext)
+export const usePasslogUserData = (): PasslogUserDataProps => useContext(PasslogUserDataContext)
