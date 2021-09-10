@@ -129,8 +129,8 @@ const stylesSheet = (theme: Theme) => StyleSheet.create({
     height: 50,
     borderWidth: 2,
     borderColor: theme.colors.card,
-    borderRadius: 20,
-    marginHorizontal: 3
+    borderRadius: 15,
+    marginHorizontal: 2
   },
   inputStyle: {
     fontSize: 0,

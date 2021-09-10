@@ -5,42 +5,82 @@ import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import { Button, Switch } from 'react-native-elements'
 import InputCode, {InputCodeHandler} from '../components/InputCode'
 import ReactNativeBiometrics from 'react-native-biometrics'
-import { PasslogUserDataProps } from '../interface/interfaces'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
+import { SettingsProps } from '../interface/interfaces'
+import { setSettingsInStorage } from '../lib/asyncStorage'
+import Snackbar from 'react-native-snackbar'
 
 const OnStartSecurityScreen = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { settings, setSettings } = usePasslogUserData()
+  const { settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
+  const [useOnStartSecurity, setUseOnStartSecurity] = useState(false)
   const [usePin, setUsePin] = useState(false)
   const [canUseBiometrics, setCanUseBiometrics] = useState(false)
   const [useBiometrics, setUseBiometrics] = useState(false)
-  const [code, setCode] = useState("")
+  const [biometricType, setBiometricType] = useState<'Biometrics' | 'Face ID' | 'Touch ID' | 'none'>('none')
+  const [code, setCode] = useState('')
   const inputCodeRef = useRef<InputCodeHandler>(null)
   const [saveCodeButton, setSaveCodeButton] = useState(false)
 
-  const onChangeCode = useCallback((value) => {
-    setCode(value)
-  }, [])
-
-  const onFullFill = useCallback((value) => {
-    setSaveCodeButton(true)
-  }, [inputCodeRef])
-
   const biometricExists = async() => {
     const { available, biometryType } = await ReactNativeBiometrics.isSensorAvailable()
+    if (biometryType == ReactNativeBiometrics.TouchID) {
+      setBiometricType('Touch ID')
+    } else if (biometryType == ReactNativeBiometrics.FaceID) {
+      setBiometricType('Face ID')
+    } else if (biometryType == ReactNativeBiometrics.Biometrics) {
+      setBiometricType('Biometrics')
+    } else {
+      setBiometricType('none')
+    }
+
     if (available) {
       setCanUseBiometrics(true)
     }
   }
 
-  const saveCode = async() => {
-    console.log('Saved')
+  const saveNewSettings = async() => {
+    const newSettings: SettingsProps = {
+      usePin: usePin,
+      useBiometrics: useBiometrics,
+      pinNumber: code,
+      /* @ts-ignore */
+      biometricType: biometricType.toLowerCase().replace(' ', '-'),
+      onStartSecurity: useOnStartSecurity
+    }
+    setSettings!(newSettings)
+    renderPasslogDataHandler!()
+
+    await setSettingsInStorage(newSettings)
+
+    Snackbar.show({
+      text: 'Settings changed',
+      fontFamily: 'poppins',
+      textColor: theme.colors.text,
+      backgroundColor: theme.colors.primary
+    })
   }
 
   useEffect(() => {
     biometricExists()
+    setUseOnStartSecurity(settings?.onStartSecurity ? settings?.onStartSecurity : false)
+    setUsePin(settings?.usePin ? settings?.usePin : false)
+    setUseBiometrics(settings?.useBiometrics ? settings?.useBiometrics : false)
+    setCode(settings?.pinNumber ? settings?.pinNumber : 'false')
   }, [])
+
+  const onChangeCode = useCallback((value) => {
+    setCode(value)
+  }, [])
+
+  const onFullFillCode = useCallback(() => {
+    setSaveCodeButton(true)
+  }, [inputCodeRef])
+
+  const saveCode = async() => {
+    await saveNewSettings()
+  }
 
   return (
     <View style={styles.container}>
@@ -50,25 +90,48 @@ const OnStartSecurityScreen = () => {
       <View style={styles.optionsContainer}>
         <View style={styles.optionBox}>
           <Text style={[styles.text, { fontSize: 18, fontFamily: 'poppins-bold' }]}>
-            Use pin code
+            On start security
           </Text>
           <Switch
-            value={usePin}
-            onChange={() => setUsePin(!usePin)}
+            value={useOnStartSecurity}
+            onChange={() => {
+              setUseOnStartSecurity(!useOnStartSecurity)
+              saveNewSettings()
+            }}
             color={theme.colors.primary}
           />
         </View>
-        {canUseBiometrics && (
+        {useOnStartSecurity && (
+          <>
           <View style={styles.optionBox}>
             <Text style={[styles.text, { fontSize: 18, fontFamily: 'poppins-bold' }]}>
-              Use biometrics
+              Use pin code
             </Text>
             <Switch
-              value={useBiometrics}
-              onChange={() => setUseBiometrics(!useBiometrics)}
+              value={usePin}
+              onChange={() => {
+                setUsePin(!usePin)
+                saveNewSettings()
+              }}
               color={theme.colors.primary}
             />
           </View>
+          {canUseBiometrics && (
+            <View style={styles.optionBox}>
+              <Text style={[styles.text, { fontSize: 18, fontFamily: 'poppins-bold' }]}>
+                Use {biometricType}
+              </Text>
+              <Switch
+                value={useBiometrics}
+                onChange={() => {
+                  setUseBiometrics(!useBiometrics)
+                  saveNewSettings()
+                }}
+                color={theme.colors.primary}
+              />
+            </View>
+          )}
+          </>
         )}
       </View>
       {usePin && (
@@ -82,7 +145,7 @@ const OnStartSecurityScreen = () => {
               length={4}
               ref={inputCodeRef}
               onChangeCode={onChangeCode}
-              onFullFill={onFullFill}
+              onFullFill={onFullFillCode}
               //passcode
               //passcodeChar="*"
             />
@@ -113,7 +176,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   },
   optionsContainer: {
     width: '95%',
-    flex: 1.2,
+    flex: 2.2,
   },
   optionBox: {
     padding: 15,
@@ -129,6 +192,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   inputPinContainer: {
     flex: 3,
     width: '95%',
+    paddingTop: 30,
     alignItems: 'center',
     justifyContent: 'space-between',
   }

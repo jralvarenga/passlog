@@ -20,6 +20,7 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
     const settings: SettingsProps = await getSettings()
     setPasswords(passwords)
     setCards(cards)
+    setSettings(settings)
   }
 
   useEffect(() => {

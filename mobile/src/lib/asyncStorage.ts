@@ -50,7 +50,8 @@ export const getSettings = async(): Promise<SettingsProps> => {
     onStartSecurity: false,
     pinNumber: '',
     useBiometrics: false,
-    usePin: false
+    usePin: false,
+    biometricType: 'none'
   }
 
   return settings

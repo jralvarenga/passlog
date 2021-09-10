@@ -35,4 +35,5 @@ export interface SettingsProps {
   useBiometrics?: boolean
   usePin?: boolean
   pinNumber?: string
+  biometricType?: 'biometric' | 'face-id' | 'touch-id' | 'none'
 }
