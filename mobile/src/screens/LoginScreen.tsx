@@ -6,12 +6,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import FormInput from '../components/FormInput'
 import { loginInFirebaseAuth } from '../lib/firebase'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 const windowHeight = Dimensions.get('window').height
 const windowWidth = Dimensions.get('window').width
 
 const LoginScreen = ({ navigation }: any) => {
   const theme = useTheme()
+  const { setUser, renderPasslogDataHandler } = usePasslogUserData()
   const styles = styleSheet(theme)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -21,6 +23,8 @@ const LoginScreen = ({ navigation }: any) => {
   const loginHandler = async() => {
     try {
       const result = await loginInFirebaseAuth(email, password)
+      setUser!(result.user)
+      renderPasslogDataHandler!()
       navigation.navigate('Home')
       console.log(result)
     } catch (error) {

@@ -1,13 +1,21 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useState } from 'react'
-import { StatusBar, StyleSheet, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Dimensions, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
+import Snackbar from 'react-native-snackbar'
+import BottomSheet from '../components/BottomSheet'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
+import { createAccountInFirebaseAuth } from '../lib/firebase'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
-const CreateAccountScreen = () => {
+const windowHeight = Dimensions.get('window').height
+const bottomSheetHeight = 0.3
+
+const CreateAccountScreen = ({ navigation }: any) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { setUser, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
@@ -15,7 +23,7 @@ const CreateAccountScreen = () => {
   const [repeatedPassword, setRepeatedPassword] = useState("")
   const [eyeIcon, setEyeIcon] = useState("eye-off")
   const [showPassword, setShowPassword] = useState(false)
-  
+  const [showVerifySheet, setShowVerifySheet] = useState(false)
 
   const changePasswordVisibility = () => {
     if (showPassword) {
@@ -25,6 +33,31 @@ const CreateAccountScreen = () => {
       setShowPassword(true)
       setEyeIcon("eye-off")
     }
+  }
+
+  const createAccountHandler = async() => {
+    if (password != repeatedPassword) {
+      Snackbar.show({
+        text: "The passwords don't match",
+        fontFamily: 'poppins',
+        textColor: theme.colors.text,
+        backgroundColor: theme.colors.primary
+      })
+      return
+    }
+    const userName = `${name.replace(' ', '')} ${lastName.replace(' ', '')}`
+    try {
+      const user = await createAccountInFirebaseAuth(email, password, userName)
+      setUser!(user)
+      renderPasslogDataHandler!()
+      setShowVerifySheet(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const goHome = async() => {
+    navigation.navigate('Home')
   }
 
   return (
@@ -100,12 +133,41 @@ const CreateAccountScreen = () => {
       <View style={styles.createButtonContainer}>
         <Button
           title="Create account"
+          onPress={createAccountHandler}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           containerStyle={{
             width: '45%',
           }}
         />
       </View>
+      <BottomSheet
+        visible={showVerifySheet}
+        //setVisible={setShowVerifySheet}
+        bottomSheetHeight={bottomSheetHeight}
+      >
+        <View style={styles.bottomSheetContainer}>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 24 }]}>
+              Verify account
+            </Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.text, { textAlign: 'center' }]}>
+              We've sent you a verification email, do it now or you can do it later,
+            </Text>
+          </View>
+          <View style={{ flex: 1.2, alignItems: 'flex-end', justifyContent: 'center', flexDirection: 'row' }}>
+            <Button
+              title="Go home"
+              onPress={goHome}
+              titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
+              containerStyle={{
+                width: '45%',
+              }}
+            />
+          </View>
+        </View>
+      </BottomSheet>
     </View>
   )
 }
@@ -140,6 +202,14 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
+  },
+  bottomSheetContainer: {
+    height: windowHeight * bottomSheetHeight,
+    flex: 1,
+    padding: 15,
+    backgroundColor: theme.colors.background,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30
   }
 })
 

@@ -56,7 +56,7 @@ const GeneratePasswordSheet = ({ goToScreen, visible, setVisible }: GeneratePass
         bottomSheetHeight={bottomSheetPercentage}
       >
         <View style={styles.contentContainer}>
-          <View style={{ flex: 1}}>
+          <View style={{ flex: 1 }}>
             <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 24 }]}>
               Secure Password:
             </Text>

@@ -28,7 +28,11 @@ const BottomSheet = ({ visible, setVisible, children, props, bottomSheetHeight }
       {...props}
     >
       <TouchableWithoutFeedback
-        onPress={() => setVisible!(false)}
+        onPress={() => {
+          if (setVisible) {
+            setVisible!(false) 
+          }
+        }}
       >
         <View
           style={{ height: windowHeight * (0.95 - bottomSheetHeight) }}

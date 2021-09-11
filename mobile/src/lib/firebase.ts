@@ -7,6 +7,20 @@ export const loginInFirebaseAuth = async(email: string, password: string) => {
   return result
 }
 
+export const sendEmailConfirmationHandler = async(user: FirebaseAuthTypes.User) => {
+  await user.sendEmailVerification()
+}
+
+export const createAccountInFirebaseAuth = async(email: string, password: string, name: string): Promise<FirebaseAuthTypes.User> => {
+  const { user } = await auth().createUserWithEmailAndPassword(email, password)
+  await user.updateProfile({
+    displayName: name
+  })
+  await sendEmailConfirmationHandler(user)
+
+  return user
+}
+
 export const returnCurrentUser = (): FirebaseAuthTypes.User | null => {
   return auth().currentUser
 }
