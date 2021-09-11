@@ -31,6 +31,8 @@ export interface PasslogUserDataProps {
   setSettings?: Function
   user?: FirebaseAuthTypes.User | null
   setUser?: Function
+  userSettings?: UserSettingsProps | null
+  setUserSettings?: Function
 }
 
 export interface SettingsProps {
@@ -39,4 +41,10 @@ export interface SettingsProps {
   usePin?: boolean
   pinNumber?: string
   biometricType?: 'biometric' | 'face-id' | 'touch-id' | 'none'
+}
+
+export interface UserSettingsProps {
+  name: string
+  uid: string
+  alwaysSync: boolean
 }

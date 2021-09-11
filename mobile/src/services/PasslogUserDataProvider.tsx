@@ -1,8 +1,8 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react'
-import { CardProps, PasslogUserDataProps, PasswordProps, SettingsProps } from '../interface/interfaces'
-import { getCardsFromStorage, getPasswordsFromStorage, getSettings } from '../lib/asyncStorage'
-import { returnCurrentUser } from '../lib/firebase'
+import { CardProps, PasslogUserDataProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interface/interfaces'
+import { getCardsFromStorage, getPasswordsFromStorage, getSettings, getUserSettings } from '../lib/asyncStorage'
+import { returnCurrentUser } from '../lib/auth'
 
 interface PasslogUserDataProviderProps {
   children: ReactElement
@@ -16,6 +16,7 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
   const [passwords, setPasswords] = useState<PasswordProps[]>([])
   const [cards, setCards] = useState<CardProps[]>([])
   const [settings, setSettings] = useState<SettingsProps>({})
+  const [userSettings, setUserSettings] = useState<UserSettingsProps | null>(null)
 
   const getData = async() => {
     const user = returnCurrentUser()
@@ -23,6 +24,11 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
     const passwords: PasswordProps[] = await getPasswordsFromStorage()
     const cards: CardProps[] = await getCardsFromStorage()
     const settings: SettingsProps = await getSettings()
+    if (user) {
+      const userSettings = await getUserSettings()
+      console.log(userSettings)
+      setUserSettings(userSettings)
+    }
     setPasswords(passwords)
     setCards(cards)
     setSettings(settings)
@@ -37,7 +43,7 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
   }
 
   return (
-    <PasslogUserDataContext.Provider value={{ passwords, setPasswords, cards, setCards, renderPasslogDataHandler, settings, setSettings, user, setUser }}>
+    <PasslogUserDataContext.Provider value={{ passwords, setPasswords, cards, setCards, renderPasslogDataHandler, settings, setSettings, user, setUser, userSettings, setUserSettings }}>
       {children}
     </PasslogUserDataContext.Provider>
   )

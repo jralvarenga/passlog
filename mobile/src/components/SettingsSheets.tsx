@@ -1,8 +1,10 @@
-import React, { ReactElement, useCallback, useMemo, useState } from 'react'
+import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react'
 import { Theme, useTheme } from '@react-navigation/native'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Button, Switch } from 'react-native-elements'
 import BottomSheet from './BottomSheet'
+import { UserSettingsProps } from '../interface/interfaces'
+import { setUserSettings as setUserSettingsInStorage } from '../lib/asyncStorage'
 
 interface SettingSheetsProps {
   visible: boolean
@@ -57,11 +59,26 @@ export const AppSettingsSheet = ({ goToScreen }: any) => {
   )
 }
 
-export const CloudSettingsSheet = () => {
+export const CloudSettingsSheet = ({ userSettings, setUserSettings }: { userSettings: UserSettingsProps, setUserSettings: Function }) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const [enabledSync, setEnabledSync] = useState(false)
 
+  useEffect(() => {
+    setEnabledSync(userSettings.alwaysSync)
+  }, [userSettings])
+
+  const enableAlwaysSyncState = async(state: boolean) => {
+    const newUserSettings: UserSettingsProps = {
+      name: userSettings.name,
+      uid: userSettings.uid,
+      alwaysSync: state
+    }
+
+    await setUserSettingsInStorage(newUserSettings)
+    setUserSettings(newUserSettings)
+    setEnabledSync(state)
+  }
 
   return (
     <View style={styles.contentContainer}>
@@ -73,9 +90,16 @@ export const CloudSettingsSheet = () => {
           Enable Back Up
         </Text>
         <Switch
-          value={enabledSync}
-          onChange={() => setEnabledSync(!enabledSync)}
+          value={userSettings.alwaysSync}
+          onChange={() => enableAlwaysSyncState(!enabledSync)}
           color={theme.colors.primary}
+        />
+      </View>
+      <View>
+        <Button
+          containerStyle={{ width: '100%' }}
+          titleStyle={styles.text}
+          title="Back up now"
         />
       </View>
     </View>

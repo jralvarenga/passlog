@@ -6,7 +6,10 @@ import Snackbar from 'react-native-snackbar'
 import BottomSheet from '../components/BottomSheet'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
-import { createAccountInFirebaseAuth } from '../lib/firebase'
+import { UserSettingsProps } from '../interface/interfaces'
+import { setUserSettings } from '../lib/asyncStorage'
+import { createAccountInFirebaseAuth } from '../lib/auth'
+import { createUserDocument } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 const windowHeight = Dimensions.get('window').height
@@ -48,6 +51,13 @@ const CreateAccountScreen = ({ navigation }: any) => {
     const userName = `${name.replace(' ', '')} ${lastName.replace(' ', '')}`
     try {
       const user = await createAccountInFirebaseAuth(email, password, userName)
+      await createUserDocument(user.uid)
+      const userDefaultSettings: UserSettingsProps = {
+        uid: user.uid,
+        name: userName,
+        alwaysSync: false
+      }
+      await setUserSettings(userDefaultSettings)
       setUser!(user)
       renderPasslogDataHandler!()
       setShowVerifySheet(true)

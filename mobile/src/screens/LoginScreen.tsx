@@ -4,11 +4,12 @@ import { Dimensions, Image, StatusBar, StyleSheet, Text, View } from 'react-nati
 import { Button, SocialIcon } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FormInput from '../components/FormInput'
-import { loginInFirebaseAuth } from '../lib/firebase'
+import { UserSettingsProps } from '../interface/interfaces'
+import { setUserSettings } from '../lib/asyncStorage'
+import { loginInFirebaseAuth } from '../lib/auth'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
-const windowHeight = Dimensions.get('window').height
 const windowWidth = Dimensions.get('window').width
 
 const LoginScreen = ({ navigation }: any) => {
@@ -22,11 +23,16 @@ const LoginScreen = ({ navigation }: any) => {
 
   const loginHandler = async() => {
     try {
-      const result = await loginInFirebaseAuth(email, password)
-      setUser!(result.user)
+      const { user } = await loginInFirebaseAuth(email, password)
+      const userDefaultSettings: UserSettingsProps = {
+        uid: user.uid,
+        name: user.displayName!,
+        alwaysSync: false
+      }
+      await setUserSettings(userDefaultSettings)
+      setUser!(user)
       renderPasslogDataHandler!()
       navigation.navigate('Home')
-      console.log(result)
     } catch (error) {
       console.log(error)
     }

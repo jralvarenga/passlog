@@ -5,7 +5,8 @@ import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import SettingsSheets, { AppSettingsSheet, CloudSettingsSheet } from '../components/SettingsSheets'
-import { signOutHandler } from '../lib/firebase'
+import { removeUserSettings } from '../lib/asyncStorage'
+import { signOutHandler } from '../lib/auth'
 import { objectMemorySize } from '../lib/objectMemorySize'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
@@ -16,7 +17,7 @@ interface SettingsScreenProps {
 const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { passwords, cards, user, setUser, renderPasslogDataHandler }= usePasslogUserData()
+  const { passwords, cards, user, setUser, renderPasslogDataHandler, userSettings, setUserSettings }= usePasslogUserData()
   const [showSettingsSheet, setShowSettingsSheet] = useState(false)
   const [showInSheet, setShowInSheet] = useState("")
 
@@ -36,6 +37,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
 
   const signOutButtonHandler = async() => {
     await signOutHandler()
+    await removeUserSettings()
     setUser!(null)
     renderPasslogDataHandler!()
   }
@@ -146,7 +148,10 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
             />
           )}
           {showInSheet == 'cloudSettings' && (
-            <CloudSettingsSheet />
+            <CloudSettingsSheet
+              userSettings={userSettings!}
+              setUserSettings={setUserSettings!}
+            />
           )}
         </>
       </SettingsSheets>

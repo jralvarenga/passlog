@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { CardProps, PasswordProps, SettingsProps } from '../interface/interfaces'
+import { CardProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interface/interfaces'
 import { decryptString, encryptCard, encryptPassword } from './encripter'
 
 // Get methods
@@ -57,6 +57,13 @@ export const getSettings = async(): Promise<SettingsProps> => {
   return settings
 }
 
+export const getUserSettings = async(): Promise<UserSettingsProps> => {
+  const jsonSettings = await AsyncStorage.getItem('user')
+  const settings: UserSettingsProps = JSON.parse(jsonSettings!)
+
+  return settings
+}
+
 // Set methods
 
 export const setPasswordsInStorage = async(passwords: PasswordProps[]) => {
@@ -74,4 +81,15 @@ export const setCardsInStorage = async(cards: CardProps[]) => {
 export const setSettingsInStorage = async(settings: SettingsProps) => {
   const jsonValue = JSON.stringify(settings)
   await AsyncStorage.setItem('settings', jsonValue)
+}
+
+export const setUserSettings = async(settings: UserSettingsProps) => {
+  const jsonValue = JSON.stringify(settings)
+  await AsyncStorage.setItem('user', jsonValue)
+}
+
+// Delete methods
+
+export const removeUserSettings = async() => {
+  await AsyncStorage.removeItem('user')
 }

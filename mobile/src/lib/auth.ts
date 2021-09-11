@@ -1,5 +1,4 @@
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth'
-import firestore from '@react-native-firebase/firestore'
 
 // Auth handlers
 export const loginInFirebaseAuth = async(email: string, password: string) => {
