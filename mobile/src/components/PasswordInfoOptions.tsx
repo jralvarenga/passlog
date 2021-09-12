@@ -28,6 +28,7 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
 
   const addNewChanges = () => {
     const currentDate = new Date()
+    currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
     const newData: PasswordProps = {
       id: passwordInfo.id,
       profileName: name != '' ? name : passwordInfo.profileName,

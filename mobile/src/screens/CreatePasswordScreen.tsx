@@ -50,6 +50,7 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
     setLoading(true)
     try {
       const currentDate = new Date()
+      currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
       let newPasswordInfo: PasswordProps = {
         id: createId(),
         profileName: name,

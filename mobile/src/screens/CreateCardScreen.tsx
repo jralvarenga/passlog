@@ -45,6 +45,7 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
     setLoading(true)
     try {
       const currentDate = new Date()
+      currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
       let newCard: CardProps = {
         id: createId(),
         cardName: name,
