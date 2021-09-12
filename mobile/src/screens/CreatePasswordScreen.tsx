@@ -7,6 +7,8 @@ import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import { PasswordProps } from '../interface/interfaces'
 import { setPasswordsInStorage } from '../lib/asyncStorage'
 import { createId } from '../lib/createId'
+import { encryptPassword } from '../lib/encripter'
+import { createNewPasslogDocument } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 interface CreatePasswordScreenProps {
@@ -17,7 +19,7 @@ interface CreatePasswordScreenProps {
 const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { passwords, setPasswords, renderPasslogDataHandler } = usePasslogUserData()
+  const { passwords, setPasswords, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [user, setUser] = useState("")
   const [email, setEmail] = useState("")
@@ -25,6 +27,7 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
   const [comments, setComments] = useState("")
   const [eyeIcon, setEyeIcon] = useState("eye-off")
   const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (route.params.generatedPassword) {
@@ -44,22 +47,33 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
   }
 
   const createPassword = async() => {
-    const currentDate = new Date()
-    const newPasswordInfo: PasswordProps = {
-      id: createId(),
-      profileName: name,
-      user: user,
-      email: email,
-      password: password,
-      comments: comments,
-      date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
-    }
+    setLoading(true)
+    try {
+      const currentDate = new Date()
+      let newPasswordInfo: PasswordProps = {
+        id: createId(),
+        profileName: name,
+        user: user,
+        email: email,
+        password: password,
+        comments: comments,
+        date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
+      }
 
-    passwords!.push(newPasswordInfo)
-    setPasswords!(passwords)
-    await setPasswordsInStorage(passwords!)
-    renderPasslogDataHandler!()
-    navigation.goBack()
+      passwords!.push(newPasswordInfo)
+      setPasswords!(passwords)
+      await setPasswordsInStorage(passwords!)
+      if (userSettings?.alwaysSync) {
+        newPasswordInfo = encryptPassword(newPasswordInfo)
+        await createNewPasslogDocument(newPasswordInfo, 'passwords')
+      }
+      renderPasslogDataHandler!()
+      setLoading(false)
+      navigation.goBack()
+    } catch (error) {
+      setLoading(false)
+      console.log(error)
+    }
   }
 
   return (
@@ -134,6 +148,7 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
         <Button
           title="Create"
           onPress={createPassword}
+          loading={loading}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           containerStyle={{
             width: '45%',

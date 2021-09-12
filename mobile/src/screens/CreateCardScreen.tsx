@@ -9,6 +9,8 @@ import { CardProps, PasslogUserDataProps } from '../interface/interfaces'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import { createId } from '../lib/createId'
 import { setCardsInStorage } from '../lib/asyncStorage'
+import { encryptCard } from '../lib/encripter'
+import { createNewPasslogDocument } from '../lib/firestore'
 
 interface CreateCardScreenProps {
   route: any
@@ -18,7 +20,7 @@ interface CreateCardScreenProps {
 const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { cards, setCards, renderPasslogDataHandler } = usePasslogUserData()
+  const { cards, setCards, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [type, setType] = useState("")
   const [typeValue, setTypeValue] = useState("")
@@ -27,6 +29,7 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   //const [extraInfo, setExtraInfo] = useState("")
   //const [extraInfoData, setExtraInfoData] = useState("")
   const [showBottomSheet, setShowBottomSheet] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const showBottomSheetHandler = () => {
     setShowBottomSheet(true)
@@ -39,22 +42,34 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   }
 
   const createCard = async() => {
-    const currentDate = new Date()
-    const newCard: CardProps = {
-      id: createId(),
-      cardName: name,
-      type: typeValue,
-      holder: holder,
-      number: numbers,
-      addedInfo: "",
-      date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
-    }
+    setLoading(true)
+    try {
+      const currentDate = new Date()
+      let newCard: CardProps = {
+        id: createId(),
+        cardName: name,
+        type: typeValue,
+        holder: holder,
+        number: numbers,
+        addedInfo: "",
+        date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
+      }
 
-    cards!.push(newCard)
-    setCards!(cards)
-    await setCardsInStorage(cards!)
-    renderPasslogDataHandler!()
-    navigation.goBack()
+      cards!.push(newCard)
+      setCards!(cards)
+      await setCardsInStorage(cards!)
+      if (userSettings?.alwaysSync) {
+        newCard = encryptCard(newCard)
+        await createNewPasslogDocument(newCard, 'cards')
+      }
+      renderPasslogDataHandler!()
+      setLoading(false)
+      navigation.goBack()
+    } catch (error) {
+      setLoading(false)
+      console.log(error)
+    }
+    
   }
 
   return (
@@ -73,7 +88,7 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
             onChangeText={(value: string) => setName(value)}
           />
           <FormInput
-            placeholder="card, promo..."
+            placeholder="Card, promo..."
             label="Card type"
             width="50%"
             icon={{ type: 'ionicon', name: 'card' }}
@@ -113,7 +128,8 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
       </View>
       <View style={styles.createButtonContainer}>
         <Button
-          title="Create"
+          title="Create card"
+          loading={loading}
           onPress={createCard}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           containerStyle={{
