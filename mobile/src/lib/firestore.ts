@@ -22,15 +22,6 @@ export const searchForLegacyBackup = async(uid: string) => {
   }
 }
 
-export const createNewPasslogDocument = async(data: PasswordProps | CardProps, collection: 'passwords' | 'cards') => {
-  const user = returnCurrentUser()
-  const docRef = firestore().collection('data').doc(user?.uid).collection(collection).doc(data.id)
-
-  await docRef.set({
-    ...data
-  })
-}
-
 export const getPasslogUserDataInFirestore = async(): Promise<{ firestorePasswords: PasswordProps[], firestoreCards: CardProps[] }> => {
   const user = returnCurrentUser()
   const passwordsCollection = firestore().collection('data').doc(user?.uid).collection('passwords')
@@ -56,4 +47,29 @@ export const getPasslogUserDataInFirestore = async(): Promise<{ firestorePasswor
     firestorePasswords: passwords,
     firestoreCards: cards
   }
+}
+
+export const createNewPasslogDocument = async(data: PasswordProps | CardProps, collection: 'passwords' | 'cards') => {
+  const user = returnCurrentUser()
+  const docRef = firestore().collection('data').doc(user?.uid).collection(collection).doc(data.id)
+
+  await docRef.set({
+    ...data
+  })
+}
+
+export const deletePasslogDocument = async(docId: string, collection: 'passwords' | 'cards') => {  
+  const user = returnCurrentUser()
+  const docRef = firestore().collection('data').doc(user?.uid).collection(collection).doc(docId)
+
+  await docRef.delete()
+}
+
+export const updatePasslogDocument = async(data: PasswordProps | CardProps, collection: 'passwords' | 'cards') => {
+  const user = returnCurrentUser()
+  const docRef = firestore().collection('data').doc(user?.uid).collection(collection).doc(data.id)
+
+  await docRef.update({
+    ...data
+  })
 }

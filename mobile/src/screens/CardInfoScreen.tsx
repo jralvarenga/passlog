@@ -5,6 +5,7 @@ import { Icon } from 'react-native-elements'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import { CardProps } from '../interface/interfaces'
 import { setCardsInStorage } from '../lib/asyncStorage'
+import { deletePasslogDocument } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 interface CardInfoScreenProps {
@@ -13,7 +14,7 @@ interface CardInfoScreenProps {
 }
 
 const CardInfoScreen = ({ route, navigation }: CardInfoScreenProps) => {
-  const { cards, setCards, renderPasslogDataHandler } = usePasslogUserData()
+  const { cards, setCards, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [cardInfo, setCardInfo] = useState<CardProps>(route.params.cardInfo)
   const theme = useTheme()
   const styles = styleSheet(theme)
@@ -25,6 +26,9 @@ const CardInfoScreen = ({ route, navigation }: CardInfoScreenProps) => {
     setCards!(cards)
     
     await setCardsInStorage(cards!)
+    if (userSettings?.alwaysSync) {
+      await deletePasslogDocument(id, 'cards')
+    }
     renderPasslogDataHandler!()
     navigation.goBack()
   }

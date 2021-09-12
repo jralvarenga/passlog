@@ -10,6 +10,8 @@ import Snackbar from 'react-native-snackbar'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import { setPasswordsInStorage } from '../lib/asyncStorage'
 import Clipboard from '@react-native-clipboard/clipboard'
+import { deletePasslogDocument, updatePasslogDocument } from '../lib/firestore'
+import { encryptPassword } from '../lib/encripter'
 
 interface PasswordInfoScreenProps {
   route: any
@@ -19,7 +21,7 @@ interface PasswordInfoScreenProps {
 const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { passwords, setPasswords, renderPasslogDataHandler }= usePasslogUserData()
+  const { passwords, setPasswords, userSettings, renderPasslogDataHandler }= usePasslogUserData()
   const [passwordInfo, setPasswordInfo] = useState<PasswordProps>(route.params.passwordInfo)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
 
@@ -44,8 +46,12 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
     setPasswordInfo(newData)
     setPasswords!(newPasswords)
     await setPasswordsInStorage(newPasswords!)
-    renderPasslogDataHandler!()
+    if (userSettings?.alwaysSync) {
+      newData = encryptPassword(newData)
+      await updatePasslogDocument(newData, 'passwords')
+    }
     setShowBottomSheet(false)
+    renderPasslogDataHandler!()
 
     Snackbar.show({
       text: 'Saved changes',
@@ -62,6 +68,9 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
     setPasswords!(passwords)
 
     await setPasswordsInStorage(passwords!)
+    if (userSettings?.alwaysSync) {
+      await deletePasslogDocument(id, 'passwords')
+    }
     renderPasslogDataHandler!()
     navigation.goBack()
   }
