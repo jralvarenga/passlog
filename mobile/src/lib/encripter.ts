@@ -42,3 +42,29 @@ export const encryptCard = (card: CardProps) => {
   }
   return encrypted
 }
+
+export const decryptPassword = (password: PasswordProps) => {
+  const decrypted: PasswordProps = {
+    id: password.id,
+    profileName: decryptString(password.profileName),
+    user: decryptString(password.user),
+    email: decryptString(password.email),
+    password: decryptString(password.password),
+    comments: decryptString(password.comments),
+    date: password.date
+  }
+  return decrypted
+}
+
+export const decryptCard = (card: CardProps) => {
+  const decrypted: CardProps = {
+    id: card.id,
+    cardName: decryptString(card.cardName),
+    holder: decryptString(card.holder),
+    number: decryptString(card.number),
+    type: decryptString(card.type),
+    addedInfo: decryptString(card.addedInfo),
+    date: card.date
+  }
+  return decrypted
+}

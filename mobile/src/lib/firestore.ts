@@ -1,6 +1,7 @@
 import firestore from '@react-native-firebase/firestore'
 import { CardProps, PasswordProps } from '../interface/interfaces'
 import { returnCurrentUser } from './auth'
+import { decryptCard, decryptPassword } from './encripter'
 
 export const createUserDocument = async(uid: string) => {
   const currentDate = new Date()
@@ -28,4 +29,31 @@ export const createNewPasslogDocument = async(data: PasswordProps | CardProps, c
   await docRef.set({
     ...data
   })
+}
+
+export const getPasslogUserDataInFirestore = async(): Promise<{ firestorePasswords: PasswordProps[], firestoreCards: CardProps[] }> => {
+  const user = returnCurrentUser()
+  const passwordsCollection = firestore().collection('data').doc(user?.uid).collection('passwords')
+  const cardsCollection = firestore().collection('data').doc(user?.uid).collection('cards')
+
+  let passwords: PasswordProps[] = []
+  let cards: CardProps[] = []
+  const getPasswords = await passwordsCollection.get()
+  const getCards = await cardsCollection.get()
+
+  getPasswords.forEach((doc) => {
+    /* @ts-ignore */
+    const data: PasswordProps = decryptPassword(doc.data())
+    passwords.push(data)
+  })
+  getCards.forEach((doc) => {
+    /* @ts-ignore */
+    const data: CardProps = decryptCard(doc.data())
+    cards.push(data)
+  })
+
+  return {
+    firestorePasswords: passwords,
+    firestoreCards: cards
+  }
 }

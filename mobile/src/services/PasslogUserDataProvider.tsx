@@ -3,6 +3,7 @@ import React, { createContext, ReactElement, useContext, useEffect, useState } f
 import { CardProps, PasslogUserDataProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interface/interfaces'
 import { getCardsFromStorage, getPasswordsFromStorage, getSettings, getUserSettings } from '../lib/asyncStorage'
 import { returnCurrentUser } from '../lib/auth'
+import { getPasslogUserDataInFirestore } from '../lib/firestore'
 
 interface PasslogUserDataProviderProps {
   children: ReactElement
@@ -21,13 +22,17 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
   const getData = async() => {
     const user = returnCurrentUser()
     setUser(user)
-    const passwords: PasswordProps[] = await getPasswordsFromStorage()
-    const cards: CardProps[] = await getCardsFromStorage()
-    const settings: SettingsProps = await getSettings()
+    let passwords: PasswordProps[] = await getPasswordsFromStorage()
+    let cards: CardProps[] = await getCardsFromStorage()
+    let settings: SettingsProps = await getSettings()
     if (user) {
       const userSettings = await getUserSettings()
-      console.log(userSettings)
       setUserSettings(userSettings)
+      if (userSettings.alwaysSync) {
+        const { firestorePasswords, firestoreCards } = await getPasslogUserDataInFirestore()
+        passwords = firestorePasswords
+        cards = firestoreCards
+      }
     }
     setPasswords(passwords)
     setCards(cards)
