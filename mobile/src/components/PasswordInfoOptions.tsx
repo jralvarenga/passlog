@@ -27,6 +27,7 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
   const [comments, setComments] = useState("")
 
   const addNewChanges = () => {
+    const currentDate = new Date()
     const newData: PasswordProps = {
       id: passwordInfo.id,
       profileName: name != '' ? name : passwordInfo.profileName,
@@ -34,7 +35,7 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
       email: email != '' ? email : passwordInfo.email,
       password: password != '' ? password : passwordInfo.password,
       comments: comments != '' ? comments : passwordInfo.comments,
-      date: 'new date'
+      date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
     }
 
     savePasswordChanges(newData)

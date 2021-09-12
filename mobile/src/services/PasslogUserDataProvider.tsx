@@ -1,7 +1,7 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react'
 import { CardProps, PasslogUserDataProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interface/interfaces'
-import { getCardsFromStorage, getPasswordsFromStorage, getSettings, getUserSettings } from '../lib/asyncStorage'
+import { getCardsFromStorage, getPasswordsFromStorage, getSettings, getUserSettings, setCardsInStorage, setPasswordsInStorage } from '../lib/asyncStorage'
 import { returnCurrentUser } from '../lib/auth'
 import { getPasslogUserDataInFirestore } from '../lib/firestore'
 
@@ -18,6 +18,7 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
   const [cards, setCards] = useState<CardProps[]>([])
   const [settings, setSettings] = useState<SettingsProps>({})
   const [userSettings, setUserSettings] = useState<UserSettingsProps | null>(null)
+  const [dataLoading, setDataLoading] = useState(false)
 
   const getData = async() => {
     const user = returnCurrentUser()
@@ -30,6 +31,8 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
       setUserSettings(userSettings)
       if (userSettings.alwaysSync) {
         const { firestorePasswords, firestoreCards } = await getPasslogUserDataInFirestore()
+        await setPasswordsInStorage(firestorePasswords)
+        await setCardsInStorage(firestoreCards)
         passwords = firestorePasswords
         cards = firestoreCards
       }
@@ -48,7 +51,7 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
   }
 
   return (
-    <PasslogUserDataContext.Provider value={{ passwords, setPasswords, cards, setCards, renderPasslogDataHandler, settings, setSettings, user, setUser, userSettings, setUserSettings }}>
+    <PasslogUserDataContext.Provider value={{ passwords, setPasswords, cards, setCards, renderPasslogDataHandler, settings, setSettings, user, setUser, userSettings, setUserSettings, dataLoading, setDataLoading }}>
       {children}
     </PasslogUserDataContext.Provider>
   )

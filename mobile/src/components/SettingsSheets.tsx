@@ -4,7 +4,8 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Button, Switch } from 'react-native-elements'
 import BottomSheet from './BottomSheet'
 import { UserSettingsProps } from '../interface/interfaces'
-import { setUserSettings as setUserSettingsInStorage } from '../lib/asyncStorage'
+import { getCardsFromStorage, getPasswordsFromStorage, setUserSettings as setUserSettingsInStorage } from '../lib/asyncStorage'
+import { fullBackupInFirestore } from '../lib/firestore'
 
 interface SettingSheetsProps {
   visible: boolean
@@ -63,6 +64,7 @@ export const CloudSettingsSheet = ({ userSettings, setUserSettings }: { userSett
   const theme = useTheme()
   const styles = styleSheet(theme)
   const [enabledSync, setEnabledSync] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setEnabledSync(userSettings.alwaysSync)
@@ -78,6 +80,19 @@ export const CloudSettingsSheet = ({ userSettings, setUserSettings }: { userSett
     await setUserSettingsInStorage(newUserSettings)
     setUserSettings(newUserSettings)
     setEnabledSync(state)
+  }
+
+  const backupData = async() => {
+    setLoading(true)
+    try {
+      const passwords = await getPasswordsFromStorage()
+      const cards = await getCardsFromStorage()
+      await fullBackupInFirestore(passwords, cards)
+      setLoading(false) 
+    } catch (error) {
+      setLoading(false)
+      console.log(error)
+    }
   }
 
   return (
@@ -97,6 +112,8 @@ export const CloudSettingsSheet = ({ userSettings, setUserSettings }: { userSett
       </View>
       <View>
         <Button
+          loading={loading}
+          onPress={backupData}
           containerStyle={{ width: '100%' }}
           titleStyle={styles.text}
           title="Back up now"

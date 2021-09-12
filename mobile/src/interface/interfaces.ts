@@ -33,6 +33,8 @@ export interface PasslogUserDataProps {
   setUser?: Function
   userSettings?: UserSettingsProps | null
   setUserSettings?: Function
+  dataLoading?: boolean
+  setDataLoading?: Function
 }
 
 export interface SettingsProps {

@@ -1,7 +1,7 @@
 import firestore from '@react-native-firebase/firestore'
 import { CardProps, PasswordProps } from '../interface/interfaces'
 import { returnCurrentUser } from './auth'
-import { decryptCard, decryptPassword } from './encripter'
+import { decryptCard, decryptPassword, encryptCard, encryptPassword } from './encripter'
 
 export const createUserDocument = async(uid: string) => {
   const currentDate = new Date()
@@ -72,4 +72,26 @@ export const updatePasslogDocument = async(data: PasswordProps | CardProps, coll
   await docRef.update({
     ...data
   })
+}
+
+export const fullBackupInFirestore = async(passwords: PasswordProps[], cards: CardProps[]) => {
+  const user = returnCurrentUser()
+  const batch = firestore().batch()
+  const passwordsCollection = firestore().collection('data').doc(user?.uid).collection('passwords')
+  const cardsCollection = firestore().collection('data').doc(user?.uid).collection('cards')
+
+  passwords.map((password) => {
+    const docRef = passwordsCollection.doc(password.id)
+    password = encryptPassword(password)
+    batch.set(docRef, password)
+  })
+
+  cards.map((card) => {
+    const docRef = cardsCollection.doc(card.id)
+    card = encryptCard(card)
+    batch.set(docRef, card)
+  })
+
+  batch.commit()
+  
 }
