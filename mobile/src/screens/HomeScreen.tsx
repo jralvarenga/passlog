@@ -21,9 +21,10 @@ const HomeScreen = () => {
         }}
         tabBar={(props: BottomTabBarProps) => <TabBar {...props} />}
       >
-        <Tab.Screen name="key-outline" component={PasswordsScreen} />
-        <Tab.Screen name="card-outline" component={CardsScreen} />
-        <Tab.Screen name="settings-outline" component={SettingsScreen} />
+        <Tab.Screen name="key" component={PasswordsScreen} />
+        <Tab.Screen name="credit-card" component={CardsScreen} />
+        <Tab.Screen name="book" component={SettingsScreen} />
+        <Tab.Screen name="settings" component={SettingsScreen} />
       </Tab.Navigator>
       {useSafeAreaInsets().bottom > 0 && (
         <View

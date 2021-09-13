@@ -1,7 +1,8 @@
 import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { View } from 'react-native'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Feather from 'react-native-vector-icons/Feather'
+import { reduceIncrementColor } from '../../lib/reduceIncrementColor'
 
 type Props = {
   iconName: string
@@ -19,10 +20,10 @@ export const BottomMenuItem = ({ iconName, isCurrent }: Props) => {
         alignItems: "center",
       }}
     >
-      <Ionicons
+      <Feather
         name={iconName}
         size={32}
-        style={{ color: isCurrent ? theme.colors.primary : theme.colors.card }}
+        style={{ color: isCurrent ? theme.colors.primary : reduceIncrementColor(theme.colors.card, 'reduce', -30) }}
       />
     </View>
   )
