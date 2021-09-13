@@ -1,3 +1,4 @@
+import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { Dimensions, StatusBar, StyleSheet, Text, View } from 'react-native'
@@ -61,8 +62,14 @@ const CreateAccountScreen = ({ navigation }: any) => {
       setUser!(user)
       renderPasslogDataHandler!()
       setShowVerifySheet(true)
-    } catch (error) {
-      console.log(error)
+    } catch (e: any) {
+      const error: FirebaseAuthTypes.NativeFirebaseAuthError = e
+      Snackbar.show({
+        text: error.message,
+        fontFamily: 'poppins',
+        textColor: theme.colors.text,
+        backgroundColor: theme.colors.primary
+      })
     }
   }
 

@@ -1,8 +1,10 @@
+import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useRef, useState } from 'react'
 import { Dimensions, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
 import { Button, SocialIcon } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Snackbar from 'react-native-snackbar'
 import FormInput from '../components/FormInput'
 import { UserSettingsProps } from '../interface/interfaces'
 import { setUserSettings } from '../lib/asyncStorage'
@@ -33,8 +35,14 @@ const LoginScreen = ({ navigation }: any) => {
       setUser!(user)
       renderPasslogDataHandler!()
       navigation.navigate('Home')
-    } catch (error) {
-      console.log(error)
+    } catch (e: any) {
+      const error: FirebaseAuthTypes.NativeFirebaseAuthError = e
+      Snackbar.show({
+        text: error.message,
+        fontFamily: 'poppins',
+        textColor: theme.colors.text,
+        backgroundColor: theme.colors.primary
+      })
     }
   }
 

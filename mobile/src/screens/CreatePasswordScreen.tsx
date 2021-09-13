@@ -1,7 +1,9 @@
+import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-elements'
+import Snackbar from 'react-native-snackbar'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
 import { PasswordProps } from '../interface/interfaces'
@@ -71,9 +73,14 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
       renderPasslogDataHandler!()
       setLoading(false)
       navigation.goBack()
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false)
-      console.log(error)
+      Snackbar.show({
+        text: error.message,
+        fontFamily: 'poppins',
+        textColor: theme.colors.text,
+        backgroundColor: theme.colors.primary
+      })
     }
   }
 

@@ -11,6 +11,8 @@ import { createId } from '../lib/createId'
 import { setCardsInStorage } from '../lib/asyncStorage'
 import { encryptCard } from '../lib/encripter'
 import { createNewPasslogDocument } from '../lib/firestore'
+import Snackbar from 'react-native-snackbar'
+import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 
 interface CreateCardScreenProps {
   route: any
@@ -66,9 +68,14 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
       renderPasslogDataHandler!()
       setLoading(false)
       navigation.goBack()
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false)
-      console.log(error)
+      Snackbar.show({
+        text: error.message,
+        fontFamily: 'poppins',
+        textColor: theme.colors.text,
+        backgroundColor: theme.colors.primary
+      })
     }
     
   }
