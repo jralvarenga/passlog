@@ -4,8 +4,10 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Button, Switch } from 'react-native-elements'
 import BottomSheet from './BottomSheet'
 import { UserSettingsProps } from '../interface/interfaces'
-import { getCardsFromStorage, getPasswordsFromStorage, setUserSettings as setUserSettingsInStorage } from '../lib/asyncStorage'
+import { getCardsFromStorage, getPasswordsFromStorage, setUserSettings as setUserSettingsInStorage, wipeAllStorageData } from '../lib/asyncStorage'
 import { fullBackupInFirestore } from '../lib/firestore'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
+import { signOutHandler } from '../lib/auth'
 
 interface SettingSheetsProps {
   visible: boolean
@@ -31,9 +33,7 @@ export const SettingsSheets = ({ visible, setVisible, children }: SettingSheetsP
   )
 }
 
-
-
-export const AppSettingsSheet = ({ goToScreen }: any) => {
+export const AppSettingsSheet = ({ goToScreen, enableWipeDataScreen }: any) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
 
@@ -52,8 +52,57 @@ export const AppSettingsSheet = ({ goToScreen }: any) => {
         <Button
           containerStyle={{ width: '47%' }}
           titleStyle={styles.text}
+          onPress={enableWipeDataScreen}
           buttonStyle={{ backgroundColor: '#ff2e2e' }}
           title="Wipe data"
+        />
+      </View>
+    </View>
+  )
+}
+
+export const WipeDataSheet = ({ setVisible }: { setVisible: Function }) => {
+  const theme = useTheme()
+  const styles = styleSheet(theme)
+  const { setCards, setPasswords, setSettings, setUserSettings, setUser } = usePasslogUserData()
+  const [loading, setLoading] = useState(false)
+
+  const wipeData = async() => {
+    setLoading(true)
+    try {
+      await wipeAllStorageData()
+      await signOutHandler()
+      setUserSettings!(null)
+      setSettings!({})
+      setCards!([])
+      setPasswords!([])
+      setUser!(null)
+      setVisible(false)
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
+    }
+  }
+
+  return (
+    <View style={styles.contentContainer}>
+      <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
+        Wipe data
+      </Text>
+      <View style={styles.appSettingsContainer}>
+        <Text style={[styles.text, { textAlign: 'center' }]}>
+          Are you sure you want to delete all the data in your phone (will not affect cloud storage)
+        </Text>
+      </View>
+      <View>
+        <Button
+          loading={loading}
+          onPress={wipeData}
+          containerStyle={{ width: '100%' }}
+          titleStyle={styles.text}
+          buttonStyle={{ backgroundColor: '#ff2e2e' }}
+          title="Delete data"
         />
       </View>
     </View>

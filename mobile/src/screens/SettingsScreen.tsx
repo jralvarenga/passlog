@@ -4,7 +4,7 @@ import { Linking, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
-import SettingsSheets, { AppSettingsSheet, CloudSettingsSheet } from '../components/SettingsSheets'
+import SettingsSheets, { AppSettingsSheet, CloudSettingsSheet, WipeDataSheet } from '../components/SettingsSheets'
 import { removeUserSettings } from '../lib/asyncStorage'
 import { signOutHandler } from '../lib/auth'
 import { objectMemorySize } from '../lib/objectMemorySize'
@@ -20,6 +20,12 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const { passwords, cards, user, setUser, renderPasslogDataHandler, userSettings, setUserSettings }= usePasslogUserData()
   const [showSettingsSheet, setShowSettingsSheet] = useState(false)
   const [showInSheet, setShowInSheet] = useState("")
+
+  const enableWipeDataScreen = () => {
+    setShowSettingsSheet(false)
+    setShowInSheet('wipedataSheet')
+    setShowSettingsSheet(true)
+  }
 
   const goToScreen = (screen: string, params: any) => {
     setShowSettingsSheet(false)
@@ -145,12 +151,18 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           {showInSheet == 'appSettings' && (
             <AppSettingsSheet
               goToScreen={goToScreen}
+              enableWipeDataScreen={enableWipeDataScreen}
             />
           )}
           {showInSheet == 'cloudSettings' && (
             <CloudSettingsSheet
               userSettings={userSettings!}
               setUserSettings={setUserSettings!}
+            />
+          )}
+          {showInSheet == 'wipedataSheet' && (
+            <WipeDataSheet
+              setVisible={setShowSettingsSheet}
             />
           )}
         </>
