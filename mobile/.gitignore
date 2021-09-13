@@ -60,3 +60,4 @@ buck-out/
 
 # Crypto keys
 crypto_keys.ts
+private_key.pepk
