@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { CardProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interface/interfaces'
-import { decryptString, encryptCard, encryptPassword } from './encripter'
+import { CardProps, NoteProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interface/interfaces'
+import { decryptCard, decryptNote, decryptPassword, decryptString, encryptCard, encryptNote, encryptPassword } from './encripter'
 
 // Get methods
 
@@ -9,15 +9,7 @@ export const getPasswordsFromStorage = async(): Promise<PasswordProps[]> => {
   let passwords: PasswordProps[] = jsonPasswords != null ? JSON.parse(jsonPasswords) : []
   
   passwords = passwords.map((password) => {
-    const decrypted: PasswordProps = {
-      id: password.id,
-      profileName: decryptString(password.profileName),
-      user: decryptString(password.user),
-      email: decryptString(password.email),
-      password: decryptString(password.password),
-      comments: decryptString(password.comments),
-      date: password.date
-    }
+    const decrypted: PasswordProps = decryptPassword(password)
     return decrypted
   })
 
@@ -29,19 +21,23 @@ export const getCardsFromStorage = async(): Promise<CardProps[]> => {
   let cards: CardProps[] = jsonCards != null ? JSON.parse(jsonCards) : []
 
   cards = cards.map((card) => {
-    const decrypted: CardProps = {
-      id: card.id,
-      cardName: decryptString(card.cardName),
-      holder: decryptString(card.holder),
-      number: decryptString(card.number),
-      type: decryptString(card.type),
-      addedInfo: decryptString(card.addedInfo),
-      date: card.date
-    }
+    const decrypted: CardProps = decryptCard(card)
     return decrypted
   })
 
   return cards
+}
+
+export const getNotesFromStorage = async(): Promise<NoteProps[]> => {
+  const jsonCards = await AsyncStorage.getItem('notes')
+  let notes: NoteProps[] = jsonCards != null ? JSON.parse(jsonCards) : []
+
+  notes = notes.map((note) => {
+    const decrypted: NoteProps = decryptNote(note)
+    return decrypted
+  })
+
+  return notes
 }
 
 export const getSettings = async(): Promise<SettingsProps> => {
@@ -76,6 +72,12 @@ export const setCardsInStorage = async(cards: CardProps[]) => {
   cards = cards.map((card) => encryptCard(card))
   const jsonValue = JSON.stringify(cards)
   await AsyncStorage.setItem('cards', jsonValue)
+}
+
+export const setNotesInStorage = async(notes: NoteProps[]) => {
+  notes = notes.map((note) => encryptNote(note))
+  const jsonValue = JSON.stringify(notes)
+  await AsyncStorage.setItem('notes', jsonValue)
 }
 
 export const setSettingsInStorage = async(settings: SettingsProps) => {

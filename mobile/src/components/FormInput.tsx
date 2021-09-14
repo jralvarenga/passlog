@@ -35,6 +35,7 @@ const FormInput = forwardRef(({ label, value, placeholder, icon, width, error, i
       errorMessage={error ? error : ''}
       errorStyle={styles.errorStyle}
       inputStyle={styles.inputStyle}
+      selectionColor={theme.colors.primary}
       inputContainerStyle={styles.inputContainerStyle}
       labelStyle={styles.labelStyle}
       onChangeText={(value) => onChangeText(value)}

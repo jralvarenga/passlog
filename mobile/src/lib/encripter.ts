@@ -1,6 +1,6 @@
 import CryptoES from 'crypto-es'
 import { CRYPTO_IV, CRYPTO_KEY } from '../../crypto_keys'
-import { CardProps, PasswordProps } from '../interface/interfaces'
+import { CardProps, NoteProps, PasswordProps } from '../interface/interfaces'
 
 const key = CryptoES.enc.Hex.parse(CRYPTO_KEY)
 const iv = CryptoES.enc.Hex.parse(CRYPTO_IV)
@@ -43,6 +43,16 @@ export const encryptCard = (card: CardProps) => {
   return encrypted
 }
 
+export const encryptNote = (note: NoteProps) => {
+  const encrypted: NoteProps = {
+    id: note.id,
+    title: encryptString(note.title).toString(),
+    body: encryptString(note.body).toString(),
+    date: note.date
+  }
+  return encrypted
+}
+
 export const decryptPassword = (password: PasswordProps) => {
   const decrypted: PasswordProps = {
     id: password.id,
@@ -65,6 +75,16 @@ export const decryptCard = (card: CardProps) => {
     type: decryptString(card.type),
     addedInfo: decryptString(card.addedInfo),
     date: card.date
+  }
+  return decrypted
+}
+
+export const decryptNote = (note: NoteProps) => {
+  const decrypted: NoteProps = {
+    id: note.id,
+    title: decryptString(note.title),
+    body: decryptString(note.body),
+    date: note.date
   }
   return decrypted
 }

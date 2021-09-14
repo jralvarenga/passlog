@@ -7,6 +7,7 @@ import { useTheme } from '@react-navigation/native'
 import { View } from 'react-native'
 import { TabBar } from '../components/bottomTabBar/TabBar'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import NotesScreen from './NotesScreen'
 
 const Tab = createBottomTabNavigator()
 
@@ -23,7 +24,7 @@ const HomeScreen = () => {
       >
         <Tab.Screen name="key" component={PasswordsScreen} />
         <Tab.Screen name="credit-card" component={CardsScreen} />
-        <Tab.Screen name="book" component={SettingsScreen} />
+        <Tab.Screen name="book" component={NotesScreen} />
         <Tab.Screen name="settings" component={SettingsScreen} />
       </Tab.Navigator>
       {useSafeAreaInsets().bottom > 0 && (

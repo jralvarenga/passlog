@@ -21,6 +21,13 @@ export interface CardProps {
   type: string
 }
 
+export interface NoteProps {
+  id: string
+  title?: string
+  body?: string
+  date: string
+}
+
 export interface PasslogUserDataProps {
   passwords?: PasswordProps[]
   setPasswords?: Function
@@ -35,6 +42,8 @@ export interface PasslogUserDataProps {
   setUserSettings?: Function
   dataLoading?: boolean
   setDataLoading?: Function
+  notes?: NoteProps[]
+  setNotes?: Function
 }
 
 export interface SettingsProps {
