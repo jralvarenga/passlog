@@ -1,5 +1,5 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BackHandler, Dimensions, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -20,49 +20,57 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   const styles = styleSheet(theme)
   const { notes, setNotes, renderPasslogDataHandler } = usePasslogUserData()
   const [noteInfo, setNoteInfo] = useState<NoteProps>()
-  const [noteTitle, setNoteTitle] = useState("")
-  const [noteBody, setNoteBody] = useState("")
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const noteTitleRef = useRef<TextInput>()
+  const noteBodyRef = useRef<TextInput>()
 
   useEffect(() => {
     const note: NoteProps = route.params.note
     
     setNoteInfo(note)
-    setNoteTitle(note.title ? note.title : "")
-    setNoteBody(note.body ? note.body : "")
   }, [])
 
-  const saveChanges = async() => {
-    const newNoteData: NoteProps = {
-      id: noteInfo!.id,
-      title: noteTitle,
-      body: noteBody,
-      date: noteInfo!.date
+  const changeNoteInfo = (value: string, type: 'title' | 'body') => {
+    setHasUnsavedChanges(true)
+    if (type == 'body') {
+      const newNoteData: NoteProps = {
+        id: noteInfo!.id,
+        title: noteInfo!.title,
+        body: value,
+        date: noteInfo!.date
+      }
+      setNoteInfo(newNoteData)
+    } else {
+      const newNoteData: NoteProps = {
+        id: noteInfo!.id,
+        title: value,
+        body: noteInfo!.body,
+        date: noteInfo!.date
+      }
+      setNoteInfo(newNoteData)
     }
+  }
+
+  const saveChanges = () => {
     const newNotes = notes!.map((note) => {
-      if (note.id == newNoteData.id) {
-        return newNoteData
+      if (note.id == noteInfo!.id) {
+        return noteInfo!
       } else {
         return note
       }
     })
     setNotes!(newNotes)
-    await setNotesInStorage(newNotes!)
+    setNotesInStorage(newNotes!)
   }
 
-  const goBackHandler = async() => {
-    await saveChanges()
-
-    navigation.goBack()
-  }
-
-  useEffect(() => {
-    Snackbar.show({
-      text: 'Use the back arrow on the top to save and exit',
-      fontFamily: 'poppins',
-      textColor: theme.colors.text,
-      backgroundColor: theme.colors.primary
-    })
-  }, [])
+  useEffect(() => navigation.addListener('beforeRemove', (e: any) => {
+    if (!hasUnsavedChanges) {
+      return
+    }
+    
+    saveChanges()
+    return
+  }), [navigation, hasUnsavedChanges])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -74,16 +82,22 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
               type="material"
               color={theme.colors.text}
               size={40}
-              onPress={goBackHandler}
+              onPress={() => navigation.goBack()}
             />
           </View>
           <View style={styles.pageName}>
             <TextInput
               style={styles.titleInputStyle}
-              value={noteTitle}
+              value={noteInfo?.title}
               textAlignVertical="center"
               selectionColor={theme.colors.primary}
-              onChangeText={(value) => setNoteTitle(value)}
+              /* @ts-ignore */
+              ref={noteTitleRef}
+              onBlur={() => {
+                noteTitleRef.current?.blur()
+                setHasUnsavedChanges(true)
+              }}
+              onChangeText={(value) => changeNoteInfo(value, 'title')}
             />
           </View>
         </View>
@@ -102,11 +116,17 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
       <View style={styles.bodyContainer}>
         <TextInput
           style={styles.noteBodyInput}
-          value={noteBody}
+          value={noteInfo?.body}
           multiline={true}
           textAlignVertical="top"
           selectionColor={theme.colors.primary}
-          onChangeText={(value) => setNoteBody(value)}
+          /* @ts-ignore */
+          ref={noteBodyRef}
+          onBlur={() => {
+            noteTitleRef.current?.blur()
+            setHasUnsavedChanges(true)
+          }}
+          onChangeText={(value) => changeNoteInfo(value, 'body')}
         />
       </View>
     </SafeAreaView>

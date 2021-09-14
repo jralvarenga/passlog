@@ -23,8 +23,8 @@ export interface CardProps {
 
 export interface NoteProps {
   id: string
-  title?: string
-  body?: string
+  title: string
+  body: string
   date: string
 }
 
