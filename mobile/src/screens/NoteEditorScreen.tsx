@@ -4,6 +4,7 @@ import { BackHandler, Dimensions, StyleSheet, Text, TextInput, View } from 'reac
 import { Icon } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Snackbar from 'react-native-snackbar'
+import NoteOptionsSheet from '../components/NoteOptionsSheet'
 import { NoteProps } from '../interface/interfaces'
 import { setNotesInStorage } from '../lib/asyncStorage'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
@@ -21,6 +22,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   const { notes, setNotes, renderPasslogDataHandler } = usePasslogUserData()
   const [noteInfo, setNoteInfo] = useState<NoteProps>()
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [showBottomSheet, setShowBottomSheet] = useState(false)
   const noteTitleRef = useRef<TextInput>()
   const noteBodyRef = useRef<TextInput>()
 
@@ -72,6 +74,19 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
     return
   }), [navigation, hasUnsavedChanges])
 
+  const deleteNote = async() => {
+    setHasUnsavedChanges(false)
+    const id = noteInfo!.id
+    const index = notes!.map((note) => note.id).indexOf(id)
+    notes!.splice(index, 1)
+    setNotes!(notes)
+
+    await setNotesInStorage(notes!)
+    setShowBottomSheet(false)
+    renderPasslogDataHandler!()
+    navigation.goBack()
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.headerContainer}>
@@ -106,6 +121,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
           <View style={[styles.pageName, { alignItems: 'center', justifyContent: 'center' }]}>
             <Icon
               name="menu"
+              onPress={() => setShowBottomSheet(true)}
               type="feather"
               color={theme.colors.text}
               size={30}
@@ -129,6 +145,13 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
           onChangeText={(value) => changeNoteInfo(value, 'body')}
         />
       </View>
+      <NoteOptionsSheet
+        name={noteInfo?.title ? noteInfo?.title : ""}
+        visible={showBottomSheet}
+        setVisible={setShowBottomSheet}
+        date={noteInfo?.date ? noteInfo?.date : ""}
+        deleteNote={deleteNote}
+      />
     </SafeAreaView>
   )
 }

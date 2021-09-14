@@ -23,7 +23,7 @@ const windowHeight = Dimensions.get('window').height
 const NotesScreen = ({ navigation }: PasswordContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { notes, setNotes } = usePasslogUserData()
+  const { notes, setNotes, renderPasslogDataHandler } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
 
   const goToScreen = (screen: string, params: any) => {
@@ -57,6 +57,7 @@ const NotesScreen = ({ navigation }: PasswordContainerProps) => {
     notes?.push(newNote)
     setNotes!(notes)
     await setNotesInStorage(notes!)
+    renderPasslogDataHandler!()
     goToScreen('noteEditor', { note: newNote })
   }
 

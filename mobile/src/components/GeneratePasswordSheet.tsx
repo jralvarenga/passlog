@@ -14,7 +14,7 @@ interface GeneratePasswordSheetProps {
 }
 
 const windowHeight = Dimensions.get('window').height
-const bottomSheetPercentage = 0.35
+const bottomSheetHeight = 0.35
 
 const GeneratePasswordSheet = ({ goToScreen, visible, setVisible }: GeneratePasswordSheetProps) => {
   const theme = useTheme()
@@ -53,7 +53,7 @@ const GeneratePasswordSheet = ({ goToScreen, visible, setVisible }: GeneratePass
       <BottomSheet
         visible={visible}
         setVisible={setVisible}
-        bottomSheetHeight={bottomSheetPercentage}
+        bottomSheetHeight={bottomSheetHeight}
       >
         <View style={styles.contentContainer}>
           <View style={{ flex: 1 }}>
@@ -98,7 +98,7 @@ const GeneratePasswordSheet = ({ goToScreen, visible, setVisible }: GeneratePass
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   contentContainer: {
-    height: windowHeight * bottomSheetPercentage,
+    height: windowHeight * bottomSheetHeight,
     flex: 1,
     padding: 15,
     backgroundColor: theme.colors.background,
