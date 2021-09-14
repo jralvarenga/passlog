@@ -7,6 +7,8 @@ import Snackbar from 'react-native-snackbar'
 import NoteOptionsSheet from '../components/NoteOptionsSheet'
 import { NoteProps } from '../interface/interfaces'
 import { setNotesInStorage } from '../lib/asyncStorage'
+import { encryptNote } from '../lib/encripter'
+import { createNewPasslogDocument, deletePasslogDocument, updatePasslogDocument } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 interface NoteEditorScreenProps {
@@ -19,7 +21,7 @@ const windowHeight = Dimensions.get('window').height
 const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { notes, setNotes, renderPasslogDataHandler } = usePasslogUserData()
+  const { notes, setNotes, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [noteInfo, setNoteInfo] = useState<NoteProps>()
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
@@ -63,6 +65,11 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
     })
     setNotes!(newNotes)
     setNotesInStorage(newNotes!)
+    if (userSettings?.alwaysSync) {
+      const encrypted = encryptNote(noteInfo!)
+      updatePasslogDocument(encrypted, 'notes')
+    }
+    renderPasslogDataHandler!()
   }
 
   useEffect(() => navigation.addListener('beforeRemove', (e: any) => {
@@ -83,6 +90,10 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
 
     await setNotesInStorage(notes!)
     setShowBottomSheet(false)
+    if (userSettings?.alwaysSync) {
+      const encrypted = encryptNote(noteInfo!)
+      deletePasslogDocument(encrypted.id, 'notes')
+    }
     renderPasslogDataHandler!()
     navigation.goBack()
   }

@@ -1,7 +1,7 @@
 import firestore from '@react-native-firebase/firestore'
-import { CardProps, PasswordProps } from '../interface/interfaces'
+import { CardProps, NoteProps, PasswordProps } from '../interface/interfaces'
 import { returnCurrentUser } from './auth'
-import { decryptCard, decryptPassword, encryptCard, encryptPassword } from './encripter'
+import { decryptCard, decryptNote, decryptPassword, encryptCard, encryptNote, encryptPassword } from './encripter'
 
 export const createUserDocument = async(uid: string) => {
   const currentDate = new Date()
@@ -22,15 +22,18 @@ export const searchForLegacyBackup = async(uid: string) => {
   }
 }
 
-export const getPasslogUserDataInFirestore = async(): Promise<{ firestorePasswords: PasswordProps[], firestoreCards: CardProps[] }> => {
+export const getPasslogUserDataInFirestore = async(): Promise<{ firestorePasswords: PasswordProps[], firestoreCards: CardProps[], firestoreNotes: NoteProps[] }> => {
   const user = returnCurrentUser()
   const passwordsCollection = firestore().collection('data').doc(user?.uid).collection('passwords')
   const cardsCollection = firestore().collection('data').doc(user?.uid).collection('cards')
+  const notesCollection = firestore().collection('data').doc(user?.uid).collection('notes')
 
   let passwords: PasswordProps[] = []
   let cards: CardProps[] = []
+  let notes: NoteProps[] = []
   const getPasswords = await passwordsCollection.get()
   const getCards = await cardsCollection.get()
+  const getNotes = await notesCollection.get()
 
   getPasswords.forEach((doc) => {
     /* @ts-ignore */
@@ -42,14 +45,20 @@ export const getPasslogUserDataInFirestore = async(): Promise<{ firestorePasswor
     const data: CardProps = decryptCard(doc.data())
     cards.push(data)
   })
+  getNotes.forEach((doc) => {
+    /* @ts-ignore */
+    const data: NoteProps = decryptNote(doc.data())
+    notes.push(data)
+  })
 
   return {
     firestorePasswords: passwords,
-    firestoreCards: cards
+    firestoreCards: cards,
+    firestoreNotes: notes
   }
 }
 
-export const createNewPasslogDocument = async(data: PasswordProps | CardProps, collection: 'passwords' | 'cards') => {
+export const createNewPasslogDocument = async(data: PasswordProps | CardProps | NoteProps, collection: 'passwords' | 'cards' | 'notes') => {
   const user = returnCurrentUser()
   const docRef = firestore().collection('data').doc(user?.uid).collection(collection).doc(data.id)
 
@@ -58,14 +67,14 @@ export const createNewPasslogDocument = async(data: PasswordProps | CardProps, c
   })
 }
 
-export const deletePasslogDocument = async(docId: string, collection: 'passwords' | 'cards') => {  
+export const deletePasslogDocument = async(docId: string, collection: 'passwords' | 'cards' | 'notes' | 'notes') => {  
   const user = returnCurrentUser()
   const docRef = firestore().collection('data').doc(user?.uid).collection(collection).doc(docId)
 
   await docRef.delete()
 }
 
-export const updatePasslogDocument = async(data: PasswordProps | CardProps, collection: 'passwords' | 'cards') => {
+export const updatePasslogDocument = async(data: PasswordProps | CardProps | NoteProps, collection: 'passwords' | 'cards' | 'notes') => {
   const user = returnCurrentUser()
   const docRef = firestore().collection('data').doc(user?.uid).collection(collection).doc(data.id)
 
@@ -74,11 +83,12 @@ export const updatePasslogDocument = async(data: PasswordProps | CardProps, coll
   })
 }
 
-export const fullBackupInFirestore = async(passwords: PasswordProps[], cards: CardProps[]) => {
+export const fullBackupInFirestore = async(passwords: PasswordProps[], cards: CardProps[], notes: NoteProps[]) => {
   const user = returnCurrentUser()
   const batch = firestore().batch()
   const passwordsCollection = firestore().collection('data').doc(user?.uid).collection('passwords')
   const cardsCollection = firestore().collection('data').doc(user?.uid).collection('cards')
+  const notesCollection = firestore().collection('data').doc(user?.uid).collection('notes')
 
   passwords.map((password) => {
     const docRef = passwordsCollection.doc(password.id)
@@ -90,6 +100,12 @@ export const fullBackupInFirestore = async(passwords: PasswordProps[], cards: Ca
     const docRef = cardsCollection.doc(card.id)
     card = encryptCard(card)
     batch.set(docRef, card)
+  })
+  
+  notes.map((note) => {
+    const docRef = notesCollection.doc(note.id)
+    note = encryptNote(note)
+    batch.set(docRef, note)
   })
 
   batch.commit()

@@ -1,7 +1,7 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import React, { createContext, ReactElement, useContext, useEffect, useState } from 'react'
 import { CardProps, NoteProps, PasslogUserDataProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interface/interfaces'
-import { getCardsFromStorage, getNotesFromStorage, getPasswordsFromStorage, getSettings, getUserSettings, setCardsInStorage, setPasswordsInStorage } from '../lib/asyncStorage'
+import { getCardsFromStorage, getNotesFromStorage, getPasswordsFromStorage, getSettings, getUserSettings, setCardsInStorage, setNotesInStorage, setPasswordsInStorage } from '../lib/asyncStorage'
 import { returnCurrentUser } from '../lib/auth'
 import { getPasslogUserDataInFirestore } from '../lib/firestore'
 
@@ -32,11 +32,13 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
       const userSettings = await getUserSettings()
       setUserSettings(userSettings)
       if (userSettings.alwaysSync) {
-        const { firestorePasswords, firestoreCards } = await getPasslogUserDataInFirestore()
+        const { firestorePasswords, firestoreCards, firestoreNotes } = await getPasslogUserDataInFirestore()
         await setPasswordsInStorage(firestorePasswords)
         await setCardsInStorage(firestoreCards)
+        await setNotesInStorage(firestoreNotes)
         passwords = firestorePasswords
         cards = firestoreCards
+        notes = firestoreNotes
       }
     }
     setPasswords(passwords)

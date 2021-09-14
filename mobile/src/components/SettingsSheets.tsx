@@ -4,7 +4,7 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Button, Switch } from 'react-native-elements'
 import BottomSheet from './BottomSheet'
 import { UserSettingsProps } from '../interface/interfaces'
-import { getCardsFromStorage, getPasswordsFromStorage, setUserSettings as setUserSettingsInStorage, wipeAllStorageData } from '../lib/asyncStorage'
+import { getCardsFromStorage, getNotesFromStorage, getPasswordsFromStorage, setUserSettings as setUserSettingsInStorage, wipeAllStorageData } from '../lib/asyncStorage'
 import { fullBackupInFirestore } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import { signOutHandler } from '../lib/auth'
@@ -136,7 +136,8 @@ export const CloudSettingsSheet = ({ userSettings, setUserSettings }: { userSett
     try {
       const passwords = await getPasswordsFromStorage()
       const cards = await getCardsFromStorage()
-      await fullBackupInFirestore(passwords, cards)
+      const notes = await getNotesFromStorage()
+      await fullBackupInFirestore(passwords, cards, notes)
       setLoading(false) 
     } catch (error) {
       setLoading(false)

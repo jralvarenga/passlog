@@ -12,6 +12,8 @@ import NoteContainer from '../components/NoteContainer'
 import { NoteProps } from '../interface/interfaces'
 import { createId } from '../lib/createId'
 import { setNotesInStorage } from '../lib/asyncStorage'
+import { createNewPasslogDocument } from '../lib/firestore'
+import { encryptNote } from '../lib/encripter'
 
 interface PasswordContainerProps {
   navigation: any
@@ -23,7 +25,7 @@ const windowHeight = Dimensions.get('window').height
 const NotesScreen = ({ navigation }: PasswordContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { notes, setNotes, renderPasslogDataHandler } = usePasslogUserData()
+  const { notes, setNotes, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
 
   const goToScreen = (screen: string, params: any) => {
@@ -57,6 +59,10 @@ const NotesScreen = ({ navigation }: PasswordContainerProps) => {
     notes?.push(newNote)
     setNotes!(notes)
     await setNotesInStorage(notes!)
+    if (userSettings?.alwaysSync) {
+      const encrypted = encryptNote(newNote)
+      await createNewPasslogDocument(encrypted, 'notes')
+    }
     renderPasslogDataHandler!()
     goToScreen('noteEditor', { note: newNote })
   }

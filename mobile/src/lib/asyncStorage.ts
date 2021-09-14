@@ -97,5 +97,5 @@ export const removeUserSettings = async() => {
 }
 
 export const wipeAllStorageData = async() => {
-  await AsyncStorage.multiRemove(['user', 'settings', 'cards', 'profiles'])
+  await AsyncStorage.multiRemove(['user', 'settings', 'cards', 'notes', 'profiles'])
 }
