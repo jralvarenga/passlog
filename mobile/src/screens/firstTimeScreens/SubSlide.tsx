@@ -1,7 +1,10 @@
-import { Theme, useTheme } from '@react-navigation/native'
+import { Theme, useNavigation, useTheme } from '@react-navigation/native'
 import React from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
+import { SettingsProps } from '../../interface/interfaces'
+import { setSettingsInStorage } from '../../lib/asyncStorage'
+import { usePasslogUserData } from '../../services/PasslogUserDataProvider'
 
 interface SubSlideProps {
   title: string
@@ -11,8 +14,21 @@ interface SubSlideProps {
 }
 
 const SubSlide = ({ title, description, buttonType, onPress }: SubSlideProps) => {
+  const navigation = useNavigation()
+  const { settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
   const theme = useTheme()
   const styles = styleSheet(theme)
+
+  const goTo = async(link: any) => {
+    const newSettings: SettingsProps = {
+      ...settings,
+      firstTime: false
+    }
+    setSettings!(newSettings)
+    await setSettingsInStorage(newSettings)
+    renderPasslogDataHandler!()
+    navigation.navigate(link)
+  }
 
   return (
     <View style={styles.container}>
@@ -35,12 +51,22 @@ const SubSlide = ({ title, description, buttonType, onPress }: SubSlideProps) =>
             title="Next"
           />
         ) : (
-          <Button
-            containerStyle={[styles.buttonContainerStyle, { height: 45 }]}
-            buttonStyle={{ height: 45 }}
-            titleStyle={styles.description}
-            title="Lets start"
-          />
+          <View style={{ flex: 1, width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Button
+              onPress={() => goTo('login')}
+              containerStyle={[styles.buttonContainerStyle, { height: 45, width: '48%' }]}
+              buttonStyle={{ height: 45, backgroundColor: '#ff637c' }}
+              titleStyle={styles.description}
+              title="Login or Sign up"
+            />
+            <Button
+              onPress={() => goTo('Home')}
+              containerStyle={[styles.buttonContainerStyle, { height: 45, width: '48%' }]}
+              buttonStyle={{ height: 45 }}
+              titleStyle={styles.description}
+              title="Lets start"
+            />
+          </View>
         )}
       </View>
     </View>

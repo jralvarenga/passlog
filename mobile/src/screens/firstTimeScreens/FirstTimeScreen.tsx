@@ -11,43 +11,49 @@ interface SlideTypes {
   description: string
   buttonType: 'next' | 'done'
   color: string
+  fontColor: string
 }
 
 const slides: SlideTypes[] = [
   {
     label: "Welcome",
     title: "Welcome To Passlog",
-    description: "Stop worrying about all your sensitive information, use Passlog",
+    description: "Start using Passlog and stop worrying about your inportant stuff",
     buttonType: 'next',
-    color: '#ffc658'
+    color: '#ffc658',
+    fontColor: '#ffdfa1'
   },
   {
-    label: "Save",
+    label: "Safe",
     title: "Save Your Data",
-    description: "Manage your passwords and cards, take notes and keep it all safe in Passlog",
+    description: "Manage your Passwords and Cards, take Notes and keep it all safe in Passlog",
     buttonType: 'next',
-    color: '#ff9262'
+    color: '#ff9262',
+    fontColor: '#ffdac9'
   },
   {
     label: "Encrypted",
     title: "All Encrypted",
-    description: "All the data from passwords, notes and cards are encrypted with AES encryption, so no one will see your data, but you",
+    description: "Your data from Passwords, Notes and Cards are encrypted with AES encryption, no one will see your data besides you",
     buttonType: 'next',
-    color: '#ff637c'
+    color: '#ff637c',
+    fontColor: '#ffa3b2'
   },
   {
     label: "Cloud",
     title: "Secure Cloud",
-    description: "Create an account, back up all your data and keep it safe in the cloud",
+    description: "Keep your data secured in the cloud with an account and have it in any device",
     buttonType: 'next',
-    color: '#d74799'
+    color: '#d74799',
+    fontColor: '#ff9ed5'
   },
   {
-    label: "Done",
-    title: "Start Using Passlog",
-    description: "Now that you know how it works, start using Passlog and stop worrying",
+    label: "Let's start",
+    title: "Let's Get Started",
+    description: "Start usign Passlog with or without an account and get all your data safe",
     buttonType: 'done',
-    color: '#8e44ad'
+    color: '#8e44ad',
+    fontColor: '#e5a6ff'
   }
 ]
 
@@ -62,6 +68,10 @@ const FirstTimeScreen = () => {
   const backgroundColor = x.interpolate({
     inputRange: slides.map((_, i) => i*windowWidth),
     outputRange: slides.map((slide) => slide.color)
+  })
+  const labelColor = x.interpolate({
+    inputRange: slides.map((_, i) => i*windowWidth),
+    outputRange: slides.map((slide) => slide.fontColor)
   })
 
   const onScrollEvent = (event: any) => {
@@ -86,7 +96,12 @@ const FirstTimeScreen = () => {
           onScroll={onScrollEvent}
         >
           {slides.map((slide, i) => (
-            <Slide key={i} label={slide.label} />
+            <Slide
+              key={i}
+              right={i%2 == 0 ? false : true}
+              label={slide.label}
+              color={labelColor}
+            />
           ))}
         </Animated.ScrollView>
       </Animated.View>
