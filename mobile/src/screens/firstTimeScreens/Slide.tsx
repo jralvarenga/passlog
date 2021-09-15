@@ -10,7 +10,7 @@ interface SlideProps {
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
-export const SLIDE_HEIGHT = 0.61*windowHeight
+export const SLIDE_HEIGHT = 0.55*windowHeight
 
 const Slide = ({ label, right }: SlideProps) => {
   const theme = useTheme()
@@ -29,7 +29,7 @@ const Slide = ({ label, right }: SlideProps) => {
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   container: {
-    flex: 1
+    height: SLIDE_HEIGHT
   },
   text: {
     fontFamily: 'poppins',
@@ -45,7 +45,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     fontFamily: 'poppins-bold',
     fontSize: 40,
     color: theme.colors.text,
-    textAlign: 'center'
+    textAlign: 'center',
   }
 })
 
