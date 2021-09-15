@@ -57,7 +57,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
             {user != null ? (
               user.displayName
             ) : (
-              "Anounimous"
+              "No user"
             )}
           </Text>
           {user != null ?? (
