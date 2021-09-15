@@ -1,10 +1,11 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useEffect, useRef, useState } from 'react'
-import { BackHandler, Dimensions, StyleSheet, Text, TextInput, View } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { Alert, BackHandler, Dimensions, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Button, Icon } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Snackbar from 'react-native-snackbar'
 import NoteOptionsSheet from '../components/NoteOptionsSheet'
+import UnsavedInNote from '../components/UnsavedInNotesSheet'
 import { NoteProps } from '../interface/interfaces'
 import { setNotesInStorage } from '../lib/asyncStorage'
 import { encryptNote } from '../lib/encripter'
@@ -23,53 +24,68 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   const styles = styleSheet(theme)
   const { notes, setNotes, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [noteInfo, setNoteInfo] = useState<NoteProps>()
+  const [noteBody, setNoteBody] = useState("")
+  const [noteTitle, setNoteTitle] = useState("")
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
+  const [editBody, setEditBody] = useState(false)
+  const [editTitle, setEditTitle] = useState(false)
   const noteTitleRef = useRef<TextInput>()
   const noteBodyRef = useRef<TextInput>()
+  const [showUnsaveSheet, setShowUnsavedSheet] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const note: NoteProps = route.params.note
     
     setNoteInfo(note)
+    setNoteBody(note.body)
+    setNoteTitle(note.title)
   }, [])
 
   const changeNoteInfo = (value: string, type: 'title' | 'body') => {
     setHasUnsavedChanges(true)
     if (type == 'body') {
-      const newNoteData: NoteProps = {
-        id: noteInfo!.id,
-        title: noteInfo!.title,
-        body: value,
-        date: noteInfo!.date
-      }
-      setNoteInfo(newNoteData)
+      setNoteBody(value)
     } else {
-      const newNoteData: NoteProps = {
-        id: noteInfo!.id,
-        title: value,
-        body: noteInfo!.body,
-        date: noteInfo!.date
-      }
-      setNoteInfo(newNoteData)
+      setNoteTitle(value)
     }
   }
 
-  const saveChanges = () => {
+  const saveChanges = async() => {
+    setLoading(true)
+    noteBodyRef.current?.blur()
+    noteTitleRef.current?.blur()
+    setEditBody(false)
+    setEditTitle(false)
+    const newNoteData: NoteProps = {
+      id: noteInfo!.id,
+      body: noteBody,
+      title: noteTitle,
+      date: noteInfo!.date
+    }
     const newNotes = notes!.map((note) => {
-      if (note.id == noteInfo!.id) {
-        return noteInfo!
+      if (note.id == newNoteData!.id) {
+        return newNoteData
       } else {
         return note
       }
     })
     setNotes!(newNotes)
-    setNotesInStorage(newNotes!)
+    await setNotesInStorage(newNotes!)
     if (userSettings?.alwaysSync) {
-      const encrypted = encryptNote(noteInfo!)
-      updatePasslogDocument(encrypted, 'notes')
+      const encrypted = encryptNote(newNoteData!)
+      await updatePasslogDocument(encrypted, 'notes')
     }
+    setHasUnsavedChanges(false)
     renderPasslogDataHandler!()
+    Snackbar.show({
+      text: 'Saved',
+      fontFamily: 'poppins',
+      textColor: theme.colors.text,
+      backgroundColor: theme.colors.primary
+    })
+    setLoading(false)
   }
 
   useEffect(() => navigation.addListener('beforeRemove', (e: any) => {
@@ -77,9 +93,30 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
       return
     }
     
-    saveChanges()
-    return
+    e.preventDefault()
+    setShowUnsavedSheet(true)
   }), [navigation, hasUnsavedChanges])
+
+  const unsaveAndGoback = () => {
+    setHasUnsavedChanges(false)
+    setShowBottomSheet(false)
+    navigation.goBack()
+  }
+
+  const saveAndGo = async() => {
+    setShowUnsavedSheet(false)
+    await saveChanges()
+    navigation.goBack()
+  }
+
+  useEffect(() => {
+    Snackbar.show({
+      text: 'Long press in title or body to start editing',
+      fontFamily: 'poppins',
+      textColor: theme.colors.text,
+      backgroundColor: theme.colors.primary
+    })
+  }, [])
 
   const deleteNote = async() => {
     setHasUnsavedChanges(false)
@@ -98,6 +135,16 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
     navigation.goBack()
   }
 
+  const enableEditing = (type: 'title' | 'body') => {
+    if (type == 'body') {
+      setEditBody(true)
+      noteBodyRef.current?.focus()
+    } else {
+      setEditTitle(true)
+      noteTitleRef.current?.focus()
+    }
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.headerContainer}>
@@ -112,19 +159,25 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
             />
           </View>
           <View style={styles.pageName}>
-            <TextInput
-              style={styles.titleInputStyle}
-              value={noteInfo?.title}
-              textAlignVertical="center"
-              selectionColor={theme.colors.primary}
-              /* @ts-ignore */
-              ref={noteTitleRef}
-              onBlur={() => {
-                noteTitleRef.current?.blur()
-                setHasUnsavedChanges(true)
-              }}
-              onChangeText={(value) => changeNoteInfo(value, 'title')}
-            />
+            {editTitle ? (
+              <TextInput
+                style={styles.titleInputStyle}
+                value={noteTitle}
+                textAlignVertical="center"
+                selectionColor={theme.colors.primary}
+                /* @ts-ignore */
+                ref={noteTitleRef}
+                onBlur={saveChanges}
+                onChangeText={(value) => changeNoteInfo(value, 'title')}
+              />
+            ) : (
+              <Text
+                onLongPress={() => enableEditing('title')}
+                style={styles.titleInputStyle}
+              >
+                {noteTitle}
+              </Text>
+            )}
           </View>
         </View>
         <View style={styles.headerOptions}>
@@ -140,21 +193,38 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
           </View>
         </View>
       </View>
+      <View style={styles.editContainer}>
+        {hasUnsavedChanges && (
+          <Button
+            loading={loading}
+            titleStyle={styles.text}
+            containerStyle={{ width: '40%' }}
+            title="Save changes"
+            onPress={saveChanges}
+          />
+        )}
+      </View>
       <View style={styles.bodyContainer}>
-        <TextInput
-          style={styles.noteBodyInput}
-          value={noteInfo?.body}
-          multiline={true}
-          textAlignVertical="top"
-          selectionColor={theme.colors.primary}
-          /* @ts-ignore */
-          ref={noteBodyRef}
-          onBlur={() => {
-            noteTitleRef.current?.blur()
-            setHasUnsavedChanges(true)
-          }}
-          onChangeText={(value) => changeNoteInfo(value, 'body')}
-        />
+        {editBody ? (
+          <TextInput
+            style={styles.noteBodyInput}
+            value={noteBody}
+            multiline={true}
+            textAlignVertical="top"
+            selectionColor={theme.colors.primary}
+            /* @ts-ignore */
+            ref={noteBodyRef}
+            onBlur={saveChanges}
+            onChangeText={(value) => changeNoteInfo(value, 'body')}
+          />
+        ) : (
+          <Text
+            onLongPress={() => enableEditing('body')}
+            style={styles.noteBodyInput}
+          >
+            {noteBody}
+          </Text>
+        )}
       </View>
       <NoteOptionsSheet
         name={noteInfo?.title ? noteInfo?.title : ""}
@@ -162,6 +232,12 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
         setVisible={setShowBottomSheet}
         date={noteInfo?.date ? noteInfo?.date : ""}
         deleteNote={deleteNote}
+      />
+      <UnsavedInNote
+        visible={showUnsaveSheet}
+        setVisible={setShowUnsavedSheet}
+        unsaveAndGoback={unsaveAndGoback}
+        saveChanges={saveAndGo}
       />
     </SafeAreaView>
   )
@@ -216,7 +292,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     height: '60%'
   },
   bodyContainer: {
-    flex: 1,
+    flex: 5,
     padding: 20
   },
   noteBodyInput: {
@@ -229,6 +305,13 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     fontFamily: 'poppins',
     fontSize: 16,
     color: theme.colors.text
+  },
+  editContainer: {
+    flex: 0.5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingRight: 25
   }
 })
 

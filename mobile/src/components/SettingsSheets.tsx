@@ -5,7 +5,7 @@ import { Button, Switch } from 'react-native-elements'
 import BottomSheet from './BottomSheet'
 import { UserSettingsProps } from '../interface/interfaces'
 import { getCardsFromStorage, getNotesFromStorage, getPasswordsFromStorage, setUserSettings as setUserSettingsInStorage, wipeAllStorageData } from '../lib/asyncStorage'
-import { fullBackupInFirestore } from '../lib/firestore'
+import { fullBackupInFirestore, getPasslogUserDataInFirestore } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import { signOutHandler } from '../lib/auth'
 
@@ -112,6 +112,7 @@ export const WipeDataSheet = ({ setVisible }: { setVisible: Function }) => {
 export const CloudSettingsSheet = ({ userSettings, setUserSettings }: { userSettings: UserSettingsProps, setUserSettings: Function }) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { setPasswords, setCards, setNotes, renderPasslogDataHandler } = usePasslogUserData()
   const [enabledSync, setEnabledSync] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -127,6 +128,7 @@ export const CloudSettingsSheet = ({ userSettings, setUserSettings }: { userSett
     }
 
     await setUserSettingsInStorage(newUserSettings)
+    renderPasslogDataHandler!()
     setUserSettings(newUserSettings)
     setEnabledSync(state)
   }
