@@ -10,6 +10,7 @@ import CreateCardScreen from '../screens/CreateCardScreen';
 import CardInfoScreen from '../screens/CardInfoScreen';
 import OnStartSecuritySettingsScreen from '../screens/OnStartSecuritySettingsScreen';
 import NoteEditorScreen from '../screens/NoteEditorScreen';
+import FirstTimeScreen from '../screens/firstTimeScreens/FirstTimeScreen';
 
 const Stack = createStackNavigator();
 
@@ -63,6 +64,14 @@ const Navigator = () => {
       <Stack.Screen
         name="noteEditor"
         component={NoteEditorScreen}
+      />
+      <Stack.Screen
+        name="firstTime"
+        component={FirstTimeScreen}
+        options={{
+          gestureEnabled: true,
+          ...TransitionPresets.ModalPresentationIOS
+        }}
       />
     </Stack.Navigator>
   )

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PasswordsScreen from './PasswordsScreen'
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import CardsScreen from './CardsScreen'
@@ -8,11 +8,23 @@ import { View } from 'react-native'
 import { TabBar } from '../components/bottomTabBar/TabBar'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import NotesScreen from './NotesScreen'
+import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 const Tab = createBottomTabNavigator()
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }: any) => {
   const theme = useTheme()
+  const { settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
+
+  useEffect(() =>  {
+    if (settings?.firstTime) {
+      navigation.navigate('firstTime')
+      console.log('is first time')
+    }
+    if (settings?.askForAlwaysSync) {
+      console.log('ask for always sync')
+    }
+  }, [settings])
 
   return (
     <View style={{ flex: 1, position: "relative" }}>

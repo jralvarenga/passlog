@@ -43,11 +43,11 @@ export const getNotesFromStorage = async(): Promise<NoteProps[]> => {
 export const getSettings = async(): Promise<SettingsProps> => {
   const jsonSettings = await AsyncStorage.getItem('settings')
   const settings: SettingsProps = jsonSettings != null ? JSON.parse(jsonSettings) : {
-    onStartSecurity: false,
     pinNumber: '',
     useBiometrics: false,
     usePin: false,
-    biometricType: 'none'
+    askForAlwaysSync: false,
+    firstTime: true
   }
 
   return settings

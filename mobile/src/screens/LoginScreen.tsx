@@ -6,8 +6,8 @@ import { Button, SocialIcon } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Snackbar from 'react-native-snackbar'
 import FormInput from '../components/FormInput'
-import { UserSettingsProps } from '../interface/interfaces'
-import { setUserSettings } from '../lib/asyncStorage'
+import { SettingsProps, UserSettingsProps } from '../interface/interfaces'
+import { setSettingsInStorage, setUserSettings } from '../lib/asyncStorage'
 import { loginInFirebaseAuth } from '../lib/auth'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
@@ -16,7 +16,7 @@ const windowWidth = Dimensions.get('window').width
 
 const LoginScreen = ({ navigation }: any) => {
   const theme = useTheme()
-  const { setUser, renderPasslogDataHandler } = usePasslogUserData()
+  const { setUser, settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
   const styles = styleSheet(theme)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -31,8 +31,14 @@ const LoginScreen = ({ navigation }: any) => {
         name: user.displayName!,
         alwaysSync: false
       }
+      const newSettings: SettingsProps = {
+        ...settings,
+        askForAlwaysSync: true
+      }
+      await setSettingsInStorage(newSettings)
       await setUserSettings(userDefaultSettings)
       setUser!(user)
+      setSettings!(newSettings)
       renderPasslogDataHandler!()
       navigation.navigate('Home')
     } catch (e: any) {

@@ -7,8 +7,8 @@ import Snackbar from 'react-native-snackbar'
 import BottomSheet from '../components/BottomSheet'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
-import { UserSettingsProps } from '../interface/interfaces'
-import { setUserSettings } from '../lib/asyncStorage'
+import { SettingsProps, UserSettingsProps } from '../interface/interfaces'
+import { setSettingsInStorage, setUserSettings } from '../lib/asyncStorage'
 import { createAccountInFirebaseAuth } from '../lib/auth'
 import { createUserDocument } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
@@ -19,7 +19,7 @@ const bottomSheetHeight = 0.3
 const CreateAccountScreen = ({ navigation }: any) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { setUser, renderPasslogDataHandler } = usePasslogUserData()
+  const { setUser, settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
@@ -58,8 +58,14 @@ const CreateAccountScreen = ({ navigation }: any) => {
         name: userName,
         alwaysSync: false
       }
+      const newSettings: SettingsProps = {
+        ...settings,
+        askForAlwaysSync: true
+      }
+      await setSettingsInStorage(newSettings)
       await setUserSettings(userDefaultSettings)
       setUser!(user)
+      setSettings!(newSettings)
       renderPasslogDataHandler!()
       setShowVerifySheet(true)
     } catch (e: any) {

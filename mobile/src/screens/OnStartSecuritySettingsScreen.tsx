@@ -44,8 +44,8 @@ const OnStartSecuritySettingsScreen = () => {
       usePin: usePin,
       useBiometrics: useBiometrics,
       pinNumber: code,
-      /* @ts-ignore */
-      biometricType: biometricType.toLowerCase().replace(' ', '-'),
+      askForAlwaysSync: settings?.askForAlwaysSync ? settings?.askForAlwaysSync : false,
+      firstTime: settings?.firstTime ? settings?.firstTime : false
     }
     setSettings!(newSettings)
     renderPasslogDataHandler!()
@@ -88,8 +88,8 @@ const OnStartSecuritySettingsScreen = () => {
         usePin: false,
         useBiometrics: false,
         pinNumber: "",
-        /* @ts-ignore */
-        biometricType: 'none',
+        askForAlwaysSync: settings?.askForAlwaysSync ? settings?.askForAlwaysSync : false,
+        firstTime: settings?.firstTime ? settings?.firstTime : false
       }
       setSettings!(newSettings)
       renderPasslogDataHandler!()

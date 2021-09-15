@@ -7,7 +7,7 @@ import { UserSettingsProps } from '../interface/interfaces'
 import { getCardsFromStorage, getNotesFromStorage, getPasswordsFromStorage, setUserSettings as setUserSettingsInStorage, wipeAllStorageData } from '../lib/asyncStorage'
 import { fullBackupInFirestore, getPasslogUserDataInFirestore } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
-import { signOutHandler } from '../lib/auth'
+import { returnCurrentUser, signOutHandler } from '../lib/auth'
 
 interface SettingSheetsProps {
   visible: boolean
@@ -64,14 +64,17 @@ export const AppSettingsSheet = ({ goToScreen, enableWipeDataScreen }: any) => {
 export const WipeDataSheet = ({ setVisible }: { setVisible: Function }) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { setCards, setPasswords, setSettings, setUserSettings, setUser } = usePasslogUserData()
+  const { setCards, setPasswords, setSettings, setUserSettings, setUser, renderPasslogDataHandler } = usePasslogUserData()
   const [loading, setLoading] = useState(false)
 
   const wipeData = async() => {
     setLoading(true)
     try {
+      const user = returnCurrentUser()
       await wipeAllStorageData()
-      await signOutHandler()
+      if (user) {
+        await signOutHandler() 
+      }
       setUserSettings!(null)
       setSettings!({})
       setCards!([])
@@ -79,6 +82,7 @@ export const WipeDataSheet = ({ setVisible }: { setVisible: Function }) => {
       setUser!(null)
       setVisible(false)
       setLoading(false)
+      renderPasslogDataHandler!()
     } catch (error) {
       console.log(error)
       setLoading(false)

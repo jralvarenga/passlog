@@ -47,11 +47,11 @@ export interface PasslogUserDataProps {
 }
 
 export interface SettingsProps {
-  onStartSecurity?: boolean
   useBiometrics?: boolean
   usePin?: boolean
   pinNumber?: string
-  biometricType?: 'biometric' | 'face-id' | 'touch-id' | 'none'
+  firstTime?: boolean
+  askForAlwaysSync?: boolean
 }
 
 export interface UserSettingsProps {
