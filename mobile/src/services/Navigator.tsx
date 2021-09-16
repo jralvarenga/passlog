@@ -69,7 +69,6 @@ const Navigator = () => {
         name="firstTime"
         component={FirstTimeScreen}
         options={{
-          gestureEnabled: true,
           ...TransitionPresets.ModalPresentationIOS
         }}
       />
