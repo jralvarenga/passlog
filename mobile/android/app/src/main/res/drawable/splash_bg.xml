@@ -4,8 +4,8 @@
     android:drawable="@color/background"/>
 
   <item
-    android:width="90px"
-    android:height="195px"
+    android:width="100px"
+    android:height="216px"
     android:drawable="@drawable/ic_passlog_logo"
     android:gravity="center"
     />

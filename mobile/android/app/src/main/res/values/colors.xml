@@ -2,4 +2,5 @@
 <resources>
   <color name="background">#141414</color>
   <color name="font_color">#ffffff</color>
+  <color name="primary_dark">#141414</color>
 </resources>

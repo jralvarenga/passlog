@@ -4,6 +4,7 @@ import { CardProps, NoteProps, PasslogUserDataProps, PasswordProps, SettingsProp
 import { getCardsFromStorage, getNotesFromStorage, getPasswordsFromStorage, getSettings, getUserSettings, setCardsInStorage, setNotesInStorage, setPasswordsInStorage } from '../lib/asyncStorage'
 import { returnCurrentUser } from '../lib/auth'
 import { getPasslogUserDataInFirestore } from '../lib/firestore'
+import SplashScreen from 'react-native-splash-screen'
 
 interface PasslogUserDataProviderProps {
   children: ReactElement
@@ -45,6 +46,7 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
     setCards(cards)
     setNotes(notes)
     setSettings(settings)
+    SplashScreen.hide()
   }
 
   useEffect(() => {
