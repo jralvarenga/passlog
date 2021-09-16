@@ -20,29 +20,6 @@ export const darkTheme: NavigationThemeProps = {
   },
 }
 
-export const transitionColors: TransitionColors[] = [
-  {
-    color: '#ffc658',
-    fontColor: '#ffdfa1'
-  },
-  {
-    color: '#ff9262',
-    fontColor: '#ffdac9'
-  },
-  {
-    color: '#ff637c',
-    fontColor: '#ffa3b2'
-  },
-  {
-    color: '#d74799',
-    fontColor: '#ff9ed5'
-  },
-  {
-    color: '#8e44ad',
-    fontColor: '#e5a6ff'
-  }
-]
-
 export const darkElementsTheme = {
   Text: {
     style: {
