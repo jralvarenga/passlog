@@ -1,3 +1,4 @@
 react-native-icons
 biometrics
 react-native-firebase
+splashscreen
