@@ -1,7 +1,8 @@
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { createRef, useEffect, useRef, useState } from 'react'
 import { Alert, BackHandler, Dimensions, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
+import { TapGestureHandler } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Snackbar from 'react-native-snackbar'
 import NoteOptionsSheet from '../components/NoteOptionsSheet'
@@ -30,10 +31,12 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const [editBody, setEditBody] = useState(false)
   const [editTitle, setEditTitle] = useState(false)
-  const noteTitleRef = useRef<TextInput>()
-  const noteBodyRef = useRef<TextInput>()
   const [showUnsaveSheet, setShowUnsavedSheet] = useState(false)
   const [loading, setLoading] = useState(false)
+  const noteTitleRef = useRef<TextInput>()
+  const noteBodyRef = useRef<TextInput>()
+  const doubleTapTitle = createRef()
+  const doubleTapBody = createRef()
 
   useEffect(() => {
     const note: NoteProps = route.params.note
@@ -111,7 +114,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
 
   useEffect(() => {
     Snackbar.show({
-      text: 'Long press in title or body to start editing',
+      text: 'Double tap in title or body to start editing',
       fontFamily: 'poppins',
       textColor: theme.colors.text,
       backgroundColor: theme.colors.primary
@@ -161,7 +164,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
           <View style={styles.pageName}>
             {editTitle ? (
               <TextInput
-                style={styles.titleInputStyle}
+              style={[styles.text, { fontSize: 28, fontFamily: 'poppins-bold' }]}
                 value={noteTitle}
                 textAlignVertical="center"
                 selectionColor={theme.colors.primary}
@@ -171,12 +174,18 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
                 onChangeText={(value) => changeNoteInfo(value, 'title')}
               />
             ) : (
-              <Text
-                onLongPress={() => enableEditing('title')}
-                style={styles.titleInputStyle}
+              <TapGestureHandler
+                onActivated={() => enableEditing('title')}
+                ref={doubleTapTitle}
+                numberOfTaps={2}
               >
-                {noteTitle}
-              </Text>
+                <Text
+                  //selectable
+                  style={[styles.text, { fontSize: 28, fontFamily: 'poppins-bold' }]}
+                >
+                  {noteTitle}
+                </Text>
+              </TapGestureHandler>
             )}
           </View>
         </View>
@@ -218,12 +227,18 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
             onChangeText={(value) => changeNoteInfo(value, 'body')}
           />
         ) : (
-          <Text
-            onLongPress={() => enableEditing('body')}
-            style={styles.noteBodyInput}
+          <TapGestureHandler
+            onActivated={() => enableEditing('body')}
+            ref={doubleTapBody}
+            numberOfTaps={2}
           >
-            {noteBody}
-          </Text>
+            <Text
+              //selectable
+              style={styles.noteBodyInput}
+            >
+              {noteBody}
+            </Text>
+          </TapGestureHandler>
         )}
       </View>
       <NoteOptionsSheet
@@ -260,8 +275,6 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     fontFamily: 'poppins-bold',
     fontSize: 28,
     color: theme.colors.text,
-    width: '100%',
-    height: '100%'
   },
   headerInfo: {
     width: '75%',

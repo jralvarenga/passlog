@@ -42,7 +42,9 @@ const NoteContainer = ({ note, goToScreen }: NoteContainerProps) => {
           </View>
         </View>
         <View style={styles.noteInfo}>
-          <Text style={[styles.text]}>{note.body}</Text>
+          <Text style={[styles.text, { flex: 1 }]} numberOfLines={1} ellipsizeMode="tail">
+            {note.body}
+          </Text>
         </View>
       </LinearGradient>
     </TouchableOpacity>
