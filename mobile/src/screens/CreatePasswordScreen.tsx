@@ -1,8 +1,7 @@
-import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Button } from 'react-native-elements'
+import React, { useEffect, useRef, useState } from 'react'
+import { StyleSheet, TextInput, View } from 'react-native'
+import { Button, } from 'react-native-elements'
 import Snackbar from 'react-native-snackbar'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
@@ -30,6 +29,11 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
   const [eyeIcon, setEyeIcon] = useState("eye-off")
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
+  const nameRef = useRef<TextInput>(null)
+  const userRef = useRef<TextInput>(null)
+  const emailRef = useRef<TextInput>(null)
+  const passwordRef = useRef<TextInput>(null)
+  const commentsRef = useRef<TextInput>(null)
 
   useEffect(() => {
     if (route.params.generatedPassword) {
@@ -97,30 +101,43 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
           <FormInput
             placeholder="Name"
             label="Password name"
+            ref={nameRef}
             width="50%"
             icon={{ type: 'font-awesome', name: 'user-circle' }}
             value={name}
             onChangeText={(value: string) => setName(value)}
+            inputProps={{
+              returnKeyType: 'next',
+              onSubmitEditing: () => userRef.current?.focus()
+            }}
           />
           <FormInput
             placeholder="my_user"
             label="User name"
+            ref={userRef}
             width="50%"
             icon={{ type: 'font-awesome', name: 'user-circle' }}
             value={user}
             onChangeText={(value: string) => setUser(value)}
+            inputProps={{
+              returnKeyType: 'next',
+              onSubmitEditing: () => emailRef.current?.focus()
+            }}
           />
         </View>
         <View>
           <FormInput
             label="An email or credential"
+            ref={emailRef}
             placeholder="email132@adress.com"
             icon={{ type: 'ionicons', name: 'mail' }}
             value={email}
             onChangeText={(value: string) => setEmail(value)}
             inputProps={{
               keyboardType: 'email-address',
-              autoCapitalize: 'none'
+              autoCapitalize: 'none',
+              returnKeyType: 'next',
+              onSubmitEditing: () => passwordRef.current?.focus()
             }}
           />
         </View>
@@ -128,13 +145,15 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
           <FormInput
             label="The password"
             placeholder="your_password123"
+            ref={passwordRef}
             icon={{ type: 'material', name: 'lock' }}
             value={password}
             onChangeText={(value: string) => setPassword(value)}
             inputProps={{
               autoCapitalize: 'none',
               autoCompleteType: 'off',
-              secureTextEntry: !showPassword
+              secureTextEntry: !showPassword,
+              returnKeyType: 'done',
             }}
           />
         </View>
@@ -142,6 +161,7 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
           <FormInput
             label="Your comments"
             placeholder="Write your comments here..."
+            ref={commentsRef}
             icon={{ type: 'font-awesome', name: 'comment', }}
             value={comments}
             onChangeText={(value: string) => setComments(value)}

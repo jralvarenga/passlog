@@ -33,8 +33,8 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   const [editTitle, setEditTitle] = useState(false)
   const [showUnsaveSheet, setShowUnsavedSheet] = useState(false)
   const [loading, setLoading] = useState(false)
-  const noteTitleRef = useRef<TextInput>()
-  const noteBodyRef = useRef<TextInput>()
+  const noteTitleRef = useRef<TextInput>(null)
+  const noteBodyRef = useRef<TextInput>(null)
   const doubleTapTitle = createRef()
   const doubleTapBody = createRef()
 
@@ -168,7 +168,6 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
                 value={noteTitle}
                 textAlignVertical="center"
                 selectionColor={theme.colors.primary}
-                /* @ts-ignore */
                 ref={noteTitleRef}
                 onBlur={saveChanges}
                 onChangeText={(value) => changeNoteInfo(value, 'title')}
@@ -180,7 +179,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
                 numberOfTaps={2}
               >
                 <Text
-                  //selectable
+                  selectable
                   style={[styles.text, { fontSize: 28, fontFamily: 'poppins-bold' }]}
                 >
                   {noteTitle}
@@ -221,7 +220,6 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
             multiline={true}
             textAlignVertical="top"
             selectionColor={theme.colors.primary}
-            /* @ts-ignore */
             ref={noteBodyRef}
             onBlur={saveChanges}
             onChangeText={(value) => changeNoteInfo(value, 'body')}
@@ -233,7 +231,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
             numberOfTaps={2}
           >
             <Text
-              //selectable
+              selectable
               style={styles.noteBodyInput}
             >
               {noteBody}

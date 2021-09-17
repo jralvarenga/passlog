@@ -1,7 +1,7 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useRef, useState } from 'react'
-import { Dimensions, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, Image, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button, SocialIcon } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Snackbar from 'react-native-snackbar'
@@ -20,8 +20,8 @@ const LoginScreen = ({ navigation }: any) => {
   const styles = styleSheet(theme)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const emailRef = useRef()
-  const passwordRef = useRef()
+  const emailRef = useRef<TextInput>()
+  const passwordRef = useRef<TextInput>()
 
   const loginHandler = async() => {
     try {
@@ -83,7 +83,6 @@ const LoginScreen = ({ navigation }: any) => {
               autoCompleteType: 'email',
               autoCapitalize: 'none',
               returnKeyType: "next",
-              /* @ts-ignore */
               onSubmitEditing: () => passwordRef.current!.focus()
             }}
           />
@@ -98,7 +97,11 @@ const LoginScreen = ({ navigation }: any) => {
               autoCapitalize: 'none',
               autoCompleteType: 'password',
               secureTextEntry: true,
-              returnKeyType: "done"
+              returnKeyType: "done",
+              onSubmitEditing: () => {
+                passwordRef.current?.blur()
+                loginHandler()
+              }
             }}
           />
         </View>

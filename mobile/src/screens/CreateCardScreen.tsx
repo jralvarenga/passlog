@@ -1,6 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import FormInput from '../components/FormInput'
 import HeaderNavigationBar from '../components/HeaderNavigationBar'
@@ -32,6 +32,10 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   //const [extraInfoData, setExtraInfoData] = useState("")
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const [loading, setLoading] = useState(false)
+  const nameRef = useRef<TextInput>(null)
+  const typeRef = useRef<TextInput>(null)
+  const holderRef = useRef<TextInput>(null)
+  const numbersdRef = useRef<TextInput>(null)
 
   const showBottomSheetHandler = () => {
     setShowBottomSheet(true)
@@ -94,6 +98,10 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
             icon={{ type: 'ionicon', name: 'card' }}
             value={name}
             onChangeText={(value: string) => setName(value)}
+            inputProps={{
+              returnKeyType: 'next',
+              onSubmitEditing: () => typeRef.current?.focus()
+            }}
           />
           <FormInput
             placeholder="Card, promo..."
@@ -104,7 +112,9 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
             onChangeText={(value: string) => setType(value)}
             inputProps={{
               onPressIn: showBottomSheetHandler,
-              showSoftInputOnFocus: false
+              showSoftInputOnFocus: false,
+              returnKeyType: 'next',
+              onSubmitEditing: () => holderRef.current?.focus()
             }}
           />
         </View>
@@ -115,6 +125,10 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
             icon={{ type: 'material-community', name: 'account' }}
             value={holder}
             onChangeText={(value: string) => setHolder(value)}
+            inputProps={{
+              returnKeyType: 'next',
+              onSubmitEditing: () => numbersdRef.current?.focus()
+            }}
           />
         </View>
         <View>
@@ -127,6 +141,7 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
             inputProps={{
               autoCapitalize: 'none',
               autoCompleteType: 'off',
+              returnKeyType: 'done',
             }}
           />
         </View>

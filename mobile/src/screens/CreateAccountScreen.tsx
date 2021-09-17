@@ -1,7 +1,7 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
-import { Dimensions, StatusBar, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { Dimensions, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import Snackbar from 'react-native-snackbar'
 import BottomSheet from '../components/BottomSheet'
@@ -28,6 +28,11 @@ const CreateAccountScreen = ({ navigation }: any) => {
   const [eyeIcon, setEyeIcon] = useState("eye-off")
   const [showPassword, setShowPassword] = useState(false)
   const [showVerifySheet, setShowVerifySheet] = useState(false)
+  const nameRef = useRef<TextInput>(null)
+  const lastNameRef = useRef<TextInput>(null)
+  const emailRef = useRef<TextInput>(null)
+  const passwordRef = useRef<TextInput>(null)
+  const repeatPasswordsRef = useRef<TextInput>(null)
 
   const changePasswordVisibility = () => {
     if (showPassword) {
@@ -101,6 +106,11 @@ const CreateAccountScreen = ({ navigation }: any) => {
             icon={{ type: 'font-awesome', name: 'user-circle' }}
             value={name}
             onChangeText={(value: string) => setName(value)}
+            inputProps={{
+              returnKeyType: 'next',
+              autoCompleteType: 'name',
+              onSubmitEditing: () => lastNameRef.current?.focus()
+            }}
           />
           <FormInput
             placeholder="Dolphin"
@@ -109,6 +119,11 @@ const CreateAccountScreen = ({ navigation }: any) => {
             icon={{ type: 'font-awesome', name: 'user-circle' }}
             value={lastName}
             onChangeText={(value: string) => setLastName(value)}
+            inputProps={{
+              returnKeyType: 'next',
+              autoCompleteType: 'name',
+              onSubmitEditing: () => emailRef.current?.focus()
+            }}
           />
         </View>
         <View>
@@ -120,7 +135,9 @@ const CreateAccountScreen = ({ navigation }: any) => {
             onChangeText={(value: string) => setEmail(value)}
             inputProps={{
               keyboardType: 'email-address',
-              autoCapitalize: 'none'
+              autoCapitalize: 'none',
+              returnKeyType: 'next',
+              onSubmitEditing: () => passwordRef.current?.focus()
             }}
           />
         </View>
@@ -134,7 +151,9 @@ const CreateAccountScreen = ({ navigation }: any) => {
             inputProps={{
               autoCapitalize: 'none',
               autoCompleteType: 'off',
-              secureTextEntry: !showPassword
+              secureTextEntry: !showPassword,
+              returnKeyType: 'next',
+              onSubmitEditing: () => repeatPasswordsRef.current?.focus()
             }}
           />
         </View>
@@ -148,7 +167,8 @@ const CreateAccountScreen = ({ navigation }: any) => {
             inputProps={{
               autoCapitalize: 'none',
               autoCompleteType: 'off',
-              secureTextEntry: !showPassword
+              secureTextEntry: !showPassword,
+              returnKeyType: 'done',
             }}
           />
         </View>
