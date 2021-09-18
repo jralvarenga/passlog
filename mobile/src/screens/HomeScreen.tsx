@@ -62,8 +62,8 @@ const HomeScreen = ({ navigation }: any) => {
         tabBar={(props: BottomTabBarProps) => <TabBar {...props} />}
       >
         <Tab.Screen name="key" component={PasswordsScreen} />
-        <Tab.Screen name="credit-card" component={CardsScreen} />
         <Tab.Screen name="book" component={NotesScreen} />
+        <Tab.Screen name="credit-card" component={CardsScreen} />
         <Tab.Screen name="settings" component={SettingsScreen} />
       </Tab.Navigator>
       {useSafeAreaInsets().bottom > 0 && (

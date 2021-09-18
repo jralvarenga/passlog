@@ -24,7 +24,7 @@ const PasswordContainer = ({ password, goToScreen }: PasswordContainerProps) => 
       onPress={() => goToScreen('passwordInfo', { passwordInfo: password })}
     >
       <LinearGradient
-        colors={[theme.colors.card, theme.colors.background]}
+        colors={[theme.colors.card, reduceIncrementColor(theme.colors.card, 'reduce', 20)]}
         style={styles.container}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}

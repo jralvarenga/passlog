@@ -24,7 +24,7 @@ const CardContainer = ({ card, goToScreen }: CardContainerProps) => {
       onPress={() => goToScreen('cardInfo', { cardInfo: card })}
     >
       <LinearGradient
-        colors={[theme.colors.card, theme.colors.background]}
+        colors={[theme.colors.card, reduceIncrementColor(theme.colors.card, 'reduce', 20)]}
         style={styles.container}
         start={{ x: 1, y: 0 }}
         end={{ x: 0, y: 1 }}
