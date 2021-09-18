@@ -1,6 +1,7 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useRef } from 'react'
 import { Animated, Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native'
+import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
 import PaginationDot from './PaginationDot'
 import Slide, { SLIDE_HEIGHT } from './Slide'
 import SubSlide from './SubSlide'
@@ -84,6 +85,7 @@ const FirstTimeScreen = () => {
 
   return (
     <View style={styles.container}>
+      <FocusAwareStatusBar backgroundColor="#000" />
       <Animated.View style={[styles.slider, { backgroundColor }]}>
         <Animated.ScrollView
           horizontal

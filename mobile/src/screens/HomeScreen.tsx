@@ -53,6 +53,17 @@ const HomeScreen = ({ navigation }: any) => {
     setShowEnableAlwaysSync(false)
   }
 
+  const removeAlwaysSync = async(prop: boolean) => {
+    const newSettings: SettingsProps = {
+      ...settings,
+      askForAlwaysSync: false
+    }
+    setSettings!(newSettings)
+    await setSettingsInStorage(newSettings)
+    renderPasslogDataHandler!()
+    setShowEnableAlwaysSync(false)
+  }
+
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <Tab.Navigator
@@ -76,7 +87,7 @@ const HomeScreen = ({ navigation }: any) => {
       )}
       <BottomSheet
         visible={showEnableAlwaysSync}
-        setVisible={setShowEnableAlwaysSync}
+        setVisible={removeAlwaysSync}
         bottomSheetHeight={bottomSheetHeight}
       >
         <View style={styles.contentContainer}>

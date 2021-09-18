@@ -89,7 +89,6 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
           <LottieView
             source={require('../../assets/animations/cards.json')}
             autoPlay
-            loop
             style={{ width: 250, height: 250 }}
           />
         </EmptyDataView>

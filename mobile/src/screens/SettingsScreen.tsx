@@ -115,6 +115,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         {user != null ? (
           <Button
             title="Account settings"
+            onPress={() => navigation.navigate('accountSettings')}
             containerStyle={{ marginTop: 15 }}
             buttonStyle={{ justifyContent: 'flex-start', padding: 15, backgroundColor: theme.colors.card }}
             titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}

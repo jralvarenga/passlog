@@ -11,6 +11,7 @@ import CardInfoScreen from '../screens/CardInfoScreen';
 import OnStartSecuritySettingsScreen from '../screens/OnStartSecuritySettingsScreen';
 import NoteEditorScreen from '../screens/NoteEditorScreen';
 import FirstTimeScreen from '../screens/firstTimeScreens/FirstTimeScreen';
+import AccountSettingsScreen from '../screens/AccountSettingsScreen';
 
 const Stack = createStackNavigator();
 
@@ -69,6 +70,14 @@ const Navigator = () => {
         name="firstTime"
         component={FirstTimeScreen}
         options={{
+          ...TransitionPresets.ModalPresentationIOS
+        }}
+      />
+      <Stack.Screen
+        name="accountSettings"
+        component={AccountSettingsScreen}
+        options={{
+          gestureEnabled: true,
           ...TransitionPresets.ModalPresentationIOS
         }}
       />
