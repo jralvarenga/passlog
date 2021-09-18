@@ -24,6 +24,15 @@ const LoginScreen = ({ navigation }: any) => {
   const passwordRef = useRef<TextInput>()
 
   const loginHandler = async() => {
+    if (email == '' || password == '') {
+      Snackbar.show({
+        text: "All fields are required are required",
+        fontFamily: 'poppins',
+        textColor: theme.colors.text,
+        backgroundColor: theme.colors.primary
+      })
+      return
+    }
     try {
       const { user } = await loginInFirebaseAuth(email, password)
       const userDefaultSettings: UserSettingsProps = {

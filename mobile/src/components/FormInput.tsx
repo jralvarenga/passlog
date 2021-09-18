@@ -39,6 +39,7 @@ const FormInput = forwardRef(({ label, value, placeholder, icon, width, error, i
       inputContainerStyle={styles.inputContainerStyle}
       labelStyle={styles.labelStyle}
       onChangeText={(value) => onChangeText(value)}
+      //blurOnSubmit={false}
       leftIcon={{
         type: icon?.type,
         name: icon?.name,

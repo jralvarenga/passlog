@@ -45,6 +45,15 @@ const CreateAccountScreen = ({ navigation }: any) => {
   }
 
   const createAccountHandler = async() => {
+    if (name == '' || lastName == '' || repeatedPassword == '' || email == '' || password == '') {
+      Snackbar.show({
+        text: "All fields are required",
+        fontFamily: 'poppins',
+        textColor: theme.colors.text,
+        backgroundColor: theme.colors.primary
+      })
+      return
+    }
     if (password != repeatedPassword) {
       Snackbar.show({
         text: "The passwords don't match",

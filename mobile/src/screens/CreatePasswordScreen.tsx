@@ -53,6 +53,15 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
   }
 
   const createPassword = async() => {
+    if (name == '' || email == '' || password == '') {
+      Snackbar.show({
+        text: "Name, Email & Password are required",
+        fontFamily: 'poppins',
+        textColor: theme.colors.text,
+        backgroundColor: theme.colors.primary
+      })
+      return
+    }
     setLoading(true)
     try {
       const currentDate = new Date()

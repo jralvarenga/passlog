@@ -48,6 +48,15 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   }
 
   const createCard = async() => {
+    if (name == '' || holder == '' || numbers == '' || type == '') {
+      Snackbar.show({
+        text: "All fields are required",
+        fontFamily: 'poppins',
+        textColor: theme.colors.text,
+        backgroundColor: theme.colors.primary
+      })
+      return
+    }
     setLoading(true)
     try {
       const currentDate = new Date()
