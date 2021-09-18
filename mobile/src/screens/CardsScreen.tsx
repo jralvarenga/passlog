@@ -4,11 +4,12 @@ import { Theme, useTheme } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import TopBar from '../components/TopBar'
 import HiddenFlatListView from '../components/HiddenFlatListView'
-import { CardProps, PasslogUserDataProps } from '../interface/interfaces'
+import { CardProps } from '../interface/interfaces'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import CardContainer from '../components/CardContainer'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import EmptyDataView from '../components/EmptyDataView'
+import LottieView from 'lottie-react-native'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -82,9 +83,16 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
         />
       ) : (
         <EmptyDataView
-          item="Card"
+          text="Keep all your cards, codes, etc. safe in Cards"
           buttonFunction={() => goToScreen('createCard', {})}
-        />
+        >
+          <LottieView
+            source={require('../../assets/animations/cards.json')}
+            autoPlay
+            loop
+            style={{ width: 250, height: 250 }}
+          />
+        </EmptyDataView>
       )}
     </SafeAreaView>
   )

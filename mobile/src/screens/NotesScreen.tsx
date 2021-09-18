@@ -14,6 +14,7 @@ import { createId } from '../lib/createId'
 import { setNotesInStorage } from '../lib/asyncStorage'
 import { createNewPasslogDocument } from '../lib/firestore'
 import { encryptNote } from '../lib/encripter'
+import LottieView from 'lottie-react-native'
 
 interface PasswordContainerProps {
   navigation: any
@@ -106,9 +107,16 @@ const NotesScreen = ({ navigation }: PasswordContainerProps) => {
         />
       ) : (
         <EmptyDataView
-          item="Notes"
+          text="Start writing your secret notes and keep them safe here"
           buttonFunction={createNewNote}
-        />
+        >
+          <LottieView
+            source={require('../../assets/animations/notes.json')}
+            autoPlay
+            loop
+            style={{ width: 250, height: 250 }}
+          />
+        </EmptyDataView>
       )}
     </SafeAreaView>
   )

@@ -10,6 +10,7 @@ import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import EmptyDataView from '../components/EmptyDataView'
+import LottieView from 'lottie-react-native'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -86,9 +87,16 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
         />
       ) : (
         <EmptyDataView
-          item="Password"
+          text="Start adding your passwords and keep them safe here"
           buttonFunction={() => goToScreen('createPassword', {})}
-        />
+        >
+          <LottieView
+            source={require('../../assets/animations/locked.json')}
+            autoPlay
+            loop={false}
+            style={{ width: 250, height: 250 }}
+          />
+        </EmptyDataView>
       )}
       <GeneratePasswordSheet
         goToScreen={goToScreen}
