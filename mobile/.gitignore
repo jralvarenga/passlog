@@ -59,6 +59,7 @@ buck-out/
 /ios/Pods/
 
 # Private keys
+keystore.jks
 crypto_keys.ts
 private_key.pepk
 google-services.json
