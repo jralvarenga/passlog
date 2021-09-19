@@ -27,3 +27,9 @@ export const returnCurrentUser = (): FirebaseAuthTypes.User | null => {
 export const signOutHandler = async() => {
   await auth().signOut()
 }
+
+export const deleteAccountHandler = async() => {
+  const user = auth().currentUser
+
+  await user?.delete()
+}

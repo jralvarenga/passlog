@@ -111,3 +111,38 @@ export const fullBackupInFirestore = async(passwords: PasswordProps[], cards: Ca
   batch.commit()
   
 }
+
+export const deleteUserPasslogData = async() => {
+  const user = returnCurrentUser()
+  const batch = firestore().batch()
+  const passwordsCollection = firestore().collection('data').doc(user?.uid).collection('passwords')
+  const cardsCollection = firestore().collection('data').doc(user?.uid).collection('cards')
+  const notesCollection = firestore().collection('data').doc(user?.uid).collection('notes')
+
+  
+  const getPasswords = await passwordsCollection.get()
+  const getCards = await cardsCollection.get()
+  const getNotes = await notesCollection.get()
+
+  getPasswords.forEach((doc) => {
+    const ref = passwordsCollection.doc(doc.id)
+    batch.delete(ref)
+  })
+  getCards.forEach((doc) => {
+    const ref = cardsCollection.doc(doc.id)
+    batch.delete(ref)
+  })
+  getNotes.forEach((doc) => {
+    const ref = notesCollection.doc(doc.id)
+    batch.delete(ref)
+  })
+
+  batch.commit()
+}
+
+export const deleteUserDocument = async() => {
+  const user = returnCurrentUser()
+  const userRef = firestore().collection('data').doc(user?.uid)
+
+  await userRef.delete()
+}

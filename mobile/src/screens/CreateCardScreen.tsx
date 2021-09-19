@@ -154,9 +154,6 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
             }}
           />
         </View>
-      <View>
-          
-        </View>
       </View>
       <View style={styles.createButtonContainer}>
         <Button
