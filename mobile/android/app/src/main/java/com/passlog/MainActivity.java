@@ -3,14 +3,14 @@ package com.passlog;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
-import org.devio.rn.splashscreen.SplashScreen;
+import com.zoontek.rnbootsplash.RNBootSplash;
 
 public class MainActivity extends ReactActivity {
 
   @Override
   protected void onCreate(Bundle saveInstanceState) {
     setTheme(R.style.AppTheme);
-    SplashScreen.show(this, R.style.RNSplashScreenTheme);
+    RNBootSplash.init(R.drawable.splash_bg, this);
 
     super.onCreate(saveInstanceState);
   }
