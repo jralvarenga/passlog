@@ -1,7 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
 import { Animated, Dimensions, StyleSheet, View } from 'react-native'
-import { Text } from 'react-native-elements'
 
 interface SlideProps {
   label: string
@@ -9,16 +8,16 @@ interface SlideProps {
   color: Animated.AnimatedInterpolation
 }
 
-const windowWidth = Dimensions.get('window').width
-const windowHeight = Dimensions.get('window').height
-export const SLIDE_HEIGHT = 0.55*windowHeight
+const WINDOW_WIDTH = Dimensions.get('window').width
+const WINDOW_HEIGHT = Dimensions.get('window').height
+export const SLIDE_HEIGHT = 0.55*WINDOW_HEIGHT
 
 const Slide = ({ label, right, color }: SlideProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const transform = [
-    { translateY: (SLIDE_HEIGHT - windowHeight*0.55)/2 },
-    { translateX: right ? windowWidth/2 - 50 : -windowWidth/2 + 50 },
+    { translateY: (SLIDE_HEIGHT - WINDOW_HEIGHT*0.55)/2 },
+    { translateX: right ? WINDOW_WIDTH/2 - 50 : -WINDOW_WIDTH/2 + 50 },
     { rotate: right ? '-90deg' : '90deg' },
   ]
 
@@ -44,7 +43,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    width: windowWidth,
+    width: WINDOW_WIDTH,
     justifyContent: 'center',
   },
   labelStyle: {

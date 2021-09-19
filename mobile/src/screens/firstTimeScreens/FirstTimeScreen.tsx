@@ -15,49 +15,6 @@ interface SlideTypes {
   fontColor: string
 }
 
-const slides: SlideTypes[] = [
-  {
-    label: "Welcome",
-    title: "Welcome To Passlog",
-    description: "Start using Passlog and stop worrying about your inportant stuff",
-    buttonType: 'next',
-    color: '#ffc658',
-    fontColor: '#ffdfa1'
-  },
-  {
-    label: "Safe",
-    title: "Save Your Data",
-    description: "Manage your Passwords and Cards, take Notes and keep it all safe in Passlog",
-    buttonType: 'next',
-    color: '#ff9262',
-    fontColor: '#ffdac9'
-  },
-  {
-    label: "Encrypted",
-    title: "All Encrypted",
-    description: "Your data from Passwords, Notes and Cards are encrypted with AES encryption, no one will see your data besides you",
-    buttonType: 'next',
-    color: '#ff637c',
-    fontColor: '#ffa3b2'
-  },
-  {
-    label: "Cloud",
-    title: "Secure Cloud",
-    description: "Keep your data secured in the cloud with an account and have it in any device",
-    buttonType: 'next',
-    color: '#d74799',
-    fontColor: '#ff9ed5'
-  },
-  {
-    label: "Let's start",
-    title: "Let's Get Started",
-    description: "Start usign Passlog with or without an account and get all your data safe",
-    buttonType: 'done',
-    color: '#8e44ad',
-    fontColor: '#e5a6ff'
-  }
-]
-
 const windowWidth = Dimensions.get('window').width
 const BORDER_RADIUS = 75
 
@@ -66,6 +23,48 @@ const FirstTimeScreen = () => {
   const styles = styleSheet(theme)
   const scroll = useRef<any>(null)
   const x = new Animated.Value(0)
+  const slides: SlideTypes[] = [
+    {
+      label: "Welcome",
+      title: "Welcome To Passlog",
+      description: "Start using Passlog and stop worrying about your inportant stuff",
+      buttonType: 'next',
+      color: '#ffc658',
+      fontColor: '#ffdfa1'
+    },
+    {
+      label: "Safe",
+      title: "Save Your Data",
+      description: "Manage your Passwords and Cards, take Notes and keep it all safe in Passlog",
+      buttonType: 'next',
+      color: '#ff9262',
+      fontColor: '#ffdac9'
+    },
+    {
+      label: "Encrypted",
+      title: "All Encrypted",
+      description: "Your data from Passwords, Notes and Cards are encrypted with AES encryption, no one will see your data besides you",
+      buttonType: 'next',
+      color: '#ff637c',
+      fontColor: '#ffa3b2'
+    },
+    {
+      label: "Cloud",
+      title: "Secure Cloud",
+      description: "Keep your data secured in the cloud with an account and have it in any device",
+      buttonType: 'next',
+      color: '#d74799',
+      fontColor: '#ff9ed5'
+    },
+    {
+      label: "Let's start",
+      title: "Let's Get Started",
+      description: "Start usign Passlog with or without an account and get all your data safe",
+      buttonType: 'done',
+      color: '#8e44ad',
+      fontColor: '#e5a6ff'
+    }
+  ]
   const backgroundColor = x.interpolate({
     inputRange: slides.map((_, i) => i*windowWidth),
     outputRange: slides.map((slide) => slide.color)
@@ -78,9 +77,6 @@ const FirstTimeScreen = () => {
   const onScrollEvent = (event: any) => {
     const scrollXXvalue = event.nativeEvent.contentOffset.x
     x.setValue(scrollXXvalue)
-    /*if (scrollXXvalue >= 0) {
-      x.setValue(scrollXXvalue)
-    }*/
   }
 
   return (

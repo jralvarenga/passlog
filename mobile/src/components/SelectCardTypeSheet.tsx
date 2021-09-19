@@ -14,8 +14,8 @@ interface SelectCardTypeSheetProps {
   changeCardType: Function
 }
 
-const windowHeight = Dimensions.get('window').height
-const bottomSheetHeight = 0.35
+const WINDOW_HEIGHT = Dimensions.get('window').height
+const BOTTOM_SHEET_HEIGHT = 0.35
 
 const SelectCardTypeSheet = ({ visible, setVisible, type, changeCardType }: SelectCardTypeSheetProps) => {
   const theme = useTheme()
@@ -52,7 +52,7 @@ const SelectCardTypeSheet = ({ visible, setVisible, type, changeCardType }: Sele
       <BottomSheet
         visible={visible}
         setVisible={setVisible}
-        bottomSheetHeight={bottomSheetHeight}
+        bottomSheetHeight={BOTTOM_SHEET_HEIGHT}
       >
         <View style={styles.contentContainer}>
           <View style={{ flex: 1}}>
@@ -82,7 +82,7 @@ const SelectCardTypeSheet = ({ visible, setVisible, type, changeCardType }: Sele
 const styleSheet = (theme: Theme) => StyleSheet.create({
   contentContainer: {
     flex: 1,
-    height: windowHeight * bottomSheetHeight,
+    height: WINDOW_HEIGHT * BOTTOM_SHEET_HEIGHT,
     padding: 12,
     backgroundColor: theme.colors.background,
     borderTopRightRadius: 30,

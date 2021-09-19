@@ -11,7 +11,7 @@ interface OnStartSecurityProps {
   setOnStartSecurity: Function
 }
 
-const windowHeight = Dimensions.get('window').height
+const WINDOW_HEIGHT = Dimensions.get('window').height
 
 const OnStartSecurity = ({ setOnStartSecurity }: OnStartSecurityProps) => {
   const theme = useTheme()
@@ -119,7 +119,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   },
   headerContainer: {
     width: '100%',
-    height: windowHeight * 0.15,
+    height: WINDOW_HEIGHT * 0.15,
     display: 'flex',
     flexDirection: 'row',
     padding: 10,

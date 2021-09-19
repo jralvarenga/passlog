@@ -15,8 +15,8 @@ import { SettingsProps, UserSettingsProps } from '../interface/interfaces'
 import { setSettingsInStorage, setUserSettings as setUserSettingsInStorage } from '../lib/asyncStorage'
 
 const Tab = createBottomTabNavigator()
-const windowHeight = Dimensions.get('window').height
-const bottomSheetHeight = 0.25
+const WINDOW_HEIGHT = Dimensions.get('window').height
+const BOTTOM_SHEET_HEIGHT = 0.25
 
 const HomeScreen = ({ navigation }: any) => {
   const theme = useTheme()
@@ -88,7 +88,7 @@ const HomeScreen = ({ navigation }: any) => {
       <BottomSheet
         visible={showEnableAlwaysSync}
         setVisible={removeAlwaysSync}
-        bottomSheetHeight={bottomSheetHeight}
+        bottomSheetHeight={BOTTOM_SHEET_HEIGHT}
       >
         <View style={styles.contentContainer}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
@@ -117,7 +117,7 @@ const HomeScreen = ({ navigation }: any) => {
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   contentContainer: {
-    height: windowHeight * bottomSheetHeight,
+    height: WINDOW_HEIGHT * BOTTOM_SHEET_HEIGHT,
     flex: 1,
     padding: 12,
     backgroundColor: theme.colors.background,

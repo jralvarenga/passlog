@@ -1,6 +1,6 @@
 import { Theme, useNavigation, useTheme } from '@react-navigation/native'
 import React from 'react'
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { SettingsProps } from '../../interface/interfaces'
 import { setSettingsInStorage } from '../../lib/asyncStorage'

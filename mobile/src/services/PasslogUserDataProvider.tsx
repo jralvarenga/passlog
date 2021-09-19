@@ -58,8 +58,25 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
   }
 
   return (
-    <PasslogUserDataContext.Provider value={{ passwords, setPasswords, cards, setCards, renderPasslogDataHandler, settings, setSettings, user, setUser, userSettings, setUserSettings, dataLoading, setDataLoading, notes, setNotes }}>
-      {children}
+    <PasslogUserDataContext.Provider
+      value={{
+        passwords,
+        setPasswords,
+        cards,
+        setCards,
+        renderPasslogDataHandler,
+        settings,
+        setSettings,
+        user,
+        setUser,
+        userSettings,
+        setUserSettings,
+        dataLoading,
+        setDataLoading,
+        notes,
+        setNotes
+      }}>
+        {children}
     </PasslogUserDataContext.Provider>
   )
 }

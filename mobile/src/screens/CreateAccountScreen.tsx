@@ -1,6 +1,6 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Theme, useTheme } from '@react-navigation/native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Dimensions, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import Snackbar from 'react-native-snackbar'
@@ -13,8 +13,8 @@ import { createAccountInFirebaseAuth } from '../lib/auth'
 import { createUserDocument } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
-const windowHeight = Dimensions.get('window').height
-const bottomSheetHeight = 0.3
+const WINDOW_HEIGHT = Dimensions.get('window').height
+const BOTTOM_SHEET_HEIGHT = 0.3
 
 const CreateAccountScreen = ({ navigation }: any) => {
   const theme = useTheme()
@@ -195,7 +195,7 @@ const CreateAccountScreen = ({ navigation }: any) => {
       <BottomSheet
         visible={showVerifySheet}
         //setVisible={setShowVerifySheet}
-        bottomSheetHeight={bottomSheetHeight}
+        bottomSheetHeight={BOTTOM_SHEET_HEIGHT}
       >
         <View style={styles.bottomSheetContainer}>
           <View style={{ flex: 1 }}>
@@ -256,7 +256,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     justifyContent: 'space-between'
   },
   bottomSheetContainer: {
-    height: windowHeight * bottomSheetHeight,
+    height: WINDOW_HEIGHT * BOTTOM_SHEET_HEIGHT,
     flex: 1,
     padding: 15,
     backgroundColor: theme.colors.background,

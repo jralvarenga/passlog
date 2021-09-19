@@ -11,8 +11,8 @@ import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import EmptyDataView from '../components/EmptyDataView'
 import LottieView from 'lottie-react-native'
 
-const windowWidth = Dimensions.get('window').width
-const windowHeight = Dimensions.get('window').height
+const WINDOW_WIDTH = Dimensions.get('window').width
+const WINDOW_HEIGHT = Dimensions.get('window').height
 
 interface PasswordContainerProps {
   navigation: any
@@ -21,7 +21,7 @@ interface PasswordContainerProps {
 const CardsScreen = ({ navigation }: PasswordContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { cards, setCards } = usePasslogUserData()
+  const { cards } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
 
   const goToScreen = (screen: string, params: any) => {
@@ -56,8 +56,8 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
       {cards?.length != 0 ? (
         <FlatList
           style={styles.scrollView}
-          contentContainerStyle={{ minHeight: windowHeight }}
-          contentOffset={{ y: 60, x: windowWidth }}
+          contentContainerStyle={{ minHeight: WINDOW_HEIGHT }}
+          contentOffset={{ y: 60, x: WINDOW_WIDTH }}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <HiddenFlatListView

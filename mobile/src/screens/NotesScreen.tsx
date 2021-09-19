@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import { Theme, useTheme } from '@react-navigation/native'
-import { Dimensions, FlatList, StyleSheet, View } from 'react-native'
+import { Dimensions, FlatList, StyleSheet } from 'react-native'
 import TopBar from '../components/TopBar'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import HiddenFlatListView from '../components/HiddenFlatListView'
-import CardContainer from '../components/CardContainer'
 import EmptyDataView from '../components/EmptyDataView'
 import NoteContainer from '../components/NoteContainer'
 import { NoteProps } from '../interface/interfaces'
@@ -20,8 +19,8 @@ interface PasswordContainerProps {
   navigation: any
 }
 
-const windowWidth = Dimensions.get('window').width
-const windowHeight = Dimensions.get('window').height
+const WINDOW_WIDTH = Dimensions.get('window').width
+const WINDOW_HEIGHT = Dimensions.get('window').height
 
 const NotesScreen = ({ navigation }: PasswordContainerProps) => {
   const theme = useTheme()
@@ -80,8 +79,8 @@ const NotesScreen = ({ navigation }: PasswordContainerProps) => {
       {notes?.length != 0 ? (
         <FlatList
           style={styles.scrollView}
-          contentContainerStyle={{ minHeight: windowHeight }}
-          contentOffset={{ y: 60, x: windowWidth }}
+          contentContainerStyle={{ minHeight: WINDOW_HEIGHT }}
+          contentOffset={{ y: 60, x: WINDOW_WIDTH }}
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <HiddenFlatListView

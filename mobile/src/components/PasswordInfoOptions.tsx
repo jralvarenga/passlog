@@ -14,8 +14,8 @@ interface PasswordInfoOptionsProps {
   deletePassword: Function
 }
 
-const windowHeight = Dimensions.get('window').height
-const bottomSheetHeight = 0.85
+const WINDOW_HEIGHT = Dimensions.get('window').height
+const BOTTOM_SHEET_HEIGHT = 0.85
 
 const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordChanges, deletePassword }: PasswordInfoOptionsProps) => {
   const theme = useTheme()
@@ -46,7 +46,7 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
       <BottomSheet
         visible={visible}
         setVisible={setVisible}
-        bottomSheetHeight={bottomSheetHeight}
+        bottomSheetHeight={BOTTOM_SHEET_HEIGHT}
       >
         <View style={styles.contentContainer}>
           <View style={{ flex: 0.7 }}>
@@ -133,7 +133,7 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
 const styleSheet = (theme: Theme) => StyleSheet.create({
   contentContainer: {
     flex: 1,
-    height: windowHeight * bottomSheetHeight,
+    height: WINDOW_HEIGHT * BOTTOM_SHEET_HEIGHT,
     padding: 10,
     backgroundColor: theme.colors.background,
     borderTopLeftRadius: 30,

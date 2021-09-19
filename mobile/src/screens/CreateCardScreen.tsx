@@ -28,8 +28,6 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   const [typeValue, setTypeValue] = useState("")
   const [holder, setHolder] = useState("")
   const [numbers, setNumbers] = useState("")
-  //const [extraInfo, setExtraInfo] = useState("")
-  //const [extraInfoData, setExtraInfoData] = useState("")
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const [loading, setLoading] = useState(false)
   const nameRef = useRef<TextInput>(null)

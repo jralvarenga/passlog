@@ -1,6 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { createRef, useEffect, useRef, useState } from 'react'
-import { Alert, BackHandler, Dimensions, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
 import { TapGestureHandler } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -10,7 +10,7 @@ import UnsavedInNote from '../components/UnsavedInNotesSheet'
 import { NoteProps } from '../interface/interfaces'
 import { setNotesInStorage } from '../lib/asyncStorage'
 import { encryptNote } from '../lib/encripter'
-import { createNewPasslogDocument, deletePasslogDocument, updatePasslogDocument } from '../lib/firestore'
+import { deletePasslogDocument, updatePasslogDocument } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 interface NoteEditorScreenProps {
@@ -18,7 +18,7 @@ interface NoteEditorScreenProps {
   navigation: any
 }
 
-const windowHeight = Dimensions.get('window').height
+const WINDOW_HEIGHT = Dimensions.get('window').height
 
 const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   const theme = useTheme()
@@ -259,7 +259,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
 const styleSheet = (theme: Theme) => StyleSheet.create({
   headerContainer: {
     width: '100%',
-    height: windowHeight * 0.15,
+    height: WINDOW_HEIGHT * 0.15,
     display: 'flex',
     flexDirection: 'row',
     padding: 10

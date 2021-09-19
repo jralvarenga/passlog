@@ -12,7 +12,7 @@ import { loginInFirebaseAuth } from '../lib/auth'
 import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
-const windowWidth = Dimensions.get('window').width
+const WINDOW_WIDTH = Dimensions.get('window').width
 
 const LoginScreen = ({ navigation }: any) => {
   const theme = useTheme()
@@ -161,8 +161,8 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     color: theme.colors.text,
   },
   imgStyle: {
-    width: windowWidth,
-    height: windowWidth * 750/1125,
+    width: WINDOW_WIDTH,
+    height: WINDOW_WIDTH * 750/1125,
     overflow: 'hidden'
   },
   loginContainer: {

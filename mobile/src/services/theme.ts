@@ -1,9 +1,4 @@
-import { DarkTheme as NavigationDarkTheme, Theme as NavigationThemeProps } from '@react-navigation/native';
-
-interface TransitionColors {
-  color: string,
-  fontColor: string
-}
+import { DarkTheme as NavigationDarkTheme, Theme as NavigationThemeProps } from '@react-navigation/native'
 
 export const darkTheme: NavigationThemeProps = {
   ...NavigationDarkTheme,

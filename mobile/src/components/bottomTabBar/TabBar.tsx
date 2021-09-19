@@ -4,12 +4,13 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { BottomMenuItem } from './BottomMenuItem'
 import { Theme, useTheme } from '@react-navigation/native'
 
+const WINDOW_WIDTH = Dimensions.get("window").width
+
 export const TabBar = ({ state, descriptors, navigation}: BottomTabBarProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const [translateValue] = useState(new Animated.Value(0))
-  const totalWidth = Dimensions.get("window").width
-  const tabWidth = totalWidth / state.routes.length
+  const tabWidth = WINDOW_WIDTH / state.routes.length
   
   const animateSlider = (index: number) => {
     Animated.spring(translateValue, {
@@ -24,7 +25,7 @@ export const TabBar = ({ state, descriptors, navigation}: BottomTabBarProps) => 
   }, [state.index])
   
   return (
-    <View style={[styles.tabContainer, { width: totalWidth }]}>
+    <View style={[styles.tabContainer, { width: WINDOW_WIDTH }]}>
       <View style={{ flexDirection: "row" }}>
         <Animated.View
           style={[

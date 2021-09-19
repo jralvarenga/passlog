@@ -12,8 +12,8 @@ interface NoteOptionsSheetProps {
   name: string
 }
 
-const windowHeight = Dimensions.get('window').height
-const bottomSheetHeight = 0.25
+const WINDOW_HEIGHT = Dimensions.get('window').height
+const BOTTOM_SHEET_HEIGHT = 0.25
 
 const NoteOptionsSheet = ({ deleteNote, date, setVisible, visible, name }: NoteOptionsSheetProps) => {
   const theme = useTheme()
@@ -23,7 +23,7 @@ const NoteOptionsSheet = ({ deleteNote, date, setVisible, visible, name }: NoteO
     <BottomSheet
       visible={visible}
       setVisible={setVisible}
-      bottomSheetHeight={bottomSheetHeight}
+      bottomSheetHeight={BOTTOM_SHEET_HEIGHT}
     >
       <View style={styles.container}>
         <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
@@ -51,7 +51,7 @@ const NoteOptionsSheet = ({ deleteNote, date, setVisible, visible, name }: NoteO
 
 const styleSheet = (theme: Theme) => StyleSheet.create({
   container: {
-    height: windowHeight * bottomSheetHeight,
+    height: WINDOW_HEIGHT * BOTTOM_SHEET_HEIGHT,
     flex: 1,
     padding: 15,
     backgroundColor: theme.colors.background,

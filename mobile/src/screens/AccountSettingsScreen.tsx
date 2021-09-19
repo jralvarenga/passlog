@@ -1,5 +1,5 @@
-import { Theme, useTheme } from '@react-navigation/native'
 import React, { useState } from 'react'
+import { Theme, useTheme } from '@react-navigation/native'
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import Snackbar from 'react-native-snackbar'
@@ -16,14 +16,14 @@ interface AccountSettingsScreenProps {
   navigation: any
 }
 
-const windowHeight = Dimensions.get('window').height
-const bottomSheetHeight = 0.3
-const signInToDeleteSheetHeight = 0.5
+const WINDOW_HEIGHT = Dimensions.get('window').height
+const BOTTOM_SHEET_HEIGHT = 0.3
+const SIGNIN_TO_DELETE_SHEET_HEIGHT = 0.5
 
 const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
-  const { setUser, setUserSettings, userSettings, settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
+  const { setUser, setUserSettings, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const user = returnCurrentUser()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -147,7 +147,7 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
       <BottomSheet
         visible={showWipeData}
         setVisible={setShowWipeData}
-        bottomSheetHeight={bottomSheetHeight}
+        bottomSheetHeight={BOTTOM_SHEET_HEIGHT}
       >
         <View style={styles.bottomSheet}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
@@ -173,7 +173,7 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
       <BottomSheet
         visible={showDeleteAccount}
         setVisible={setShowDeleteAccount}
-        bottomSheetHeight={bottomSheetHeight}
+        bottomSheetHeight={BOTTOM_SHEET_HEIGHT}
       >
         <View style={styles.bottomSheet}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
@@ -205,9 +205,9 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
       <BottomSheet
         visible={signInToDelete}
         setVisible={setSignInToDelete}
-        bottomSheetHeight={signInToDeleteSheetHeight}
+        bottomSheetHeight={SIGNIN_TO_DELETE_SHEET_HEIGHT}
       >
-        <View style={[styles.bottomSheet, { height: windowHeight*signInToDeleteSheetHeight }]}>
+        <View style={[styles.bottomSheet, { height: WINDOW_HEIGHT*SIGNIN_TO_DELETE_SHEET_HEIGHT }]}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
             Sign in to delete
           </Text>
@@ -296,7 +296,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     width: '100%',
   },
   bottomSheet: {
-    height: windowHeight * bottomSheetHeight,
+    height: WINDOW_HEIGHT * BOTTOM_SHEET_HEIGHT,
     flex: 1,
     padding: 15,
     backgroundColor: theme.colors.background,
