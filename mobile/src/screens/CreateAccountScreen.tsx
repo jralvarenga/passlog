@@ -28,6 +28,7 @@ const CreateAccountScreen = ({ navigation }: any) => {
   const [eyeIcon, setEyeIcon] = useState("eye-off")
   const [showPassword, setShowPassword] = useState(false)
   const [showVerifySheet, setShowVerifySheet] = useState(false)
+  const [loading, setLoading] = useState(false)
   const nameRef = useRef<TextInput>(null)
   const lastNameRef = useRef<TextInput>(null)
   const emailRef = useRef<TextInput>(null)
@@ -64,6 +65,7 @@ const CreateAccountScreen = ({ navigation }: any) => {
       return
     }
     const userName = `${name.replace(' ', '')} ${lastName.replace(' ', '')}`
+    setLoading(true)
     try {
       const user = await createAccountInFirebaseAuth(email, password, userName)
       await createUserDocument(user.uid)
@@ -82,7 +84,9 @@ const CreateAccountScreen = ({ navigation }: any) => {
       setSettings!(newSettings)
       renderPasslogDataHandler!()
       setShowVerifySheet(true)
+      setLoading(false)
     } catch (e: any) {
+      setLoading(false)
       const error: FirebaseAuthTypes.NativeFirebaseAuthError = e
       Snackbar.show({
         text: error.message,
@@ -211,6 +215,7 @@ const CreateAccountScreen = ({ navigation }: any) => {
           <View style={{ flex: 1.2, alignItems: 'flex-end', justifyContent: 'center', flexDirection: 'row' }}>
             <Button
               title="Go home"
+              loading={loading}
               onPress={goHome}
               titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
               containerStyle={{

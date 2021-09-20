@@ -7,7 +7,8 @@ import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import SettingsSheets, { AppSettingsSheet, CloudSettingsSheet, WipeDataSheet } from '../components/SettingsSheets'
 import { removeUserSettings } from '../lib/asyncStorage'
 import { signOutHandler } from '../lib/auth'
-import { objectMemorySize } from '../lib/objectMemorySize'
+import { getCloudAvailableSpace, objectMemorySize } from '../lib/objectMemorySize'
+import { rateAppHandler } from '../lib/rateAppHandler'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 
 interface SettingsScreenProps {
@@ -66,7 +67,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
             </Text>
           )}
         </View>
-        <View style={{ marginTop: 20 }}>
+        <View style={{ width: '100%' }}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold' }]}>
             {passwords?.length} passwords & {cards?.length} cards in Passlog
           </Text>
@@ -79,7 +80,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           </Text>
           {user != null && (
             <Text style={[styles.text, { fontFamily: 'poppins-bold', textAlign: 'center' }]}>
-              136 KiB available in Cloud
+              {getCloudAvailableSpace(objectMemorySize({ psw: passwords, crd: cards }))} available in Cloud
             </Text>
           )}
         </View>
@@ -131,6 +132,14 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
             icon={{ name: "account", type: "material-community", color: theme.colors.text, size: 25 }}
           />
         )}
+        <Button
+          title="Rate Passlog & give us feedback"
+          onPress={rateAppHandler}
+          containerStyle={{ marginTop: 15 }}
+          buttonStyle={{ justifyContent: 'flex-start', padding: 15, backgroundColor: theme.colors.background, borderWidth: 1.5, borderColor: theme.colors.primary }}
+          titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
+          icon={{ name: "star", type: "material-community", color: theme.colors.text, size: 25 }}
+        />
       </View>
       <View style={styles.signOutContainer}>
         {user != null && (
@@ -183,19 +192,19 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     color: theme.colors.text,
   },
   userInfoContainer: {
-    flex: 1,
+    flex: 0.6,
     padding: 15,
     justifyContent: 'center',
     alignItems: 'center'
   },
   backUpContainer: {
     flex: 1.5,
-    justifyContent: 'center',
+    paddingTop: 20,
     alignItems: 'center'
   },
   appSettingsContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     padding: 15
   },
   signOutContainer: {

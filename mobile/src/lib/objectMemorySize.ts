@@ -34,3 +34,14 @@ export const objectMemorySize = (object: any) => {
 
   return formatByteSize(sizeOf(object))
 }
+
+export const getCloudAvailableSpace = (space: string) => {
+  let number: number
+  if (space.includes('bytes')) {
+    number = parseFloat(space.split(' ')[0])
+    number = number/1024
+  } else {
+    number = parseFloat(space.split(' ')[0])
+  }
+  return `${300 - number} KiB`
+}
