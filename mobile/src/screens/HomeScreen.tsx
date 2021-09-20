@@ -13,6 +13,7 @@ import BottomSheet from '../components/BottomSheet'
 import { Switch } from 'react-native-elements'
 import { SettingsProps, UserSettingsProps } from '../interface/interfaces'
 import { setSettingsInStorage, setUserSettings as setUserSettingsInStorage } from '../lib/asyncStorage'
+import { useTranslation } from 'react-i18next'
 
 const Tab = createBottomTabNavigator()
 const WINDOW_HEIGHT = Dimensions.get('window').height
@@ -21,6 +22,7 @@ const BOTTOM_SHEET_HEIGHT = 0.25
 const HomeScreen = ({ navigation }: any) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { settings, setSettings, userSettings, setUserSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [alwaysSync, setAlwaysSync] = useState(false)
   const [showEnableAlwaysSync, setShowEnableAlwaysSync] = useState(false)
@@ -92,11 +94,11 @@ const HomeScreen = ({ navigation }: any) => {
       >
         <View style={styles.contentContainer}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-            Always sync data
+            {t('always_sync_data')}
           </Text>
           <View style={styles.appSettingsContainer}>
             <Text style={styles.text}>
-              Enable always sync
+              {t('enable_sync_data')}
             </Text>
             <Switch
               value={alwaysSync}
@@ -106,7 +108,7 @@ const HomeScreen = ({ navigation }: any) => {
           </View>
           <View>
             <Text style={[styles.text, { textAlign: 'center' }]}>
-              Have your data stored safely in the cloud and in any device, It's optional
+              {t('have_data_stored_safely')}
             </Text>
           </View>
         </View>

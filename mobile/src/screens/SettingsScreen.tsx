@@ -1,5 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Linking, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -18,6 +19,7 @@ interface SettingsScreenProps {
 const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { passwords, cards, user, setUser, renderPasslogDataHandler, userSettings, setUserSettings }= usePasslogUserData()
   const [showSettingsSheet, setShowSettingsSheet] = useState(false)
   const [showInSheet, setShowInSheet] = useState("")
@@ -58,7 +60,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
             {user != null ? (
               user.displayName
             ) : (
-              "No user"
+              t('no_user')
             )}
           </Text>
           {user != null ?? (
@@ -69,18 +71,18 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         </View>
         <View style={{ width: '100%' }}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold' }]}>
-            {passwords?.length} passwords & {cards?.length} cards in Passlog
+            {t('passwords_cards_in_passlog', { passwords: passwords?.length, cards: cards?.length })}
           </Text>
         </View>
       </View>
       <View style={styles.backUpContainer}>
         <View style={styles.backupSpaceContainer}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', textAlign: 'center' }]}>
-            {objectMemorySize({ psw: passwords, crd: cards })} used in Storage
+            {t('memory_used', { memory: objectMemorySize({ psw: passwords, crd: cards }) })}
           </Text>
           {user != null && (
             <Text style={[styles.text, { fontFamily: 'poppins-bold', textAlign: 'center' }]}>
-              {getCloudAvailableSpace(objectMemorySize({ psw: passwords, crd: cards }))} available in Cloud
+              {t('available_in_cloud', { memory: getCloudAvailableSpace(objectMemorySize({ psw: passwords, crd: cards })) })}
             </Text>
           )}
         </View>
@@ -90,7 +92,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
             <Button
               containerStyle={{ width: '49%' }}
               onPress={() => showSettingsSheetHandler('cloudSettings')}
-              title="Cloud settings"
+              title={t('cloud_settings')}
               titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
             />
             <Button
@@ -98,7 +100,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
               onPress={goToGoogleSavedPassword}
               buttonStyle={{ backgroundColor: "#fff" }}
               titleStyle={{ color: "#1a1a1a", fontFamily: 'poppins-bold' }}
-              title="Saved password"
+              title={t('google_saved_passwords')}
               icon={{ name: "logo-google", type: "ionicon", color: "#1a1a1a" }}
             />
           </>
@@ -107,7 +109,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
       </View>
       <View style={styles.appSettingsContainer}>
         <Button
-          title="App Settings"
+          title={t('app_settings')}
           onPress={() => showSettingsSheetHandler('appSettings')}
           buttonStyle={{ justifyContent: 'flex-start', padding: 15, backgroundColor: theme.colors.card }}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
@@ -115,7 +117,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         />
         {user != null ? (
           <Button
-            title="Account settings"
+            title={t('account_settings')}
             onPress={() => navigation.navigate('accountSettings')}
             containerStyle={{ marginTop: 15 }}
             buttonStyle={{ justifyContent: 'flex-start', padding: 15, backgroundColor: theme.colors.card }}
@@ -124,7 +126,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           />
         ) : (
           <Button
-            title="Sign in or Create account"
+            title={t('log_in_or_create_account')}
             onPress={() => navigation.navigate('login')}
             containerStyle={{ marginTop: 15 }}
             buttonStyle={{ justifyContent: 'flex-start', padding: 15 }}
@@ -133,7 +135,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
           />
         )}
         <Button
-          title="Rate Passlog & give us feedback"
+          title={t('rate_passlog')}
           onPress={rateAppHandler}
           containerStyle={{ marginTop: 15 }}
           buttonStyle={{ justifyContent: 'flex-start', padding: 15, backgroundColor: theme.colors.background, borderWidth: 1.5, borderColor: theme.colors.primary }}
@@ -144,7 +146,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
       <View style={styles.signOutContainer}>
         {user != null && (
           <Button
-            title="Sign out"
+            title={t('log_out')}
             onPress={signOutButtonHandler}
             buttonStyle={styles.signOutButton}
             containerStyle={styles.signOutButtonContainer}

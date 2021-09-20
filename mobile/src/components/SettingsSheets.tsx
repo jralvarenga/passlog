@@ -8,6 +8,7 @@ import { getCardsFromStorage, getNotesFromStorage, getPasswordsFromStorage, setU
 import { fullBackupInFirestore } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import { returnCurrentUser, signOutHandler } from '../lib/auth'
+import { useTranslation } from 'react-i18next'
 
 interface SettingSheetsProps {
   visible: boolean
@@ -31,17 +32,18 @@ export const SettingsSheets = ({ visible, setVisible, children }: SettingSheetsP
 export const AppSettingsSheet = ({ goToScreen, enableWipeDataScreen }: any) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
 
   return (
     <View style={styles.contentContainer}>
       <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-        App Settings
+        {t('app_settings')}
       </Text>
       <View style={styles.appSettingsContainer}>
         <Button
           containerStyle={{ width: '47%' }}
           titleStyle={styles.text}
-          title="On Start Security"
+          title={t('on_start_security_title')}
           onPress={() => goToScreen('onStartSecurity')}
         />
         <Button
@@ -49,7 +51,7 @@ export const AppSettingsSheet = ({ goToScreen, enableWipeDataScreen }: any) => {
           titleStyle={styles.text}
           onPress={enableWipeDataScreen}
           buttonStyle={{ backgroundColor: '#ff2e2e' }}
-          title="Wipe data"
+          title={t('wipe_data_title')}
         />
       </View>
     </View>
@@ -59,6 +61,7 @@ export const AppSettingsSheet = ({ goToScreen, enableWipeDataScreen }: any) => {
 export const WipeDataSheet = ({ setVisible }: { setVisible: Function }) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { setCards, setPasswords, setSettings, setUserSettings, setUser, renderPasslogDataHandler } = usePasslogUserData()
   const [loading, setLoading] = useState(false)
 
@@ -87,11 +90,11 @@ export const WipeDataSheet = ({ setVisible }: { setVisible: Function }) => {
   return (
     <View style={styles.contentContainer}>
       <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-        Wipe data
+        {t('wipe_data_title')}
       </Text>
       <View style={styles.appSettingsContainer}>
         <Text style={[styles.text, { textAlign: 'center' }]}>
-          Are you sure you want to delete all the data in your phone (will not affect cloud storage)
+          {t('wipe_data_message')}
         </Text>
       </View>
       <View>
@@ -101,7 +104,7 @@ export const WipeDataSheet = ({ setVisible }: { setVisible: Function }) => {
           containerStyle={{ width: '100%' }}
           titleStyle={styles.text}
           buttonStyle={{ backgroundColor: '#ff2e2e' }}
-          title="Delete data"
+          title={t('delete_data_button')}
         />
       </View>
     </View>
@@ -111,6 +114,7 @@ export const WipeDataSheet = ({ setVisible }: { setVisible: Function }) => {
 export const CloudSettingsSheet = ({ userSettings, setUserSettings }: { userSettings: UserSettingsProps, setUserSettings: Function }) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { renderPasslogDataHandler } = usePasslogUserData()
   const [enabledSync, setEnabledSync] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -149,11 +153,11 @@ export const CloudSettingsSheet = ({ userSettings, setUserSettings }: { userSett
   return (
     <View style={styles.contentContainer}>
       <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-        Cloud Settings
+        {t('cloud_settings')}
       </Text>
       <View style={styles.appSettingsContainer}>
         <Text style={styles.text}>
-          Enable Back Up
+          {t('enable_always_backup')}
         </Text>
         <Switch
           value={userSettings.alwaysSync}
@@ -167,7 +171,7 @@ export const CloudSettingsSheet = ({ userSettings, setUserSettings }: { userSett
           onPress={backupData}
           containerStyle={{ width: '100%' }}
           titleStyle={styles.text}
-          title="Back up now"
+          title={t('backup_now_button')}
         />
       </View>
     </View>

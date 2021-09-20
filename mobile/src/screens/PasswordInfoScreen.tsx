@@ -12,6 +12,7 @@ import { setPasswordsInStorage } from '../lib/asyncStorage'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { deletePasslogDocument, updatePasslogDocument } from '../lib/firestore'
 import { encryptPassword } from '../lib/encripter'
+import { useTranslation } from 'react-i18next'
 
 interface PasswordInfoScreenProps {
   route: any
@@ -21,6 +22,7 @@ interface PasswordInfoScreenProps {
 const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { passwords, setPasswords, userSettings, renderPasslogDataHandler }= usePasslogUserData()
   const [passwordInfo, setPasswordInfo] = useState<PasswordProps>(route.params.passwordInfo)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
@@ -54,7 +56,7 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
     renderPasslogDataHandler!()
 
     Snackbar.show({
-      text: 'Saved changes',
+      text: t('saved_changes'),
       textColor: theme.colors.text,
       backgroundColor: theme.colors.primary
     })
@@ -81,7 +83,7 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
       case 'email':
         Clipboard.setString(passwordInfo.email)
         Snackbar.show({
-          text: 'Email copied',
+          text: t('email_copied'),
           fontFamily: 'poppins',
           textColor: theme.colors.text,
           backgroundColor: theme.colors.primary
@@ -90,7 +92,7 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
       case 'password':
         Clipboard.setString(passwordInfo.password)
         Snackbar.show({
-          text: 'Password copied',
+          text: t('password_copied'),
           fontFamily: 'poppins',
           textColor: theme.colors.text,
           backgroundColor: theme.colors.primary
@@ -116,7 +118,7 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
           selectionColor={theme.colors.primary}
           style={[styles.text, { marginLeft: 15 }]}
         >
-          Password of {passwordInfo.user}
+          {t('password_of', { user: passwordInfo.user })}
         </Text>
       )}
       <View style={styles.passwordInfo}>
@@ -173,7 +175,7 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
         </View>
       </View>
       <Text style={[styles.text, { marginLeft: 15 }]}>
-        Last update on {passwordInfo.date}
+        {t('last_update', { date: passwordInfo.date })}
       </Text>
       <View style={styles.commentsContainer}>
         <View style={styles.commentsBox}>
@@ -183,7 +185,7 @@ const PasswordInfoScreen = ({ route, navigation }: PasswordInfoScreenProps) => {
             </Text>
           ) : (
             <Text style={[styles.text, { color: reduceIncrementColor(theme.colors.text, 'reduce', 100) }]}>
-              No Comments
+              {t('no_comments')}
             </Text>
           )}
         </View>

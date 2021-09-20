@@ -1,5 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import BottomSheet from './BottomSheet'
@@ -17,6 +18,7 @@ const BOTTOM_SHEET_HEIGHT = 0.25
 const UnsavedInNote = ({ setVisible, visible, unsaveAndGoback, saveChanges }: UnsavedInNoteProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
  
   return (
     <BottomSheet
@@ -26,18 +28,18 @@ const UnsavedInNote = ({ setVisible, visible, unsaveAndGoback, saveChanges }: Un
     >
       <View style={styles.container}>
         <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-          Unsaved changes
+          {t('unsaved_changes_title')}
         </Text>
         <View style={styles.textContainer}>
           <Text style={styles.text}>
-            You have unsaved changes in your note
+            {t('unsaved_changes_message')}
           </Text>
         </View>
         <View style={styles.appSettingsContainer}>
           <Button
             containerStyle={{ width: '47%' }}
             titleStyle={styles.text}
-            title="Close unsaved"
+            title={t('close_without_save')}
             buttonStyle={{ backgroundColor: '#ff2e2e' }}
             /* @ts-ignore */
             onPress={unsaveAndGoback}
@@ -47,7 +49,7 @@ const UnsavedInNote = ({ setVisible, visible, unsaveAndGoback, saveChanges }: Un
             titleStyle={styles.text}
             /* @ts-ignore */
             onPress={saveChanges}
-            title="Save and go"
+            title={t('save_n_go')}
           />
         </View>
       </View>

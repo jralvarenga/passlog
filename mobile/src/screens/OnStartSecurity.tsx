@@ -1,5 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import { Button } from 'react-native-elements'
@@ -16,6 +17,7 @@ const WINDOW_HEIGHT = Dimensions.get('window').height
 const OnStartSecurity = ({ setOnStartSecurity }: OnStartSecurityProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const inputCodeRef = useRef<InputCodeHandler>(null)
   const [code, setCode] = useState('')
 
@@ -33,7 +35,7 @@ const OnStartSecurity = ({ setOnStartSecurity }: OnStartSecurityProps) => {
           setOnStartSecurity(false)
         } else {
           Snackbar.show({
-            text: 'Biometrics cancelled',
+            text: t('biometrics_cancelled'),
             fontFamily: 'poppins',
             textColor: theme.colors.text,
             backgroundColor: theme.colors.primary
@@ -55,7 +57,7 @@ const OnStartSecurity = ({ setOnStartSecurity }: OnStartSecurityProps) => {
       setOnStartSecurity(false)
     } else {
       Snackbar.show({
-        text: 'Incorrect Code',
+        text: t('incorrect_code'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -79,7 +81,7 @@ const OnStartSecurity = ({ setOnStartSecurity }: OnStartSecurityProps) => {
           <View style={styles.goBackContainer} />
           <View style={styles.pageName}>
             <Text style={[styles.text, { fontSize: 35, fontFamily: 'poppins-bold' }]}>
-              On Start Security
+              {t('on_start_security_title')}
             </Text>
           </View>
         </View>
@@ -94,18 +96,18 @@ const OnStartSecurity = ({ setOnStartSecurity }: OnStartSecurityProps) => {
         />
       </View>
       <View style={styles.buttonsContainer}>
-        <Button
+        {/*<Button
           containerStyle={styles.buttonContainerStyle}
           buttonStyle={{ borderWidth: 2, borderColor: theme.colors.primary }}
           titleStyle={styles.text}
-          title="Use Biometric"
-        />
+          title={t('use_biometrics')}
+        />*/}
         <Button
           containerStyle={styles.buttonContainerStyle}
           onPress={() => setCode("")}
           buttonStyle={styles.clearButtonStyle}
           titleStyle={styles.text}
-          title="Clear"
+          title={t('clear')}
         />
       </View>
     </View>

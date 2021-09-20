@@ -1,5 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Animated, Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native'
 import FocusAwareStatusBar from '../../components/FocusAwareStatusBar'
 import PaginationDot from './PaginationDot'
@@ -21,45 +22,46 @@ const BORDER_RADIUS = 75
 const FirstTimeScreen = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const scroll = useRef<any>(null)
   const x = new Animated.Value(0)
   const slides: SlideTypes[] = [
     {
-      label: "Welcome",
-      title: "Welcome To Passlog",
-      description: "Start using Passlog and stop worrying about your inportant stuff",
+      label: t("welcome_label"),
+      title: t("welcome_title"),
+      description: t("welcome_description"),
       buttonType: 'next',
       color: '#ffc658',
       fontColor: '#ffdfa1'
     },
     {
-      label: "Safe",
-      title: "Save Your Data",
-      description: "Manage your Passwords and Cards, take Notes and keep it all safe in Passlog",
+      label: t("safe_label"),
+      title: t("safe_title"),
+      description: t("safe_description"),
       buttonType: 'next',
       color: '#ff9262',
       fontColor: '#ffdac9'
     },
     {
-      label: "Encrypted",
-      title: "All Encrypted",
-      description: "Your data from Passwords, Notes and Cards are encrypted with AES encryption, no one will see your data besides you",
+      label: t("encrypted_label"),
+      title: t("encrypted_title"),
+      description: t("encrypted_description"),
       buttonType: 'next',
       color: '#ff637c',
       fontColor: '#ffa3b2'
     },
     {
-      label: "Cloud",
-      title: "Secure Cloud",
-      description: "Keep your data secured in the cloud with an account and have it in any device",
+      label: t("cloud_label"),
+      title: t("cloud_title"),
+      description: t("cloud_description"),
       buttonType: 'next',
       color: '#d74799',
       fontColor: '#ff9ed5'
     },
     {
-      label: "Let's start",
-      title: "Let's Get Started",
-      description: "Start usign Passlog with or without an account and get all your data safe",
+      label: t("start_label"),
+      title: t("start_title"),
+      description: t("start_description"),
       buttonType: 'done',
       color: '#8e44ad',
       fontColor: '#e5a6ff'

@@ -43,5 +43,5 @@ export const getCloudAvailableSpace = (space: string) => {
   } else {
     number = parseFloat(space.split(' ')[0])
   }
-  return `${300 - number} KiB`
+  return `${(300 - number).toFixed(3)} KiB`
 }

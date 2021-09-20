@@ -1,5 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, TextInput, View } from 'react-native'
 import { Button, } from 'react-native-elements'
 import Snackbar from 'react-native-snackbar'
@@ -20,6 +21,7 @@ interface CreatePasswordScreenProps {
 const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { passwords, setPasswords, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [user, setUser] = useState("")
@@ -55,7 +57,7 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
   const createPassword = async() => {
     if (name == '' || email == '' || password == '') {
       Snackbar.show({
-        text: "Name, Email & Password are required",
+        text: t('password_fields_required'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -89,7 +91,7 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
     } catch (error: any) {
       setLoading(false)
       Snackbar.show({
-        text: error.message,
+        text: t('server_problem'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -100,7 +102,7 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
   return (
     <View style={styles.container}>
       <HeaderNavigationBar
-        title="Create Password"
+        title={t('create_password_title')}
         showIcon
         icon={{ type: 'ionicon', name: eyeIcon }}
         iconFunction={changePasswordVisibility}
@@ -108,8 +110,8 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
       <View style={styles.passwordInfoContainer}>
         <View style={styles.passwordNameContainer}>
           <FormInput
-            placeholder="Name"
-            label="Password name"
+            label={t('name_label')}
+            placeholder={t('name_example')}
             ref={nameRef}
             width="50%"
             icon={{ type: 'font-awesome', name: 'user-circle' }}
@@ -121,8 +123,8 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
             }}
           />
           <FormInput
-            placeholder="my_user"
-            label="User name"
+            label={t('user_name_label')}
+            placeholder={t('user_name_example')}
             ref={userRef}
             width="50%"
             icon={{ type: 'font-awesome', name: 'user-circle' }}
@@ -136,9 +138,9 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
         </View>
         <View>
           <FormInput
-            label="An email or credential"
+            label={t('your_email_label')}
+            placeholder={t('email_example')}
             ref={emailRef}
-            placeholder="email132@adress.com"
             icon={{ type: 'ionicons', name: 'mail' }}
             value={email}
             onChangeText={(value: string) => setEmail(value)}
@@ -152,8 +154,8 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
         </View>
         <View>
           <FormInput
-            label="The password"
-            placeholder="your_password123"
+            label={t('the_password_label')}
+            placeholder={t('password_example')}
             ref={passwordRef}
             icon={{ type: 'material', name: 'lock' }}
             value={password}
@@ -168,8 +170,8 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
         </View>
         <View>
           <FormInput
-            label="Your comments"
-            placeholder="Write your comments here..."
+            label={t('comments_label')}
+            placeholder={t('comments_placeholder')}
             ref={commentsRef}
             icon={{ type: 'font-awesome', name: 'comment', }}
             value={comments}
@@ -183,7 +185,7 @@ const CreatePasswordScreen = ({ route, navigation }: CreatePasswordScreenProps) 
       </View>
       <View style={styles.createButtonContainer}>
         <Button
-          title="Create"
+          title={t('create_button')}
           onPress={createPassword}
           loading={loading}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}

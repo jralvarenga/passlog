@@ -12,16 +12,16 @@ import { setCardsInStorage } from '../lib/asyncStorage'
 import { encryptCard } from '../lib/encripter'
 import { createNewPasslogDocument } from '../lib/firestore'
 import Snackbar from 'react-native-snackbar'
-import { FirebaseAuthTypes } from '@react-native-firebase/auth'
+import { useTranslation } from 'react-i18next'
 
 interface CreateCardScreenProps {
-  route: any
   navigation: any
 }
 
-const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
+const CreateCardScreen = ({ navigation }: CreateCardScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { cards, setCards, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [type, setType] = useState("")
@@ -48,7 +48,7 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   const createCard = async() => {
     if (name == '' || holder == '' || numbers == '' || type == '') {
       Snackbar.show({
-        text: "All fields are required",
+        text: t('all_fields_required'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -82,7 +82,7 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
     } catch (error: any) {
       setLoading(false)
       Snackbar.show({
-        text: error.message,
+        text: t('server_problem'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -94,13 +94,14 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
   return (
     <View style={styles.container}>
       <HeaderNavigationBar
-        title="Create Card"
+        title={t('create_card_title')}
       />
       <View style={styles.cardInfoContainer}>
         <View style={styles.cardNameContainer}>
           <FormInput
-            placeholder="Name"
-            label="Card name"
+            label={t('card_name_label')}
+            placeholder={t('name_example')}
+            ref={nameRef}
             width="50%"
             icon={{ type: 'ionicon', name: 'card' }}
             value={name}
@@ -111,8 +112,8 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
             }}
           />
           <FormInput
-            placeholder="Card, promo..."
-            label="Card type"
+            label={t('card_type_label')}
+            placeholder={t('card_type_example')}
             width="50%"
             icon={{ type: 'ionicon', name: 'card' }}
             value={type}
@@ -127,8 +128,8 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
         </View>
         <View>
           <FormInput
-            label="The holder"
-            placeholder="Steve Adonis Dolphin"
+            label={t('the_holder_label')}
+            placeholder={t('the_holder_example')}
             icon={{ type: 'material-community', name: 'account' }}
             value={holder}
             onChangeText={(value: string) => setHolder(value)}
@@ -140,8 +141,8 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
         </View>
         <View>
           <FormInput
-            label="The numbers"
-            placeholder="*************9756"
+            label={t('the_numbers_label')}
+            placeholder={t('the_numbers_example')}
             icon={{ type: 'material-community', name: 'dots-horizontal' }}
             value={numbers}
             onChangeText={(value: string) => setNumbers(value)}
@@ -155,7 +156,7 @@ const CreateCardScreen = ({ route, navigation }: CreateCardScreenProps) => {
       </View>
       <View style={styles.createButtonContainer}>
         <Button
-          title="Create card"
+          title={t('create_button')}
           loading={loading}
           onPress={createCard}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}

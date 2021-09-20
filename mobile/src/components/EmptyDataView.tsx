@@ -1,5 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 
@@ -12,6 +13,7 @@ interface EmptyDataViewProps {
 const EmptyDataView = ({ text, buttonFunction, children }: EmptyDataViewProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
 
   return (
     <View style={styles.container}>
@@ -20,7 +22,7 @@ const EmptyDataView = ({ text, buttonFunction, children }: EmptyDataViewProps) =
         {text}
       </Text>
       <Button
-        title="Create one here"
+        title={t('create_one_here')}
         /* @ts-ignore */
         onPress={buttonFunction}
         containerStyle={{ width: 200, marginTop: 15 }}

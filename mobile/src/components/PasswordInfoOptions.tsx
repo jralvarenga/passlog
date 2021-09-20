@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements'
 import { PasswordProps } from '../interface/interfaces'
 import BottomSheet from './BottomSheet'
 import FormInput from './FormInput'
+import { useTranslation } from 'react-i18next'
 
 interface PasswordInfoOptionsProps {
   visible: boolean
@@ -20,6 +21,7 @@ const BOTTOM_SHEET_HEIGHT = 0.85
 const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordChanges, deletePassword }: PasswordInfoOptionsProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const [name, setName] = useState("")
   const [user, setUser] = useState("")
   const [email, setEmail] = useState("")
@@ -57,23 +59,23 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
           <View style={{ flex: 5 }}>
             <View style={styles.formInputContainer}>
               <FormInput
-                label="New Name"
+                label={t('new_name')}
                 value={name}
                 width="47%"
                 onChangeText={(value: string) => setName(value)}
                 placeholder={passwordInfo.profileName}
               />
               <FormInput
-                label="New User"
+                label={t('new_user')}
                 value={user}
                 width="47%"
                 onChangeText={(value: string) => setUser(value)}
-                placeholder={passwordInfo.user != '' ? `${passwordInfo.user}` : 'New user'}
+                placeholder={passwordInfo.user != '' ? `${passwordInfo.user}` : t('new_user')}
               />
             </View>
             <View style={styles.formInputContainer}>
               <FormInput
-                label="New Email"
+                label={t('new_email')}
                 value={email}
                 onChangeText={(value: string) => setEmail(value)}
                 placeholder={passwordInfo.email}
@@ -85,7 +87,7 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
             </View>
             <View style={styles.formInputContainer}>
               <FormInput
-                label="New Password"
+                label={t('new_password')}
                 value={password}
                 onChangeText={(value: string) => setPassword(value)}
                 placeholder={passwordInfo.password}
@@ -98,10 +100,10 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
             </View>
             <View style={styles.formInputContainer}>
               <FormInput
-                label="New Comments"
+                label={t('add_comments')}
                 value={comments}
                 onChangeText={(value: string) => setComments(value)}
-                placeholder="Add Comments"
+                placeholder={t('add_comments')}
                 inputProps={{
                   multiline: true,
                   numberOfLines: 4
@@ -112,7 +114,7 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
               <Button
                 titleStyle={styles.text}
                 onPress={addNewChanges}
-                title="Save changes"
+                title={t('save_changes')}
               />
             </View>
           </View>
@@ -122,7 +124,7 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
               titleStyle={styles.text}
               /* @ts-ignore */
               onPress={deletePassword}
-              title="Delete password"
+              title={t('delete_password')}
             />
           </View>
         </View>

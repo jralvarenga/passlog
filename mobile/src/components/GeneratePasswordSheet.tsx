@@ -6,6 +6,7 @@ import { generatePassword } from '../lib/generatePassword'
 import Clipboard from '@react-native-clipboard/clipboard'
 import Snackbar from 'react-native-snackbar'
 import BottomSheet from './BottomSheet'
+import { useTranslation } from 'react-i18next'
 
 interface GeneratePasswordSheetProps {
   goToScreen: Function
@@ -19,6 +20,7 @@ const BOTTOM_SHEET_HEIGHT = 0.35
 const GeneratePasswordSheet = ({ goToScreen, visible, setVisible }: GeneratePasswordSheetProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const [password, setPassword] = useState(generatePassword())
 
   const refreshPassword = () => {
@@ -36,7 +38,7 @@ const GeneratePasswordSheet = ({ goToScreen, visible, setVisible }: GeneratePass
     Clipboard.setString(password)
 
     Snackbar.show({
-      text: 'Password copied',
+      text: t('password_copied'),
       fontFamily: 'poppins',
       textColor: theme.colors.text,
       backgroundColor: theme.colors.primary
@@ -58,7 +60,7 @@ const GeneratePasswordSheet = ({ goToScreen, visible, setVisible }: GeneratePass
         <View style={styles.contentContainer}>
           <View style={{ flex: 1 }}>
             <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 24 }]}>
-              Secure Password:
+              {t('secure_password')}
             </Text>
           </View>
           <View style={{ flex: 3 }}>
@@ -87,7 +89,7 @@ const GeneratePasswordSheet = ({ goToScreen, visible, setVisible }: GeneratePass
           <View style={styles.buttonContainer}>
             <Button
               titleStyle={styles.text}
-              title="Create password profile"
+              title={t('create_password')}
               onPress={createNewPasswordProfile}
             />
           </View>

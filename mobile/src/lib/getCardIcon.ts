@@ -8,7 +8,7 @@ export const cardIcon = (type: string): PasswordIconResponse => {
 
   if (type.includes('id') || type.includes('license')) {
    return { icon: 'card-account-details', iconFamily: 'material' }
-  } else if (type.includes('credit') || type.includes('debit')) {
+  } else if (type.includes('credit') || type.includes('debit') || type.includes('card')) {
     return { icon: 'card', iconFamily: 'ionicons' }
   } else  {
     return { icon: '', iconFamily: '' }

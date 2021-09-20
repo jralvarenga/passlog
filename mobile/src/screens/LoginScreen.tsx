@@ -1,8 +1,9 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Dimensions, Image, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
-import { Button, SocialIcon } from 'react-native-elements'
+import { Button } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Snackbar from 'react-native-snackbar'
 import FormInput from '../components/FormInput'
@@ -16,8 +17,9 @@ const WINDOW_WIDTH = Dimensions.get('window').width
 
 const LoginScreen = ({ navigation }: any) => {
   const theme = useTheme()
-  const { setUser, settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
+  const { setUser, settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const emailRef = useRef<TextInput>()
@@ -26,7 +28,7 @@ const LoginScreen = ({ navigation }: any) => {
   const loginHandler = async() => {
     if (email == '' || password == '') {
       Snackbar.show({
-        text: "All fields are required are required",
+        text: t('all_fields_required'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -52,8 +54,14 @@ const LoginScreen = ({ navigation }: any) => {
       navigation.navigate('Home')
     } catch (e: any) {
       const error: FirebaseAuthTypes.NativeFirebaseAuthError = e
+      let errorMessage: string
+      if (error.code == 'auth/invalid-password' || error.code == 'auth/invalid-email') {
+        errorMessage = t('wrong_password')
+      } else {
+        errorMessage = t('server_problem')
+      }
       Snackbar.show({
-        text: error.message,
+        text: errorMessage,
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -73,17 +81,17 @@ const LoginScreen = ({ navigation }: any) => {
       <View style={styles.loginContainer}>
         <View style={styles.loginTitle}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 28, textAlign: 'center' }]}>
-            Welcome to Passlog
+            {t('welcome_to_passlog')}
           </Text>
           <Text style={[styles.text, { textAlign: 'center', fontSize: 14 }]}>
-            Use your Passlog creedential below and login to your account
+            {t('use_passlog_credentials')}
           </Text>
         </View>
         <View style={styles.inputsContainer}>
           <FormInput
-            label="Email"
+            label={t('email_label')}
             onChangeText={(value: string) => setEmail(value)}
-            placeholder="email@direction.com"
+            placeholder={t('email_example')}
             ref={emailRef}
             value={email}
             icon={{ type: 'ionicons', name: 'mail' }}
@@ -96,9 +104,9 @@ const LoginScreen = ({ navigation }: any) => {
             }}
           />
           <FormInput
-            label="Password"
+            label={t('password_label')}
             onChangeText={(value: string) => setPassword(value)}
-            placeholder="myawesomepassword"
+            placeholder={t('password_example')}
             value={password}
             ref={passwordRef}
             icon={{ type: 'material', name: 'lock' }}
@@ -119,28 +127,17 @@ const LoginScreen = ({ navigation }: any) => {
             onPress={loginHandler}
             buttonStyle={{ padding: 12 }}
             titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
-            title="Log In"
+            title={t('login_button')}
           />
         </View>
       </View>
       <View style={styles.noAccountContainer}>
-        {/*<View style={styles.accountProviders}>
-          <SocialIcon
-            type="google"
-          />
-          <SocialIcon
-            type="github"
-          />
-          <SocialIcon
-            type="facebook"
-          />
-          </View>*/}
         <View style={styles.dontHaveAccountContainer}>
           <Text
           onPress={() => navigation.navigate('createAccount')}
             style={[styles.text, { fontSize: 14, textAlign: 'center' }]}
           >
-            ¿Don't have an account? <Text style={{ fontFamily: 'poppins-bold', color: theme.colors.primary, textDecorationLine: 'underline' }}>Create one</Text>
+            {t('dont_have_account')} <Text style={{ fontFamily: 'poppins-bold', color: theme.colors.primary, textDecorationLine: 'underline' }}>{t('create_account_here')}</Text>
           </Text>
         </View>
       </View>
@@ -193,13 +190,6 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     width: '95%',
     justifyContent: 'center'
   },
-  accountProviders: {
-    flex: 2,
-    width: '95%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
 })
 
 export default LoginScreen

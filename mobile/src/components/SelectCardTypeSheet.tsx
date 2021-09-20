@@ -6,6 +6,7 @@ import { generatePassword } from '../lib/generatePassword'
 import Clipboard from '@react-native-clipboard/clipboard'
 import Snackbar from 'react-native-snackbar'
 import BottomSheet from './BottomSheet'
+import { useTranslation } from 'react-i18next'
 
 interface SelectCardTypeSheetProps {
   visible: boolean
@@ -20,31 +21,28 @@ const BOTTOM_SHEET_HEIGHT = 0.35
 const SelectCardTypeSheet = ({ visible, setVisible, type, changeCardType }: SelectCardTypeSheetProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
 
   const cardTypes = [
     {
-      name: 'ID',
-      value: 'id'
+      name: t('type_id_name'),
+      value: t('type_id_value')
     },
     {
-      name: 'Credit Card',
-      value: 'credit'
+      name: t('type_card_name'),
+      value: t('type_card_value')
     },
     {
-      name: 'Debit Card',
-      value: 'debit'
+      name: t('type_licence_name'),
+      value: t('type_licence_value')
     },
     {
-      name: 'Licence',
-      value: 'licence'
+      name: t('type_promo_name'),
+      value: t('type_promo_value')
     },
     {
-      name: 'Promo Code',
-      value: 'promo'
-    },
-    {
-      name: 'Other',
-      value: 'other'
+      name: t('type_other_name'),
+      value: t('type_other_value')
     }
   ]
 
@@ -57,7 +55,7 @@ const SelectCardTypeSheet = ({ visible, setVisible, type, changeCardType }: Sele
         <View style={styles.contentContainer}>
           <View style={{ flex: 1}}>
             <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 24 }]}>
-              Card type
+              {t('card_type_title')}
             </Text>
           </View>
           <View style={styles.typesContainer}>

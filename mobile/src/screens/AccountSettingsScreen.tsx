@@ -6,11 +6,12 @@ import Snackbar from 'react-native-snackbar'
 import BottomSheet from '../components/BottomSheet'
 import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import FormInput from '../components/FormInput'
-import { SettingsProps, UserSettingsProps } from '../interface/interfaces'
+import { UserSettingsProps } from '../interface/interfaces'
 import { removeUserSettings, setUserSettings as setUserSettingsInStorage } from '../lib/asyncStorage'
 import { deleteAccountHandler, loginInFirebaseAuth, returnCurrentUser, signOutHandler } from '../lib/auth'
 import { deleteUserDocument, deleteUserPasslogData } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
+import { useTranslation } from 'react-i18next'
 
 interface AccountSettingsScreenProps {
   navigation: any
@@ -23,6 +24,7 @@ const SIGNIN_TO_DELETE_SHEET_HEIGHT = 0.5
 const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { setUser, setUserSettings, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const user = returnCurrentUser()
   const [email, setEmail] = useState("")
@@ -33,11 +35,11 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
   const [loading, setLoading] = useState(false)
   const optionActions = [
     {
-      title: 'Wipe cloud data',
+      title: t('wipe_cloud_data_title'),
       function: () => setShowWipeData(true)
     },
     {
-      title: 'Delete account',
+      title: t('delete_account_title'),
       function: () => setShowDeleteAccount(true)
     }
   ]
@@ -68,7 +70,7 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
     } catch (error) {
       setLoading(false)
       Snackbar.show({
-        text: "There has been a problem, try later",
+        text: t('server_problem'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -91,7 +93,7 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
       } else {
         setLoading(false)
         Snackbar.show({
-          text: "This is not your account",
+          text: t('this_is_not_your_account'),
           fontFamily: 'poppins',
           textColor: theme.colors.text,
           backgroundColor: theme.colors.primary
@@ -101,7 +103,7 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
     } catch (error) {
       setLoading(false)
       Snackbar.show({
-        text: "There has been a problem, try later",
+        text: t('server_problem'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -136,7 +138,7 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
       </View>
       <View style={styles.signOutContainer}>
         <Button
-          title="Sign out"
+          title={t('log_out')}
           onPress={signOutButtonHandler}
           buttonStyle={styles.signOutButton}
           containerStyle={styles.signOutButtonContainer}
@@ -151,11 +153,11 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
       >
         <View style={styles.bottomSheet}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-            Wipe data
+            {t('wipe_cloud_data_title')}
           </Text>
           <View style={{ marginTop: 15 }}>
             <Text style={[styles.text, { textAlign: 'center' }]}>
-              Are you sure you want this, this will only delete your data in the cloud and it's irreversible
+              {t('wipe_cloud_data_message')}
             </Text>
           </View>
           <View style={{ marginTop: 15 }}>
@@ -165,7 +167,7 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
               containerStyle={{ width: '100%' }}
               buttonStyle={{ backgroundColor: '#ff2e2e' }}
               titleStyle={styles.text}
-              title="Wipe now"
+              title={t('wipe_button')}
             />
           </View>
         </View>
@@ -177,14 +179,14 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
       >
         <View style={styles.bottomSheet}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-            Delete account
+            {t('delete_account_title')}
           </Text>
           <View style={{ marginTop: 15 }}>
             <Text style={[styles.text, { textAlign: 'center' }]}>
-              Are you sure you want this, your account will be lost and all your data in the cloud
+              {t('delete_account_message_1')}
             </Text>
             <Text style={[styles.text, { textAlign: 'center' }]}>
-              You need to sign in again
+            {t('delete_account_message_2')}
             </Text>
           </View>
           <View style={{ marginTop: 15 }}>
@@ -197,7 +199,7 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
               containerStyle={{ width: '100%' }}
               buttonStyle={{ backgroundColor: '#ff2e2e' }}
               titleStyle={styles.text}
-              title="Sign in to delete"
+              title={t('login_to_delete')}
             />
           </View>
         </View>
@@ -209,13 +211,13 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
       >
         <View style={[styles.bottomSheet, { height: WINDOW_HEIGHT*SIGNIN_TO_DELETE_SHEET_HEIGHT }]}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-            Sign in to delete
+            {t('login_to_delete')}
           </Text>
           <View style={{ marginTop: 15 }}>
             <FormInput
               value={email}
               onChangeText={(value: string) => setEmail(value)}
-              label="Your email"
+              label={t('email_label')}
               placeholder=""
               inputProps={{
                 keyboardType: 'email-address',
@@ -227,7 +229,7 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
             <FormInput
               value={password}
               onChangeText={(value: string) => setPassword(value)}
-              label="Your password"
+              label={t('password_label')}
               placeholder=""
               inputProps={{
                 autoCapitalize: 'none',
@@ -243,7 +245,7 @@ const AccountSettingsScreen = ({ navigation }: AccountSettingsScreenProps) => {
               containerStyle={{ width: '100%' }}
               buttonStyle={{ backgroundColor: '#ff2e2e' }}
               titleStyle={styles.text}
-              title="Delete account"
+              title={t('delete_account_button')}
             />
           </View>
         </View>

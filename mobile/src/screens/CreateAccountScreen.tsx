@@ -1,6 +1,7 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth'
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Dimensions, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import Snackbar from 'react-native-snackbar'
@@ -19,6 +20,7 @@ const BOTTOM_SHEET_HEIGHT = 0.3
 const CreateAccountScreen = ({ navigation }: any) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { setUser, settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -48,7 +50,7 @@ const CreateAccountScreen = ({ navigation }: any) => {
   const createAccountHandler = async() => {
     if (name == '' || lastName == '' || repeatedPassword == '' || email == '' || password == '') {
       Snackbar.show({
-        text: "All fields are required",
+        text: t('all_fields_required'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -57,7 +59,7 @@ const CreateAccountScreen = ({ navigation }: any) => {
     }
     if (password != repeatedPassword) {
       Snackbar.show({
-        text: "The passwords don't match",
+        text: t('passwords_not_match'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -87,9 +89,8 @@ const CreateAccountScreen = ({ navigation }: any) => {
       setLoading(false)
     } catch (e: any) {
       setLoading(false)
-      const error: FirebaseAuthTypes.NativeFirebaseAuthError = e
       Snackbar.show({
-        text: error.message,
+        text: t('server_problem'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -105,7 +106,7 @@ const CreateAccountScreen = ({ navigation }: any) => {
     <View style={styles.container}>
       <StatusBar backgroundColor={theme.colors.background} />
       <HeaderNavigationBar
-        title="Create Account"
+        title={t('create_account_title')}
         showIcon
         icon={{ type: 'ionicon', name: eyeIcon }}
         iconFunction={changePasswordVisibility}
@@ -113,9 +114,10 @@ const CreateAccountScreen = ({ navigation }: any) => {
       <View style={styles.passwordInfoContainer}>
         <View style={styles.passwordNameContainer}>
           <FormInput
-            placeholder="Steve"
-            label="First name"
+            label={t('first_name_label')}
+            placeholder={t('first_name_example')}
             width="50%"
+            ref={nameRef}
             icon={{ type: 'font-awesome', name: 'user-circle' }}
             value={name}
             onChangeText={(value: string) => setName(value)}
@@ -126,8 +128,8 @@ const CreateAccountScreen = ({ navigation }: any) => {
             }}
           />
           <FormInput
-            placeholder="Dolphin"
-            label="Last name"
+            label={t('last_name_label')}
+            placeholder={t('last_name_example')}
             width="50%"
             icon={{ type: 'font-awesome', name: 'user-circle' }}
             value={lastName}
@@ -141,8 +143,8 @@ const CreateAccountScreen = ({ navigation }: any) => {
         </View>
         <View>
           <FormInput
-            label="An email or credential"
-            placeholder="email132@adress.com"
+            label={t('your_email_label')}
+            placeholder={t('email_example')}
             icon={{ type: 'ionicons', name: 'mail' }}
             value={email}
             onChangeText={(value: string) => setEmail(value)}
@@ -156,8 +158,8 @@ const CreateAccountScreen = ({ navigation }: any) => {
         </View>
         <View>
           <FormInput
-            label="Your password"
-            placeholder="your_password123"
+            label={t('your_password_label')}
+            placeholder={t('password_example')}
             icon={{ type: 'material', name: 'lock' }}
             value={password}
             onChangeText={(value: string) => setPassword(value)}
@@ -172,8 +174,8 @@ const CreateAccountScreen = ({ navigation }: any) => {
         </View>
         <View>
           <FormInput
-            label="Repeat the password"
-            placeholder="your_password123"
+            label={t('repeat_password_label')}
+            placeholder={t('password_example')}
             icon={{ type: 'material', name: 'lock' }}
             value={repeatedPassword}
             onChangeText={(value: string) => setRepeatedPassword(value)}
@@ -188,7 +190,7 @@ const CreateAccountScreen = ({ navigation }: any) => {
       </View>
       <View style={styles.createButtonContainer}>
         <Button
-          title="Create account"
+          title={t('create_account_button')}
           onPress={createAccountHandler}
           titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}
           containerStyle={{
@@ -204,17 +206,17 @@ const CreateAccountScreen = ({ navigation }: any) => {
         <View style={styles.bottomSheetContainer}>
           <View style={{ flex: 1 }}>
             <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 24 }]}>
-              Verify account
+              {t('verify_account_title')}
             </Text>
           </View>
           <View style={{ flex: 1 }}>
             <Text style={[styles.text, { textAlign: 'center' }]}>
-              We've sent you a verification email, do it now or you can do it later,
+              {t('sended_verification_email')}
             </Text>
           </View>
           <View style={{ flex: 1.2, alignItems: 'flex-end', justifyContent: 'center', flexDirection: 'row' }}>
             <Button
-              title="Go home"
+              title={t('go_home')}
               loading={loading}
               onPress={goHome}
               titleStyle={[styles.text, { fontFamily: 'poppins-bold' }]}

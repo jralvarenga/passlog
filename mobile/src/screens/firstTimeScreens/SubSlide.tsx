@@ -1,5 +1,6 @@
 import { Theme, useNavigation, useTheme } from '@react-navigation/native'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { SettingsProps } from '../../interface/interfaces'
@@ -14,10 +15,11 @@ interface SubSlideProps {
 }
 
 const SubSlide = ({ title, description, buttonType, onPress }: SubSlideProps) => {
-  const navigation = useNavigation()
-  const { settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
+  const navigation = useNavigation()
+  const { settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
 
   const goTo = async(link: any) => {
     const newSettings: SettingsProps = {
@@ -48,7 +50,7 @@ const SubSlide = ({ title, description, buttonType, onPress }: SubSlideProps) =>
             containerStyle={[styles.buttonContainerStyle, { height: 45 }]}
             buttonStyle={{ backgroundColor: theme.colors.card, height: 45 }}
             titleStyle={styles.description}
-            title="Next"
+            title={t('next_button')}
           />
         ) : (
           <View style={{ flex: 1, width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -57,14 +59,14 @@ const SubSlide = ({ title, description, buttonType, onPress }: SubSlideProps) =>
               containerStyle={[styles.buttonContainerStyle, { height: 45, width: '48%' }]}
               buttonStyle={{ height: 45, backgroundColor: '#ff637c' }}
               titleStyle={styles.description}
-              title="Login or Sign up"
+              title={t('login_signup_button')}
             />
             <Button
               onPress={() => goTo('Home')}
               containerStyle={[styles.buttonContainerStyle, { height: 45, width: '48%' }]}
               buttonStyle={{ height: 45 }}
               titleStyle={styles.description}
-              title="Lets start"
+              title={t('lets_start_button')}
             />
           </View>
         )}

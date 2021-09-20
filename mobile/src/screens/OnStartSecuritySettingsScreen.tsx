@@ -9,10 +9,12 @@ import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import { SettingsProps } from '../interface/interfaces'
 import { setSettingsInStorage } from '../lib/asyncStorage'
 import Snackbar from 'react-native-snackbar'
+import { useTranslation } from 'react-i18next'
 
 const OnStartSecuritySettingsScreen = () => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { settings, setSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [usePin, setUsePin] = useState(false)
   const [canUseBiometrics, setCanUseBiometrics] = useState(false)
@@ -53,7 +55,7 @@ const OnStartSecuritySettingsScreen = () => {
     await setSettingsInStorage(newSettings)
 
     Snackbar.show({
-      text: 'Settings changed',
+      text: t('settings_changed'),
       fontFamily: 'poppins',
       textColor: theme.colors.text,
       backgroundColor: theme.colors.primary
@@ -97,7 +99,7 @@ const OnStartSecuritySettingsScreen = () => {
       await setSettingsInStorage(newSettings)
   
       Snackbar.show({
-        text: 'Settings changed',
+        text: t('settings_changed'),
         fontFamily: 'poppins',
         textColor: theme.colors.text,
         backgroundColor: theme.colors.primary
@@ -121,12 +123,12 @@ const OnStartSecuritySettingsScreen = () => {
   return (
     <View style={styles.container}>
       <HeaderNavigationBar
-        title="On start security"
+        title={t('on_start_security_title')}
       />
       <View style={styles.optionsContainer}>
         <View style={styles.optionBox}>
           <Text style={[styles.text, { fontSize: 18, fontFamily: 'poppins-bold' }]}>
-            Use pin code
+            {t('use_pin_code')}
           </Text>
           <Switch
             value={usePin}
@@ -137,7 +139,7 @@ const OnStartSecuritySettingsScreen = () => {
         {canUseBiometrics && (
           <View style={styles.optionBox}>
             <Text style={[styles.text, { fontSize: 18, fontFamily: 'poppins-bold' }]}>
-              Use {biometricType}
+              {t('use_biometric_type', { type: biometricType })}
             </Text>
             <Switch
               value={useBiometrics}
@@ -151,7 +153,7 @@ const OnStartSecuritySettingsScreen = () => {
         <View style={styles.inputPinContainer}>
           <View>
             <Text style={[styles.text, { fontFamily: 'poppins-bold', marginBottom: 10, textAlign: 'center' }]}>
-              Set or change your pin
+              {t('set_pin')}
             </Text>
             <InputCode
               code={code}
@@ -168,7 +170,7 @@ const OnStartSecuritySettingsScreen = () => {
               containerStyle={{ width: 180, marginBottom: '20%' }}
               titleStyle={styles.text}
               onPress={saveNewSettings}
-              title="Save Settings"
+              title={t('save_settings')}
             />
           )}
         </View>

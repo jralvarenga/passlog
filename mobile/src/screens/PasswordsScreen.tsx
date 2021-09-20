@@ -11,6 +11,7 @@ import FocusAwareStatusBar from '../components/FocusAwareStatusBar'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import EmptyDataView from '../components/EmptyDataView'
 import LottieView from 'lottie-react-native'
+import { useTranslation } from 'react-i18next'
 
 const WINDOW_WIDTH = Dimensions.get('window').width
 const WINDOW_HEIGHT = Dimensions.get('window').height
@@ -22,6 +23,7 @@ interface PasswordContainer {
 const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { passwords } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
   const [showBottomSheet, setShowBottomSheet] = useState(false)
@@ -54,7 +56,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
         showIcon
         iconFunction={() => goToScreen('createPassword', {})}
         icon={{ name: 'add', type: 'material' }}
-        title="Passwords"
+        title={t('passwords_title')}
       />
       {passwords?.length != 0 ? (
         <FlatList
@@ -66,10 +68,10 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
             <HiddenFlatListView
               showButton
               inputValue={searchInput}
-              inputPlaceHolder="Search password..."
+              inputPlaceHolder={t('search_password')}
               changeInputValue={(value: string) => setSearchInput(value)}
               cancelInput={() => setSearchInput("")}
-              buttonText="Generate"
+              buttonText={t('generate')}
               buttonFunction={() => setShowBottomSheet(true)}
             />
           }
@@ -87,7 +89,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
         />
       ) : (
         <EmptyDataView
-          text="Start adding your passwords and keep them safe here"
+          text={t('start_adding_passwords')}
           buttonFunction={() => goToScreen('createPassword', {})}
         >
           <LottieView

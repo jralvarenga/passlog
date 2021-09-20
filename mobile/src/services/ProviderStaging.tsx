@@ -8,6 +8,7 @@ import OnStartSecurity from '../screens/OnStartSecurity'
 import Navigator from './Navigator'
 import { PasslogUserDataProvider } from './PasslogUserDataProvider'
 import { darkElementsTheme, darkTheme } from './theme'
+import SplashScreen from 'react-native-bootsplash'
 
 const ProviderStaging = () => {
   const [onStartSecurity, setOnStartSecurity] = useState(false)
@@ -16,6 +17,7 @@ const ProviderStaging = () => {
     const { usePin } = await getSettings()
     if (usePin) {
       setOnStartSecurity(usePin)
+      SplashScreen.hide({ fade: true })
     }
   }
 

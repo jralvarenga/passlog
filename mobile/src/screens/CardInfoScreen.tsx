@@ -7,6 +7,9 @@ import { CardProps } from '../interface/interfaces'
 import { setCardsInStorage } from '../lib/asyncStorage'
 import { deletePasslogDocument } from '../lib/firestore'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
+import Clipboard from '@react-native-clipboard/clipboard'
+import Snackbar from 'react-native-snackbar'
+import { useTranslation } from 'react-i18next'
 
 interface CardInfoScreenProps {
   route: any
@@ -14,10 +17,11 @@ interface CardInfoScreenProps {
 }
 
 const CardInfoScreen = ({ route, navigation }: CardInfoScreenProps) => {
-  const { cards, setCards, userSettings, renderPasslogDataHandler } = usePasslogUserData()
-  const [cardInfo, setCardInfo] = useState<CardProps>(route.params.cardInfo)
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
+  const { cards, setCards, userSettings, renderPasslogDataHandler } = usePasslogUserData()
+  const [cardInfo, setCardInfo] = useState<CardProps>(route.params.cardInfo)
 
   const deleteCard = async() => {
     const id = cardInfo.id
@@ -33,6 +37,33 @@ const CardInfoScreen = ({ route, navigation }: CardInfoScreenProps) => {
     navigation.goBack()
   }
 
+  const copyCardInfo = (info: string) => {
+    Clipboard.addListener(() => console.log('clipboard'))
+    switch (info) {
+      case 'holder':
+        Clipboard.setString(cardInfo.holder)
+        Snackbar.show({
+          text: t('holder_copied'),
+          fontFamily: 'poppins',
+          textColor: theme.colors.text,
+          backgroundColor: theme.colors.primary
+        })
+      break
+      case 'number':
+        Clipboard.setString(cardInfo.number)
+        Snackbar.show({
+          text: t('number_copied'),
+          fontFamily: 'poppins',
+          textColor: theme.colors.text,
+          backgroundColor: theme.colors.primary
+        })
+      break
+      default:
+      break
+    }
+    Clipboard.removeAllListeners()
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <HeaderNavigationBar
@@ -46,7 +77,7 @@ const CardInfoScreen = ({ route, navigation }: CardInfoScreenProps) => {
           selectionColor={theme.colors.primary}
           style={[styles.text, { marginLeft: 15 }]}
         >
-        {cardInfo.type} card type
+          {t('card_type', { type: cardInfo.type })}
       </Text>
       <View style={styles.cardInfo}>
         <View style={styles.emailCardContainer}>
@@ -69,6 +100,7 @@ const CardInfoScreen = ({ route, navigation }: CardInfoScreenProps) => {
           </View>
           <Icon
             name="copy"
+            onPress={() => copyCardInfo('holder')}
             color={theme.colors.text}
             containerStyle={[styles.copyIconContainerStyle]}
             type="ionicon"
@@ -93,6 +125,7 @@ const CardInfoScreen = ({ route, navigation }: CardInfoScreenProps) => {
           </View>
           <Icon
             name="copy"
+            onPress={() => copyCardInfo('number')}
             color={theme.colors.text}
             containerStyle={[styles.copyIconContainerStyle]}
             type="ionicon"
@@ -100,7 +133,7 @@ const CardInfoScreen = ({ route, navigation }: CardInfoScreenProps) => {
         </View>
       </View>
       <Text style={[styles.text, { marginLeft: 15 }]}>
-        Last update on {cardInfo.date}
+        {t('last_update', { date: cardInfo.date })}
       </Text>
       <View style={styles.commentsContainer}>
       </View>

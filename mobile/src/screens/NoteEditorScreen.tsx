@@ -1,5 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React, { createRef, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Dimensions, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Button, Icon } from 'react-native-elements'
 import { TapGestureHandler } from 'react-native-gesture-handler'
@@ -23,6 +24,7 @@ const WINDOW_HEIGHT = Dimensions.get('window').height
 const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { notes, setNotes, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [noteInfo, setNoteInfo] = useState<NoteProps>()
   const [noteBody, setNoteBody] = useState("")
@@ -83,7 +85,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
     setHasUnsavedChanges(false)
     renderPasslogDataHandler!()
     Snackbar.show({
-      text: 'Saved',
+      text: t('saved_changes'),
       fontFamily: 'poppins',
       textColor: theme.colors.text,
       backgroundColor: theme.colors.primary
@@ -114,7 +116,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
 
   useEffect(() => {
     Snackbar.show({
-      text: 'Double tap in title or body to start editing',
+      text: t('double_tap_to_edit'),
       fontFamily: 'poppins',
       textColor: theme.colors.text,
       backgroundColor: theme.colors.primary
@@ -207,7 +209,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
             loading={loading}
             titleStyle={styles.text}
             containerStyle={{ width: '40%' }}
-            title="Save changes"
+            title={t('save_changes')}
             onPress={saveChanges}
           />
         )}

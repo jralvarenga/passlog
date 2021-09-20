@@ -1,5 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import BottomSheet from './BottomSheet'
@@ -18,6 +19,7 @@ const BOTTOM_SHEET_HEIGHT = 0.25
 const NoteOptionsSheet = ({ deleteNote, date, setVisible, visible, name }: NoteOptionsSheetProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
  
   return (
     <BottomSheet
@@ -27,11 +29,11 @@ const NoteOptionsSheet = ({ deleteNote, date, setVisible, visible, name }: NoteO
     >
       <View style={styles.container}>
         <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 25, }]}>
-          {name} Settings
+          {t('note_settings', { name: name })}
         </Text>
         <View style={styles.textContainer}>
           <Text style={styles.text}>
-            Created in {date}
+            {t('created_in', { date: date })}
           </Text>
         </View>
         <View>
@@ -41,7 +43,7 @@ const NoteOptionsSheet = ({ deleteNote, date, setVisible, visible, name }: NoteO
             containerStyle={{ width: '100%' }}
             titleStyle={styles.text}
             buttonStyle={{ backgroundColor: '#ff2e2e' }}
-            title="Delete note"
+            title={t('delete_note_button')}
           />
         </View>
       </View>

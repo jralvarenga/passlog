@@ -14,6 +14,7 @@ import { setNotesInStorage } from '../lib/asyncStorage'
 import { createNewPasslogDocument } from '../lib/firestore'
 import { encryptNote } from '../lib/encripter'
 import LottieView from 'lottie-react-native'
+import { useTranslation } from 'react-i18next'
 
 interface PasswordContainerProps {
   navigation: any
@@ -25,6 +26,7 @@ const WINDOW_HEIGHT = Dimensions.get('window').height
 const NotesScreen = ({ navigation }: PasswordContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { notes, setNotes, userSettings, renderPasslogDataHandler } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
 
@@ -52,7 +54,7 @@ const NotesScreen = ({ navigation }: PasswordContainerProps) => {
     currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
     const newNote: NoteProps = {
       id: createId(),
-      title: "New note",
+      title: t('new_note_title'),
       body: "",
       date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
     }
@@ -74,7 +76,7 @@ const NotesScreen = ({ navigation }: PasswordContainerProps) => {
         showIcon
         iconFunction={createNewNote}
         icon={{ name: 'add', type: 'material' }}
-        title="Notes"
+        title={t('notes_title')}
       />
       {notes?.length != 0 ? (
         <FlatList
@@ -85,7 +87,7 @@ const NotesScreen = ({ navigation }: PasswordContainerProps) => {
           ListHeaderComponent={
             <HiddenFlatListView
               inputValue={searchInput}
-              inputPlaceHolder="Search card..."
+              inputPlaceHolder={t('search_note')}
               changeInputValue={(value: string) => setSearchInput(value)}
               cancelInput={() => setSearchInput("")}
               buttonText="New"
@@ -106,7 +108,7 @@ const NotesScreen = ({ navigation }: PasswordContainerProps) => {
         />
       ) : (
         <EmptyDataView
-          text="Start writing your secret notes and keep them safe here"
+          text={t('start_adding_notes')}
           buttonFunction={createNewNote}
         >
           <LottieView

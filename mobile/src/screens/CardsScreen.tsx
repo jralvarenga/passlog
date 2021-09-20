@@ -10,6 +10,7 @@ import CardContainer from '../components/CardContainer'
 import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import EmptyDataView from '../components/EmptyDataView'
 import LottieView from 'lottie-react-native'
+import { useTranslation } from 'react-i18next'
 
 const WINDOW_WIDTH = Dimensions.get('window').width
 const WINDOW_HEIGHT = Dimensions.get('window').height
@@ -21,6 +22,7 @@ interface PasswordContainerProps {
 const CardsScreen = ({ navigation }: PasswordContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
+  const { t } = useTranslation()
   const { cards } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
 
@@ -51,7 +53,7 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
         showIcon
         iconFunction={() => goToScreen('createCard', {})}
         icon={{ name: 'add', type: 'material' }}
-        title="Cards"
+        title={t('cards_title')}
       />
       {cards?.length != 0 ? (
         <FlatList
@@ -62,7 +64,7 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
           ListHeaderComponent={
             <HiddenFlatListView
               inputValue={searchInput}
-              inputPlaceHolder="Search card..."
+              inputPlaceHolder={t('search_card')}
               changeInputValue={(value: string) => setSearchInput(value)}
               cancelInput={() => setSearchInput("")}
               buttonText="New"
@@ -83,7 +85,7 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
         />
       ) : (
         <EmptyDataView
-          text="Keep all your cards, codes, etc. safe in Cards"
+          text={t('start_adding_cards')}
           buttonFunction={() => goToScreen('createCard', {})}
         >
           <LottieView
