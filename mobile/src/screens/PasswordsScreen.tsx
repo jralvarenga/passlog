@@ -12,13 +12,16 @@ import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import EmptyDataView from '../components/EmptyDataView'
 import LottieView from 'lottie-react-native'
 import { useTranslation } from 'react-i18next'
-
-const WINDOW_WIDTH = Dimensions.get('window').width
-const WINDOW_HEIGHT = Dimensions.get('window').height
+import EnterAnimationView from '../components/EnterAnimationView'
 
 interface PasswordContainer {
   navigation: any
 }
+
+const WINDOW_WIDTH = Dimensions.get('window').width
+const WINDOW_HEIGHT = Dimensions.get('window').height
+const ENTER_ANIMATION_DURATION = 250
+const ENTER_ANIMATION_DELAY = 100
 
 const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   const theme = useTheme()
@@ -80,11 +83,17 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
           }}
           data={filteredPasswords}
           keyExtractor={(item: PasswordProps) => item.id}
-          renderItem={({ item }: { item: PasswordProps }) => (
-            <PasswordContainer
-              password={item}
-              goToScreen={goToScreen}
-            />
+          renderItem={({ item, index }: { item: PasswordProps, index: number }) => (
+            <EnterAnimationView
+              fade
+              delay={ENTER_ANIMATION_DELAY + ENTER_ANIMATION_DELAY*index}
+              duration={ENTER_ANIMATION_DURATION}
+            >
+              <PasswordContainer
+                password={item}
+                goToScreen={goToScreen}
+              />
+            </EnterAnimationView>
           )}
         />
       ) : (

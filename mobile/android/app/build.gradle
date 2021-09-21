@@ -24,8 +24,8 @@ android {
         applicationId "com.passlog"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "3.0.25"
+        versionCode 9
+        versionName "3.0.3"
     }
     splits {
         abi {

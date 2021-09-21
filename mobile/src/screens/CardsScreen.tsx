@@ -11,15 +11,18 @@ import { usePasslogUserData } from '../services/PasslogUserDataProvider'
 import EmptyDataView from '../components/EmptyDataView'
 import LottieView from 'lottie-react-native'
 import { useTranslation } from 'react-i18next'
+import EnterAnimationView from '../components/EnterAnimationView'
 
-const WINDOW_WIDTH = Dimensions.get('window').width
-const WINDOW_HEIGHT = Dimensions.get('window').height
-
-interface PasswordContainerProps {
+interface CardsContainerProps {
   navigation: any
 }
 
-const CardsScreen = ({ navigation }: PasswordContainerProps) => {
+const WINDOW_WIDTH = Dimensions.get('window').width
+const WINDOW_HEIGHT = Dimensions.get('window').height
+const ENTER_ANIMATION_DURATION = 250
+const ENTER_ANIMATION_DELAY = 100
+
+const CardsScreen = ({ navigation }: CardsContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const { t } = useTranslation()
@@ -76,11 +79,17 @@ const CardsScreen = ({ navigation }: PasswordContainerProps) => {
           }}
           data={filteredCards}
           keyExtractor={(item: CardProps) => item.id}
-          renderItem={({ item }: { item: CardProps }) => (
-            <CardContainer
-              card={item}
-              goToScreen={goToScreen}
-            />
+          renderItem={({ item, index }: { item: CardProps, index: number }) => (
+            <EnterAnimationView
+              fade
+              delay={ENTER_ANIMATION_DELAY + ENTER_ANIMATION_DELAY*index}
+              duration={ENTER_ANIMATION_DURATION}
+            >
+              <CardContainer
+                card={item}
+                goToScreen={goToScreen}
+              />
+            </EnterAnimationView>
           )}
         />
       ) : (

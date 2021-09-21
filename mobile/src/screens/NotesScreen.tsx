@@ -15,15 +15,18 @@ import { createNewPasslogDocument } from '../lib/firestore'
 import { encryptNote } from '../lib/encripter'
 import LottieView from 'lottie-react-native'
 import { useTranslation } from 'react-i18next'
+import EnterAnimationView from '../components/EnterAnimationView'
 
-interface PasswordContainerProps {
+interface NotesContainerProps {
   navigation: any
 }
 
 const WINDOW_WIDTH = Dimensions.get('window').width
 const WINDOW_HEIGHT = Dimensions.get('window').height
+const ENTER_ANIMATION_DURATION = 250
+const ENTER_ANIMATION_DELAY = 100
 
-const NotesScreen = ({ navigation }: PasswordContainerProps) => {
+const NotesScreen = ({ navigation }: NotesContainerProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const { t } = useTranslation()
@@ -99,11 +102,17 @@ const NotesScreen = ({ navigation }: PasswordContainerProps) => {
           }}
           data={filteredNotes}
           keyExtractor={(item: NoteProps) => item.id}
-          renderItem={({ item }: { item: NoteProps }) => (
-            <NoteContainer
-              note={item}
-              goToScreen={goToScreen}
-            />
+          renderItem={({ item, index }: { item: NoteProps, index: number }) => (
+            <EnterAnimationView
+              fade
+              delay={ENTER_ANIMATION_DELAY + ENTER_ANIMATION_DELAY*index}
+              duration={ENTER_ANIMATION_DURATION}
+            >
+              <NoteContainer
+                note={item}
+                goToScreen={goToScreen}
+              />
+            </EnterAnimationView>
           )}
         />
       ) : (
