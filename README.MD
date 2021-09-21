@@ -1,4 +1,4 @@
-<a href="https://assignit.vercel.app"><p align="center">
+<a href="#"><p align="center">
   <img height=100 src="https://raw.githubusercontent.com/jralvarenga/passlog/master/assets/github_icon.svg" />
 </p></a>
 
