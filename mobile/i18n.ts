@@ -2,7 +2,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import { NativeModules } from 'react-native'
 import EN_TRANSLATION from './l10n/en'
-//import TranslationES from './languages/es'
+import ES_TRANSLATION from './l10n/es'
 
 const detectSelectedDeviceLan = () => {
   const locale = NativeModules.I18nManager.localeIdentifier
@@ -21,9 +21,9 @@ const resources = {
   en: {
     translation: EN_TRANSLATION
   },
-  /*es: {
-    translation: TranslationES
-  }*/
+  es: {
+    translation: ES_TRANSLATION
+  }
 }
 
 i18n.use(initReactI18next).init({

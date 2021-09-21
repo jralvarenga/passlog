@@ -71,7 +71,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     color: theme.colors.text
   },
   headerInfo: {
-    width: '75%',
+    width: '80%',
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'space-between'

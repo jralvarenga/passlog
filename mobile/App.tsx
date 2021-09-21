@@ -3,6 +3,8 @@ import React, { useEffect } from 'react'
 import ProviderStaging from './src/services/ProviderStaging'
 import messaging from '@react-native-firebase/messaging'
 import { rateAppHandler } from './src/lib/rateAppHandler'
+import { StatusBar } from 'react-native'
+import { darkTheme } from './src/services/theme'
 
 const App = () => {
 
@@ -59,7 +61,10 @@ const App = () => {
   }, [])
 
   return (
-    <ProviderStaging />
+    <>
+      <StatusBar backgroundColor={darkTheme.colors.background}  />
+      <ProviderStaging />
+    </>
   )
 }
 

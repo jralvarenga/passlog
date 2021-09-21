@@ -34,7 +34,7 @@ const TopBar = ({ title, iconFunction, showIcon, icon }: TopBarProps) => {
         <Icon
           name={icon!.name}
           color={theme.colors.text}
-          size={40}
+          size={50}
           type={icon!.type}
           iconStyle={styles.iconContainerStyle}
           /* @ts-ignore */
@@ -65,9 +65,6 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     color: theme.colors.text
   },
   iconContainerStyle: {
-    padding: 12,
-    paddingRight: 14,
-    paddingLeft: 14,
     backgroundColor: reduceIncrementColor(theme.colors.primary, 'reduce', 20),
     borderRadius: 100
   }

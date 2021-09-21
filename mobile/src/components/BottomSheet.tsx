@@ -46,6 +46,7 @@ const BottomSheet = ({ visible, setVisible, children, props, bottomSheetHeight }
 const styleSheet = (theme: Theme) => StyleSheet.create({
   containerStyle: {
     flex: 1,
+    paddingTop: 15,
     backgroundColor: 'rgba(0.5, 0.25, 0, 0.5)',
   }
 })

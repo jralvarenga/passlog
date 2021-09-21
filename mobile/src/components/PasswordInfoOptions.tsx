@@ -53,7 +53,7 @@ const PasswordInfoOptions = ({ visible, setVisible, passwordInfo, savePasswordCh
         <View style={styles.contentContainer}>
           <View style={{ flex: 0.7 }}>
             <Text style={[styles.text, { fontFamily: 'poppins-bold', fontSize: 24 }]}>
-              Password Settings
+              {t('password_settings')}
             </Text>
           </View>
           <View style={{ flex: 5 }}>

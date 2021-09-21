@@ -36,7 +36,7 @@ export default {
 
   // Log in screen
   "welcome_to_passlog": "Welcome to Passlog",
-  "use_passlog_credentials": "Use your Passlog creedential below and login to your account",
+  "use_passlog_credentials": "Use your Passlog credential below and login to your account",
   "email_label": "Email",
   "email_example": "email@direction.com",
   "password_label": "Password",
@@ -109,9 +109,9 @@ export default {
   "biometrics_cancelled": "Biometrics canceled",
 
   // On start security settings screen
-  "use_pin_code": "Use pin code",
+  "use_pin_code": "Use PIN code",
   "use_biometric_type": "Use {{ type }}",
-  "set_pin": "Set or change your pin",
+  "set_pin": "Set or change your PIN",
   "save_settings": "Save settings",
   "settings_changed": "Settings changed",
 
@@ -122,7 +122,7 @@ export default {
   "wipe_cloud_data_message": "Are you sure you want this, this will only delete your data in the cloud and it's irreversible",
   "wipe_button": "Wipe now",
   "delete_account_message_1": "Are you sure you want this, your account will be lost and all your data in the cloud",
-  "delete_account_message_2": "You need to sign in again",
+  "delete_account_message_2": "You need to log in again",
   "login_to_delete": "Login to delete",
   "delete_account_button": "Delete account",
 
@@ -141,7 +141,7 @@ export default {
   "cloud_description": "Keep your data secured in the cloud with an account and have it in any device",
   "start_label": "Let's start",
   "start_title": "Let's Get Started",
-  "start_description": "Start usign Passlog with or without an account and get all your data safe",
+  "start_description": "Start using Passlog with or without an account and keep all your data safe",
   "lets_start_button": "Let's start",
   "login_signup_button": "Login or Sign up",
   "next_button": "Next",
@@ -182,7 +182,7 @@ export default {
 
   // Settings sheets
   "wipe_data_title": "Wipe data",
-  "wipe_data_message": "Are you sure you want to delete all the data in your phone (will not affect cloud storage)",
+  "wipe_data_message": "¿Are you sure you want to delete all the data in your phone? (will not affect cloud storage)",
   "delete_data_button": "Delete data",
   "enable_always_backup": "Enable always backup",
   "backup_now_button": "Backup now",
