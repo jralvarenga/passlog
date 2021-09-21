@@ -2,11 +2,11 @@
   <img height=100 src="https://raw.githubusercontent.com/jralvarenga/passlog/master/assets/github_icon.svg" />
 </p></a>
 
-<p align="center">
+<h2 align="center">
   <strong>
     <font size="6">Passlog</font>
   </strong>
-</p>
+</h2>
 
 <p align="center">
   <strong>--Have all your data safely stored in Passlog--</strong>
