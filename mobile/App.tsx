@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import ProviderStaging from './src/services/ProviderStaging'
 import messaging from '@react-native-firebase/messaging'
 import { rateAppHandler } from './src/lib/rateAppHandler'
-import { StatusBar } from 'react-native'
+import { Linking, StatusBar } from 'react-native'
 import { darkTheme } from './src/services/theme'
 
 const App = () => {
@@ -32,6 +32,9 @@ const App = () => {
       if (idTitle == 'are-you-enjoying-passlog?' || idTitle == 'rate-passlog!!' || idTitle == 'estás-disfrutando-passlog?' || idTitle == 'califica-passlog!!') {
         rateAppHandler()
       }
+      if (idTitle == 'try-calculary' || idTitle == 'prueba-calculary') {
+        Linking.openURL('https://play.google.com/store/apps/details?id=com.failedbump.calculary')
+      }
     });
 
     // In background notification open app
@@ -41,6 +44,9 @@ const App = () => {
       const idTitle = title.toLowerCase().replace(' ', '-')
       if (idTitle == 'are-you-enjoying-passlog?' || idTitle == 'rate-passlog!!' || idTitle == 'estás-disfrutando-passlog?' || idTitle == 'califica-passlog!!') {
         rateAppHandler()
+      }
+      if (idTitle == 'try-calculary' || idTitle == 'prueba-calculary') {
+        Linking.openURL('https://play.google.com/store/apps/details?id=com.failedbump.calculary')
       }
     })
 
@@ -53,6 +59,9 @@ const App = () => {
         const idTitle = title.toLowerCase().replace(' ', '-')
         if (idTitle == 'are-you-enjoying-passlog?' || idTitle == 'rate-passlog!!' || idTitle == 'estás-disfrutando-passlog?' || idTitle == 'califica-passlog!!') {
           rateAppHandler()
+        }
+        if (idTitle == 'try-calculary' || idTitle == 'prueba-calculary') {
+          Linking.openURL('https://play.google.com/store/apps/details?id=com.failedbump.calculary')
         }
       }
     })
