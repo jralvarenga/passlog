@@ -19,8 +19,8 @@ interface CardsContainerProps {
 
 const WINDOW_WIDTH = Dimensions.get('window').width
 const WINDOW_HEIGHT = Dimensions.get('window').height
-const ENTER_ANIMATION_DURATION = 250
-const ENTER_ANIMATION_DELAY = 100
+const ENTER_ANIMATION_DURATION = 300
+const ENTER_ANIMATION_DELAY = 250
 
 const CardsScreen = ({ navigation }: CardsContainerProps) => {
   const theme = useTheme()

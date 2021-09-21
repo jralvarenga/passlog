@@ -20,8 +20,8 @@ interface PasswordContainer {
 
 const WINDOW_WIDTH = Dimensions.get('window').width
 const WINDOW_HEIGHT = Dimensions.get('window').height
-const ENTER_ANIMATION_DURATION = 250
-const ENTER_ANIMATION_DELAY = 100
+const ENTER_ANIMATION_DURATION = 300
+const ENTER_ANIMATION_DELAY = 250
 
 const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   const theme = useTheme()
