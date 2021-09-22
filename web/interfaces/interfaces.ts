@@ -1,6 +1,3 @@
-import { FirebaseAuthTypes } from '@react-native-firebase/auth'
-import { exp } from 'react-native-reanimated'
-
 export interface PasswordProps {
   profileName: string
   password: string
@@ -28,7 +25,7 @@ export interface NoteProps {
   date: string
 }
 
-export interface PasslogUserDataProps {
+/*export interface PasslogUserDataProps {
   passwords?: PasswordProps[]
   setPasswords?: Function
   cards?: CardProps[]
@@ -44,7 +41,7 @@ export interface PasslogUserDataProps {
   setDataLoading?: Function
   notes?: NoteProps[]
   setNotes?: Function
-}
+}*/
 
 export interface SettingsProps {
   useBiometrics?: boolean

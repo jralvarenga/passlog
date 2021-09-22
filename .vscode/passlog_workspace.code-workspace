@@ -12,6 +12,10 @@
 			"name": "mobile",
 			"path": "../mobile",
 		},
+		{
+			"name": "web",
+			"path": "../web",
+		},
 	],
 	"settings": {
 		"editor.tabSize": 2,
