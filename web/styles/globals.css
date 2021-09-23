@@ -1,16 +1,15 @@
+/*@font-face {
+  font-family: "poppins";
+  font-style: normal;
+  src: local("poppins"),
+    url(font/poppins.ttf) format("truetype");
+}*/
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
+  display: flex;
+  background-color: rgb(20, 20, 20);
+  color: rgb(255, 255, 255);
 }
