@@ -1,9 +1,14 @@
-import { Button, Theme } from '@mui/material'
+import { useState } from 'react'
 import type { NextPage } from 'next'
+import { Button, Theme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import DownloadIcon from '@mui/icons-material/Download'
+import InstallAppDialog from '../src/components/InstallAppDialog'
 
 const Home: NextPage = () => {
   const styles = styleSheet()
+  const [showInstallAppDialog, setShowInstallAppDialog] = useState(false)
 
   return (
     <div className={styles.container}>
@@ -18,15 +23,30 @@ const Home: NextPage = () => {
           className={styles.topBarItemContainer}
           style={{ justifyContent: 'flex-end', paddingRight: 15 }}
         >
+          <a href="https://github.com/jralvarenga/passlog">
+            <Button
+              className={styles.actionButton}
+              variant="outlined"
+              startIcon={<GitHubIcon />}
+            >
+              Source code
+            </Button>
+          </a>
           <Button
-            className={styles.button}
-            variant="outlined"
+            className={styles.actionButton}
+            variant="contained"
+            onClick={() => setShowInstallAppDialog(true)}
+            startIcon={<DownloadIcon />}
           >
-            Download
+            Install app
           </Button>
         </div>
       </div>
       <div className={styles.body}></div>
+      <InstallAppDialog
+        visible={showInstallAppDialog}
+        setVisible={setShowInstallAppDialog}
+      />
     </div>
   )
 }
@@ -34,14 +54,15 @@ const Home: NextPage = () => {
 const styleSheet = makeStyles((theme: Theme) => createStyles({
   container: {
     width: '100%',
+    //maxWidth: 1500,
     height: '100vh',
+    //maxHeight: 1500,
     display: 'flex',
     flexDirection: 'column',
     flex: 1
   },
   topBar: {
     flex: 0.5,
-    backgroundColor: theme.palette.primary.main,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     padding: 10,
@@ -65,10 +86,12 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     height: 54,
     marginRight: '2%'
   },
-  button: {
+  actionButton: {
     color: theme.palette.text.primary,
     borderColor: theme.palette.text.primary,
-    textTransform: 'none'
+    textTransform: 'none',
+    marginLeft: 5,
+    marginRight: 5
   },
   body: {
     flex: 5,
