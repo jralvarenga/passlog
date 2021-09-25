@@ -1,10 +1,16 @@
-/*@font-face {
-  font-family: "poppins";
-  font-style: normal;
-  src: local("poppins"),
-    url(font/poppins.ttf) format("truetype");
-}*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+@layer base {
+  :root {
+    --primary-color: rgb(142, 68, 173);
+    --background-color: rgb(20, 20, 20);
+    --card-color: rgb(50, 50, 50);
+    --text-color: rgb(255, 255, 255);
+  }
+}
 
 html,
 body {
@@ -13,7 +19,6 @@ body {
   background-color: rgb(20, 20, 20);
   font-family: 'Poppins', sans-serif;
   color: rgb(255, 255, 255);
-  background-image: url(/assets/svg/background.svg);
 }
 
 a {
