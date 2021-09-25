@@ -21,7 +21,7 @@ export const darkTheme = createTheme({
     }
   },
   shape: {
-    borderRadius: 20
+    borderRadius: 10
   },
   typography: {
     fontFamily: 'poppins',
