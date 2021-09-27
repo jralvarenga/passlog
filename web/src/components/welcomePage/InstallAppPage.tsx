@@ -1,7 +1,7 @@
 import { FC } from 'react'
-import { Theme, useTheme } from '@mui/material'
+import { Divider, Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
-import InstallAppCard from './InstallAppCard'
+import InstallAppCard, { InstallAppDivider } from './InstallAppCard'
 
 const InstallAppPage: FC = () => {
   const styles = styleSheet()
@@ -12,7 +12,7 @@ const InstallAppPage: FC = () => {
       <div className={styles.topBar}>
         <div className={styles.topBarItemContainer}>
           <span className={styles.installAppTitle}>
-            Install <span style={{ color: theme.palette.primary.light }}>Passlog</span> app
+            Install <span style={{ color: theme.palette.primary.light }}>Passlog</span>
           </span>
         </div>
       </div>
@@ -20,12 +20,13 @@ const InstallAppPage: FC = () => {
         <InstallAppCard
           version="android"
           img="/assets/icons/android_logo.svg"
-          iconWidth={65}
+          iconWidth={70}
           iconHeight={53}
           description="Passlog suited for Android users, have all your sensitive data with you at any time, with or without Wifi, Passlog will have you covered"
           link="https://play.google.com/store/apps/details?id=com.passlog"
           desciptionList={['Have everything offline', 'Unlimited storage', 'All free', 'No ads']}
         />
+        <InstallAppDivider />
         <InstallAppCard
           version="web"
           img="/assets/icons/pwa_icon.svg"
@@ -35,6 +36,7 @@ const InstallAppPage: FC = () => {
           link="dqbhifegw"
           desciptionList={['Up to 200 KiB of storage', 'Available in any device', 'A much lighter version', 'All free', ' No ads']}
         />
+        <InstallAppDivider />
         <InstallAppCard
           version="ios"
           img="/assets/icons/apple_logo.svg"
@@ -82,7 +84,10 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+    },
   },
 }))
 

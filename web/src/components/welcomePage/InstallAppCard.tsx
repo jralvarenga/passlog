@@ -1,4 +1,4 @@
-import { Button, Theme } from '@mui/material'
+import { Button, Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles, withStyles } from '@mui/styles'
 import { Android as PlayStoreIcon, Language as WebIcon, Apple as AppleIcon } from '@mui/icons-material'
 
@@ -12,9 +12,19 @@ interface InstallAppCardProps {
   version: 'android' | 'web' | 'ios'
 }
 
-const DESCRIPTION_FONT_SIZE = 14
+const DESCRIPTION_FONT_SIZE = 16
 const CARD_WIDTH = 300
 const CARD_HEIGHT = 450
+
+export const InstallAppDivider = () => {
+  const styles = styleSheet()
+
+  return (
+    <div
+      className={styles.divider}
+    />
+  )
+}
 
 const InstallAppCard = ({ img, iconHeight, iconWidth, description, link, desciptionList, version }: InstallAppCardProps) => {
   const styles = styleSheet()
@@ -111,20 +121,15 @@ const AppleButton = withStyles((theme) => ({
 const styleSheet = makeStyles((theme: Theme) => createStyles({
   container: {
     display: 'flex',
-    cursor: 'pointer',
     flexDirection: 'column',
     alignItems: 'center',
-    width: CARD_WIDTH,
+    width: '33%',
     height: CARD_HEIGHT,
     background: theme.palette.background.default,
     padding: 15,
     borderRadius: 35,
-    boxShadow: '10px 10px 40px -10px rgba(0,0,0,0.67)',
-    transition: '500ms ease-out',
-    '&:hover': {
-      width: CARD_WIDTH + 20,
-      height: CARD_HEIGHT + 20,
-      boxShadow: '15px 15px 45px -15px rgba(0,0,0,0.67)',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
     },
   },
   logoContainer: {
@@ -136,10 +141,13 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
   },
   descriptionContainer: {
     flex: 5,
-    width: CARD_WIDTH - 50,
+    width: '80%',
     display: 'flex',
     paddingTop: 20,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {
+      width: '90%',
+    },
   },
   buttonContainer: {
     flex: 1,
@@ -147,6 +155,16 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  divider: {
+    width: 3,
+    height: CARD_HEIGHT,
+    background: theme.palette.background.paper,
+    borderRadius: 10,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      height: 3,
+    },
   }
 }))
 
