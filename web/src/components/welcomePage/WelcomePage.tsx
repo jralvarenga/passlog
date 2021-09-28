@@ -3,6 +3,8 @@ import { Button, Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import DownloadIcon from '@mui/icons-material/Download'
+import { KEYFRAMES_DURATION, KEYFRAME_DELAY } from '../../../pages'
+import EnterAnimation from '../EnterAnimation'
 
 const WelcomePage: FC = () => {
   const styles = styleSheet()
@@ -17,33 +19,55 @@ const WelcomePage: FC = () => {
   return (
     <div id="welcome-page" className={styles.container}>
       <div className={styles.topBar}>
-        <div className={styles.topBarItemContainer}>
+        <EnterAnimation
+          className={styles.topBarItemContainer}
+          animation="fadeInLeft"
+          duration={KEYFRAMES_DURATION + KEYFRAME_DELAY*0}
+        >
+          <>
           <img className={styles.passlogLogo} src="assets/icons/passlog_logo.svg" alt="" />
           <span className={styles.logoTitle}>
-            Passlog 
+            Passlog
           </span>
-        </div>
+          </>
+        </EnterAnimation>
       </div>
       <div className={styles.body}>
         <div className={styles.appDescriptionContainer}>
-          <p>
-            <span className={styles.appDescriptionTitle}>
-              Welcome to <span style={{ color: theme.palette.primary.light }}>Passlog</span>
-            </span>
-          </p>
-          <p>
-            <span className={styles.appDescriptionDescription}>
-              Need a place to store all your sensitive info. With Passlog you can store safely all your passwords, notes & cards and stop worring about it
-            </span>
-          </p>
-          <div>
+          <EnterAnimation
+            className=""
+            animation="fadeInLeft"
+            duration={KEYFRAMES_DURATION + KEYFRAME_DELAY*1}
+          >
+            <p>
+              <span className={styles.appDescriptionTitle}>
+                Welcome to <span style={{ color: theme.palette.primary.light }}>Passlog</span>
+              </span>
+            </p>
+          </EnterAnimation>
+          <EnterAnimation
+            className=""
+            animation="fadeInLeft"
+            duration={KEYFRAMES_DURATION + KEYFRAME_DELAY*2}
+          >
+            <p>
+              <span className={styles.appDescriptionDescription}>
+                Need a place to store all your sensitive info. With Passlog you can store safely all your passwords, notes & cards and stop worring about it
+              </span>
+            </p>
+          </EnterAnimation>
+          <EnterAnimation
+            className=""
+            animation="fadeInUp"
+            duration={KEYFRAMES_DURATION + KEYFRAME_DELAY*3}
+          ><>
             <a href="https://github.com/jralvarenga/passlog">
               <Button
                 className={styles.actionButton}
                 variant="outlined"
                 startIcon={<GitHubIcon />}
               >
-                Source code
+                Source code 
               </Button>
             </a>
             <Button
@@ -54,14 +78,20 @@ const WelcomePage: FC = () => {
             >
               Install Passlog
             </Button>
-          </div>
+          </></EnterAnimation>
         </div>
         <div className={styles.appPreviewContainer}>
-          <img
-            className={styles.appPreviewImg}
-            src="/assets/icons/app_preview.svg"
-            alt=""
-          />
+          <EnterAnimation
+            className=""
+            animation="fadeInRight"
+            duration={KEYFRAMES_DURATION + KEYFRAME_DELAY*4}
+          >
+            <img
+              className={styles.appPreviewImg}
+              src="/assets/icons/app_preview.svg"
+              alt=""
+            />
+          </EnterAnimation>
         </div>
       </div> 
     </div>

@@ -1,6 +1,8 @@
 import { Button, Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles, withStyles } from '@mui/styles'
 import { Android as PlayStoreIcon, Language as WebIcon, Apple as AppleIcon } from '@mui/icons-material'
+import EnterAnimation from '../EnterAnimation'
+import { KEYFRAMES_DURATION, KEYFRAME_DELAY } from '../../../pages'
 
 interface InstallAppCardProps {
   img: string
@@ -10,10 +12,10 @@ interface InstallAppCardProps {
   desciptionList: string[]
   link: string
   version: 'android' | 'web' | 'ios'
+  animationIndex: number
 }
 
 const DESCRIPTION_FONT_SIZE = 16
-const CARD_WIDTH = 300
 const CARD_HEIGHT = 450
 
 export const InstallAppDivider = () => {
@@ -26,11 +28,15 @@ export const InstallAppDivider = () => {
   )
 }
 
-const InstallAppCard = ({ img, iconHeight, iconWidth, description, link, desciptionList, version }: InstallAppCardProps) => {
+const InstallAppCard = ({ img, iconHeight, animationIndex, iconWidth, description, link, desciptionList, version }: InstallAppCardProps) => {
   const styles = styleSheet()
 
   return (
-    <div className={styles.container}>
+    <EnterAnimation
+      className={styles.container}
+      animation="fadeInDown"
+      duration={KEYFRAMES_DURATION + KEYFRAME_DELAY*animationIndex}
+    ><>
       <div className={styles.logoContainer}>
         <img
           src={img}
@@ -84,7 +90,7 @@ const InstallAppCard = ({ img, iconHeight, iconWidth, description, link, descipt
           </AppleButton>
         )}
       </div>
-    </div>
+    </></EnterAnimation>
   )
 }
 
