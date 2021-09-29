@@ -1,5 +1,5 @@
-import { FirebaseAuthTypes } from "@react-native-firebase/auth";
-import { exp } from "react-native-reanimated";
+import { FirebaseAuthTypes } from '@react-native-firebase/auth'
+import { exp } from 'react-native-reanimated'
 
 export interface PasswordProps {
   profileName: string
