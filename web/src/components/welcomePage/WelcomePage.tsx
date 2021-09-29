@@ -10,8 +10,8 @@ const WelcomePage: FC = () => {
   const styles = styleSheet()
   const theme = useTheme()
 
-  const scrollToInstallApp = () => {
-    document.getElementById('install-app-page')?.scrollIntoView({
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({
       behavior: 'smooth',
     })
   }
@@ -49,13 +49,23 @@ const WelcomePage: FC = () => {
             className=""
             animation="fadeInLeft"
             duration={KEYFRAMES_DURATION + KEYFRAME_DELAY*2}
-          >
+          ><>
             <p>
               <span className={styles.appDescriptionDescription}>
                 Need a place to store all your sensitive info. With Passlog you can store safely all your passwords, notes & cards and stop worring about it
               </span>
             </p>
-          </EnterAnimation>
+            <p>
+              <span className={styles.appDescriptionDescription}>
+                You can know more about Passlog <span
+                  onClick={() => scrollTo('about-page')}
+                  style={{ color: theme.palette.primary.light, cursor: 'pointer' }}
+                >
+                  here
+                </span>
+              </span>
+            </p>
+          </></EnterAnimation>
           <EnterAnimation
             className=""
             animation="fadeInUp"
@@ -73,7 +83,7 @@ const WelcomePage: FC = () => {
             <Button
               className={styles.actionButton}
               variant="contained"
-              onClick={scrollToInstallApp}
+              onClick={() => scrollTo('install-app-page')}
               startIcon={<DownloadIcon />}
             >
               Install Passlog
@@ -108,6 +118,7 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     flex: 1,
     [theme.breakpoints.down('sm')]: {
       padding: 25,
+      marginBottom: 50
     },
   },
   topBar: {

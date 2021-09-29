@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Divider, Theme, useTheme } from '@mui/material'
+import { Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import InstallAppCard, { InstallAppDivider } from './InstallAppCard'
 import EnterAnimation from '../EnterAnimation'
