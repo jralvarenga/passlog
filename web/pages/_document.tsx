@@ -1,17 +1,14 @@
 import * as React from 'react'
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, { Html, Main, NextScript } from 'next/document'
 import createEmotionServer from '@emotion/server/create-instance'
-import { darkTheme } from '../src/services/theme'
 import { createEmotionCache } from '../src/services/createEmotionCache'
+import Header from '../src/components/Header'
 
 export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head>
-          {/* PWA primary color */}
-          <meta name="theme-color" content={darkTheme.palette.primary.main} />
-        </Head>
+        <Header />
         <body>
           <Main />
           <NextScript />
