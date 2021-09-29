@@ -1,12 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
+:root {
+  --primary-color: rgb(142, 68, 173);
+  --background-color: rgb(20, 20, 20);
+  --card-color: rgb(50, 50, 50);
+  --text-color: rgb(255, 255, 255);
+  --paper-text-color: rgb(200, 200, 200);
+  --font-size: 16px;
+  --transition-time: 300ms;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-color: var(--background-color);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: var(--card-color);
+  cursor: grab;
+  transition: 300ms;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(59, 59, 59);
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  background-color: rgb(20, 20, 20);
+  background-color: var(--background-color);
   font-family: 'Poppins', sans-serif;
-  color: rgb(255, 255, 255);
+  color: var(--text-color);
+  font-size: var(--font-size);
+
+  scrollbar-color: var(--background-color);
+  scrollbar-width: 5px;
 }
 
 a {
