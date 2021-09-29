@@ -58,7 +58,7 @@ const InstallAppCard = ({ img, iconHeight, animationIndex, iconWidth, descriptio
       </div>
       <div className={styles.buttonContainer}>
         {version == 'android' && (
-          <a href={link} target="_blank">
+          <a href={link} target="_blank" rel="noreferrer">
             <PlayStoreButton
               disableElevation
               variant="contained"

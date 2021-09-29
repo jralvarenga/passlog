@@ -71,7 +71,7 @@ const WelcomePage: FC = () => {
             animation="fadeInUp"
             duration={KEYFRAMES_DURATION + KEYFRAME_DELAY*3}
           ><>
-            <a href="https://github.com/jralvarenga/passlog">
+            <a href="https://github.com/jralvarenga/passlog" target="_blank" rel="noreferrer">
               <Button
                 className={styles.actionButton}
                 variant="outlined"

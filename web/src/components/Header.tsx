@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import React from 'react'
+import { darkTheme } from '../services/theme'
 
 interface HeaderProps {
   name?: string
@@ -15,6 +16,8 @@ const Header = ({ name }: HeaderProps) => (
     <meta name="title" content="Passlog - Password Manager & Notes" />
     <meta name="description" content="Save all your private data like passwords, notes & cards and keep them safe in one place, Passlog is the open source proyect were you can store all your sensitive information and stop worrying about it." />
     <meta name="keywords" content="password,manager,notes,storage,encryption,encrypt,contraseña,contrasena,administrador,notas" />
+
+    <meta name="theme-color" content={darkTheme.palette.primary.main} />
 
     {/*<!-- Open Graph / Facebook -->*/}
     <meta property="og:type" content="website" />
