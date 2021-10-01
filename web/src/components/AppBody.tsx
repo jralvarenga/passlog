@@ -1,5 +1,6 @@
 import { Theme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
+import PasswordsPage from '../pages/PasswordsPage'
 import { NAVBAR_HEIGHT, NAVBAR_WIDHT } from './NavBar'
 
 interface AppBodyProps {
@@ -12,7 +13,11 @@ const AppBody = ({ index, setIndex }: AppBodyProps) => {
 
   return (
     <div className={styles.container}>
-      xd
+      {index == 0 ? (
+        <PasswordsPage />
+      ) : (
+        <div></div>
+      )}
     </div>
   )
 }
@@ -21,7 +26,6 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
   container: {
     width: `calc(100% - ${NAVBAR_WIDHT}px)`,
     height: '100%',
-    backgroundColor: 'blue',
     display: 'flex',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
