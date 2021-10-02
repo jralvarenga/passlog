@@ -49,6 +49,16 @@ a {
   text-decoration: none;
 }
 
+input {
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-color);
+  font-size: 16px;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+}
+
 /* ENTER ANIMATIONS */
 
 @keyframes fadeIn {

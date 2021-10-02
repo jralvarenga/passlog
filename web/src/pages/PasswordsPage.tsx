@@ -1,16 +1,30 @@
 import { Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
+import { useState } from 'react'
+import SearchBar from '../components/SearchBar'
 import TopBar from '../components/TopBar'
 
 const PasswordsPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
+  const [searchInput, setSearchInput] = useState("")
+
+  const updateSearchInput = (e: any) => {
+    const text = e.target.value
+    setSearchInput(text)
+  }
 
   return (
     <div className={styles.container}>
       <TopBar title="Passwords" />
       <div className={styles.body}>
-        xd
+        <div className={styles.searchBarContainer}>
+          <SearchBar
+            type="password"
+            value={searchInput}            
+            setValue={updateSearchInput}
+          />
+        </div>
       </div>
     </div>
   )
@@ -32,6 +46,14 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     paddingTop: 20,
     [theme.breakpoints.down('sm')]: {
       paddingTop: 30,
+    },
+  },
+  searchBarContainer: {
+    width: '100%',
+    maxWidth: 300,
+    height: '8%',
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '100%',
     },
   }
 }))
