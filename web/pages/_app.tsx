@@ -5,6 +5,7 @@ import { createEmotionCache } from '../src/services/createEmotionCache'
 import { CacheProvider } from '@emotion/react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { darkTheme } from '../src/services/theme'
+import { PasslogUserDataProvider } from '../src/services/PasslogUserdataProvider'
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
 }
@@ -16,7 +17,9 @@ function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: 
     <CacheProvider value={emotionCache}>
       <CssBaseline />
       <ThemeProvider theme={darkTheme}>
-        <Component {...pageProps} />
+        <PasslogUserDataProvider>
+          <Component {...pageProps} />
+        </PasslogUserDataProvider>
       </ThemeProvider>
     </CacheProvider>
   )
