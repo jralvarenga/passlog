@@ -1,6 +1,7 @@
 import { Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import { useState } from 'react'
+import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 import PasswordContainer from '../components/PasswordContainer'
 import SearchBar from '../components/SearchBar'
 import TopBar from '../components/TopBar'
@@ -10,8 +11,8 @@ const PasswordsPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
   const { passwords, setPasswords } = usePasslogUserData()
-  console.log(passwords)
   const [searchInput, setSearchInput] = useState("")
+  const [showGeneratePassword, setShowGeneratePassword] = useState(false)
 
   const updateSearchInput = (e: any) => {
     const text = e.target.value
@@ -27,6 +28,7 @@ const PasswordsPage = () => {
             type="password"
             value={searchInput}            
             setValue={updateSearchInput}
+            buttonFunction={() => setShowGeneratePassword(true)}
           />
         </div>
         <div className={styles.passwordsContainer}>
@@ -38,6 +40,10 @@ const PasswordsPage = () => {
           ))}
         </div>
       </div>
+      <GeneratePasswordSheet
+        open={showGeneratePassword}
+        setOpen={setShowGeneratePassword}
+      />
     </div>
   )
 }

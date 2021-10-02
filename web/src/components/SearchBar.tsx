@@ -6,9 +6,10 @@ interface SearchBarProps {
   type: 'password' | 'card' | 'note',
   value: string
   setValue: Function
+  buttonFunction?: any
 }
 
-const SearchBar = ({ type, value, setValue }: SearchBarProps) => {
+const SearchBar = ({ type, value, setValue, buttonFunction }: SearchBarProps) => {
   const styles = styleSheet()
   const theme = useTheme()
 
@@ -22,6 +23,7 @@ const SearchBar = ({ type, value, setValue }: SearchBarProps) => {
       {type == 'password' && (
         <Button
           variant="contained"
+          onClick={buttonFunction}
           className={styles.generateButton}
         >
           Generate
