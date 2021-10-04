@@ -1,35 +1,35 @@
 import { Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import { useState } from 'react'
+import CardContainer from '../components/CardContainer'
 import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
-import PasswordContainer from '../components/PasswordContainer'
 import SearchBar from '../components/SearchBar'
 import TopBar from '../components/TopBar'
 import { usePasslogUserData } from '../services/PasslogUserdataProvider'
 
-const PasswordsPage = () => {
+const CardsPage = () => {
   const styles = styleSheet()
-  const { passwords, setPasswords } = usePasslogUserData()
+  const { cards, setCards } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
   const [showGeneratePassword, setShowGeneratePassword] = useState(false)
 
   return (
     <div className={styles.container}>
-      <TopBar title="Passwords" />
+      <TopBar title="Cards" />
       <div className={styles.body}>
         <div className={styles.searchBarContainer}>
           <SearchBar
-            type="password"
+            type="card"
             value={searchInput}            
             setValue={setSearchInput}
             buttonFunction={() => setShowGeneratePassword(true)}
           />
         </div>
-        <div className={styles.passwordsContainer}>
-          {passwords?.map((password, i) => (
-            <PasswordContainer
+        <div className={styles.cardsContainer}>
+          {cards?.map((card, i) => (
+            <CardContainer
               key={i}
-              password={password}
+              card={card}
             />
           ))}
         </div>
@@ -70,7 +70,7 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
       maxWidth: '100%',
     },
   },
-  passwordsContainer: {
+  cardsContainer: {
     width: '100%',
     height: '90%',
     overflowY: 'scroll',
@@ -85,4 +85,4 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
   }
 }))
 
-export default PasswordsPage
+export default CardsPage
