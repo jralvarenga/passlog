@@ -3,6 +3,7 @@ import { createStyles, makeStyles, withStyles } from '@mui/styles'
 import { Android as PlayStoreIcon, Language as WebIcon, Apple as AppleIcon } from '@mui/icons-material'
 import EnterAnimation from '../EnterAnimation'
 import { KEYFRAMES_DURATION, KEYFRAME_DELAY } from '../../../pages'
+import { useRouter } from 'next/router'
 
 interface InstallAppCardProps {
   img: string
@@ -30,6 +31,7 @@ export const InstallAppDivider = () => {
 
 const InstallAppCard = ({ img, iconHeight, animationIndex, iconWidth, description, link, desciptionList, version }: InstallAppCardProps) => {
   const styles = styleSheet()
+  const router = useRouter()
 
   return (
     <EnterAnimation
@@ -73,10 +75,11 @@ const InstallAppCard = ({ img, iconHeight, animationIndex, iconWidth, descriptio
           <PWAButton
             disableElevation
             variant="contained"
+            onClick={() => router.push('/app')}
             style={{ textTransform: 'none', color: '#fff' }}
             startIcon={<WebIcon />}
           >
-            Comming soon
+            Use Web App
           </PWAButton>
         )}
         {version == 'ios' && (

@@ -1,6 +1,9 @@
-import { Button, Theme, useTheme } from '@mui/material'
+import { useState, useEffect } from 'react'
+import { Button, Theme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import BottomSheet from './BottomSheet'
+import { useRouter } from 'next/router'
+import { generatePassword } from '../lib/generatePassword'
 
 interface GeneratePasswordSheet {
   open: boolean
@@ -9,7 +12,18 @@ interface GeneratePasswordSheet {
 
 const GeneratePasswordSheet = ({ open, setOpen }: GeneratePasswordSheet) => {
   const styles = styleSheet()
-  const theme = useTheme()
+  const router = useRouter()
+  const [password, setPassword] = useState("")
+
+  useEffect(() => {
+    const newPassword = generatePassword()
+    setPassword(newPassword)
+  }, [open])
+
+  const createProfile = () => {
+    setOpen(false)
+    router.push(`/app/create-password?gnp=${password}`)
+  }
 
   return (
     <BottomSheet
@@ -22,11 +36,12 @@ const GeneratePasswordSheet = ({ open, setOpen }: GeneratePasswordSheet) => {
           <span>Generate Password</span>
         </div>
         <div className={styles.newPasswordContainer}>
-          <span>vgyeqw6r2vhur38y</span>
+          <span>{password}</span>
         </div>
         <div className={styles.createContainer}>
           <Button
             className={styles.createButton}
+            onClick={createProfile}
             variant="contained"
           >
             Create password profile

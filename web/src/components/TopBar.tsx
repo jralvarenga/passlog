@@ -1,14 +1,33 @@
 import { IconButton, Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import AddIcon from '@mui/icons-material/Add'
+import { useRouter } from 'next/router'
 
 interface TopBarProps {
-  title: string
+  title: 'Passwords' | 'Notes' | 'Cards'
 }
 
 const TopBar = ({ title }: TopBarProps)  => {
   const styles = styleSheet()
   const theme = useTheme()
+  const router = useRouter()
+
+  const goToCreateNew = () => {
+    switch (title) {
+      case 'Passwords':
+        router.push('/app/create-password')
+      break
+      case 'Cards':
+        router.push('/app/create-card')
+      break
+      case 'Notes':
+        router.push('/app/create-note')
+      break    
+      default:
+        router.push('/app/create-password')
+      break
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -21,7 +40,10 @@ const TopBar = ({ title }: TopBarProps)  => {
         <span className={styles.title}>{title}</span>
       </div>
       <div>
-        <IconButton style={{ backgroundColor: theme.palette.background.paper }}>
+        <IconButton
+          onClick={goToCreateNew}
+          style={{ backgroundColor: theme.palette.background.paper }}
+        >
           <AddIcon style={{ color: theme.palette.text.primary }} />
         </IconButton>
       </div>

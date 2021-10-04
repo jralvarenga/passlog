@@ -1,45 +1,82 @@
-import { TextField, Theme, useTheme } from '@mui/material'
+import { InputAdornment, TextField, Theme, useTheme, Box } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
+import { ReactElement } from 'react'
 
 interface FormInputProps {
   label: string
   value: string
   setValue: Function
   placeholder?: string | null
-  width?: string | number
+  width?: string | number,
+  icon?: ReactElement
+  multiline?: boolean
+  rows?: number
+  secureEntry?: boolean
 }
 
-const FormInput = ({ label, value, setValue, placeholder, width }: FormInputProps) => {
+const FormInput = ({ label, value, setValue, placeholder, width, icon, multiline, rows, secureEntry }: FormInputProps) => {
   const styles = styleSheet()
   const theme = useTheme()
   
   return (
-    <TextField
-      label={label}
-      variant="filled"
-      value={value}
-      style={{ width: width ? width : '100%' }}
-      onChange={(value) => setValue(value)}
-      placeholder={placeholder ? placeholder : ""}
-      inputProps={{
-        className: styles.input,
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        width: width ? width : '100%',
       }}
-      InputLabelProps={{
-        className: styles.label
-      }}
-      InputProps={{
-        classes: {
-          underline: styles.underline
-        }
-      }}
-    />
+    >
+      {icon && (
+        icon
+      )}
+      <TextField
+        label={label}
+        type={secureEntry ? "password" : "text"}
+        variant="filled"
+        value={value}
+        multiline={multiline}
+        rows={rows ? rows : 1}
+        style={{
+          width: '100%',
+          marginLeft: icon ? 10 : 0,
+          [theme.breakpoints.down('sm')]: {
+            marginLeft: icon ? 5 : 0,
+          },
+        }}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={placeholder ? placeholder : ""}
+        inputProps={{
+          className: multiline ? styles.textarea : styles.input,
+        }}
+        InputLabelProps={{
+          className: styles.label,
+        }}
+        InputProps={{
+          classes: {
+            underline: styles.underline,
+          },
+          disableUnderline: true
+        }}
+      />
+    </Box>
   )
 }
 
 const styleSheet = makeStyles((theme: Theme) => createStyles({
   input: {
-    textTransform: 'none',
     fontSize: 14,
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: theme.palette.background.paper,
+    borderTopLeftRadius: theme.shape.borderRadius,
+    borderTopRightRadius: theme.shape.borderRadius,
+    borderRadius: theme.shape.borderRadius
+  },
+  textarea: {
+    fontSize: 14,
+    padding: 5,
+    display: 'flex',
+    alignItems: 'center',
     backgroundColor: theme.palette.background.paper,
     borderTopLeftRadius: theme.shape.borderRadius,
     borderTopRightRadius: theme.shape.borderRadius,
@@ -52,7 +89,7 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
   },
   underline: {
     borderBottomLeftRadius: theme.shape.borderRadius,
-    borderBottomRightRadius: theme.shape.borderRadius
+    borderBottomRightRadius: theme.shape.borderRadius,
   }
 }))
 

@@ -1,6 +1,7 @@
-import { Button, TextField, Theme, useTheme } from '@mui/material'
+import { Button, Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import FormInput from './FormInput'
+import SearchIcon from '@mui/icons-material/Search';
 
 interface SearchBarProps {
   type: 'password' | 'card' | 'note',

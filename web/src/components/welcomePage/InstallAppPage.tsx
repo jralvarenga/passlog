@@ -41,7 +41,7 @@ const InstallAppPage: FC = () => {
           iconHeight={50}
           animationIndex={2}
           description="Passlog for all users with a web browser, get Passlog in any device with our lighter web PWA version"
-          link="dqbhifegw"
+          link="/app"
           desciptionList={['Up to 200 KiB of storage', 'Available in any device', 'A much lighter version', 'All free', ' No ads']}
         />
         <InstallAppDivider />
@@ -52,7 +52,7 @@ const InstallAppPage: FC = () => {
           iconHeight={53}
           animationIndex={3}
           description="Passlog suited for IOS users, have all your sensitive data with you at any time, with or without Wifi, Passlog will have you covered"
-          link="https://play.google.com/store/apps/details?id=com.passlog"
+          link="#"
           desciptionList={['Have everything offline', 'Unlimited storage', 'All free', 'No ads']}
         />
       </div>

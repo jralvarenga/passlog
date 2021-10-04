@@ -14,11 +14,6 @@ const PasswordsPage = () => {
   const [searchInput, setSearchInput] = useState("")
   const [showGeneratePassword, setShowGeneratePassword] = useState(false)
 
-  const updateSearchInput = (e: any) => {
-    const text = e.target.value
-    setSearchInput(text)
-  }
-
   return (
     <div className={styles.container}>
       <TopBar title="Passwords" />
@@ -27,7 +22,7 @@ const PasswordsPage = () => {
           <SearchBar
             type="password"
             value={searchInput}            
-            setValue={updateSearchInput}
+            setValue={setSearchInput}
             buttonFunction={() => setShowGeneratePassword(true)}
           />
         </div>
