@@ -4,13 +4,14 @@ import { createStyles, makeStyles } from '@mui/styles'
 import NavBar from '../../src/components/NavBar'
 import AppBody from '../../src/components/AppBody'
 import Header from '../../src/components/Header'
+import PageLayout from '../../src/components/PageLayout'
 
 const AppIndex = () => {
   const styles = styleSheet()
   const [index, setIndex] = useState(0)
 
   return (
-    <div className={styles.container}>
+    <PageLayout className={styles.container}>
       <Header name="Web App"  />
       <NavBar
         index={index}
@@ -20,7 +21,7 @@ const AppIndex = () => {
         index={index}
         setIndex={setIndex}
       />
-    </div>
+    </PageLayout>
   )
 }
 

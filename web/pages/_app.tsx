@@ -6,6 +6,8 @@ import { CacheProvider } from '@emotion/react'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import { darkTheme } from '../src/services/theme'
 import { PasslogUserDataProvider } from '../src/services/PasslogUserdataProvider'
+import { AnimatePresence } from 'framer-motion'
+
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache
 }
@@ -17,9 +19,15 @@ function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: 
     <CacheProvider value={emotionCache}>
       <CssBaseline />
       <ThemeProvider theme={darkTheme}>
-        <PasslogUserDataProvider>
-          <Component {...pageProps} />
-        </PasslogUserDataProvider>
+        <AnimatePresence
+          exitBeforeEnter
+          initial={false}
+          onExitComplete={() => window.scrollTo(0, 0)}
+        >
+          <PasslogUserDataProvider>
+            <Component {...pageProps} />
+          </PasslogUserDataProvider>
+        </AnimatePresence>
       </ThemeProvider>
     </CacheProvider>
   )

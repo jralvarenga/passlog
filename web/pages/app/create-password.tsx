@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react'
 import { PasswordProps } from '../../src/interfaces/interfaces'
 import { createId } from '../../src/lib/createId'
 import { useRouter } from 'next/router'
+import PageLayout from '../../src/components/PageLayout'
 
 const CreatePasswordPage = () => {
   const styles = styleSheet()
@@ -47,7 +48,7 @@ const CreatePasswordPage = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <PageLayout className={styles.container}>
       <Header
         name="Create Password"
       />
@@ -166,7 +167,7 @@ const CreatePasswordPage = () => {
           </LoadingButton>
         </div>
       </div>
-    </div>
+    </PageLayout>
   )
 }
 
