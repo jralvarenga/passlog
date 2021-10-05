@@ -1,6 +1,9 @@
 import { Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
+import TouchRipple from '@mui/material/ButtonBase/TouchRipple'
 import { CardProps } from '../interfaces/interfaces'
+import { useRouter } from 'next/router'
+import { useRef } from 'react'
 
 interface CardContainerProps {
   card: CardProps
@@ -9,9 +12,31 @@ interface CardContainerProps {
 const CardContainer = ({ card }: CardContainerProps) => {
   const styles = styleSheet()
   const theme = useTheme()
+  const router = useRouter()
+  const rippleRef = useRef(null)
+
+  const goToCard = () => {
+    setTimeout(() => {
+      router.push('/app/card-info')  
+    }, 500)
+  }
+
+  const onRippleStart = (e: any) => {
+    // @ts-ignore
+    rippleRef.current.start(e)
+  }
+  const onRippleStop = (e: any) => {
+    // @ts-ignore
+    rippleRef.current.stop(e)
+  }
 
   return (
-    <div className={styles.container}>
+    <div
+      onClick={goToCard}
+      onMouseDown={onRippleStart}
+      onMouseUp={onRippleStop}
+      className={styles.container}
+    >
       <div className={styles.cardTitleContainer}>
         <span className={styles.cardName}>
           {card.cardName}
@@ -25,6 +50,7 @@ const CardContainer = ({ card }: CardContainerProps) => {
           {card.holder}
         </span>
       </div>
+      <TouchRipple ref={rippleRef} center={false} />
     </div>
   )
 }
@@ -34,6 +60,7 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     width: 250,
     height: 130,
     display: 'flex',
+    position: 'relative',
     flexDirection: 'column',
     padding: 15,
     borderRadius: theme.shape.borderRadius,

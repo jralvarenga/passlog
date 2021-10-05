@@ -8,6 +8,7 @@ export const PasslogUserDataProvider = ({ children }: any) => {
   const [dataLoading, setDataLoading] = useState(true)
   const [renderPasslogData, setRenderPasslogData] = useState(0)
   const [passwords, setPasswords] = useState<PasswordProps[]>([])
+  const [selectedPassword, setSelectedPassword] = useState<PasswordProps | null>()
   const [cards, setCards] = useState<CardProps[]>([])
   const [notes, setNotes] = useState<NoteProps[]>([])
 
@@ -27,6 +28,8 @@ export const PasslogUserDataProvider = ({ children }: any) => {
       value={{
         passwords,
         setPasswords,
+        setSelectedPassword,
+        selectedPassword,
         cards,
         setCards,
         notes,

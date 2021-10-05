@@ -1,6 +1,9 @@
 import { Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
+import TouchRipple from '@mui/material/ButtonBase/TouchRipple'
 import { NoteProps } from '../interfaces/interfaces'
+import { useRouter } from 'next/router'
+import { useRef } from 'react'
 
 interface NoteContainerProps {
   note: NoteProps
@@ -9,9 +12,31 @@ interface NoteContainerProps {
 const NoteContainer = ({ note }: NoteContainerProps) => {
   const styles = styleSheet()
   const theme = useTheme()
+  const router = useRouter()
+  const rippleRef = useRef(null)
+
+  const goToNote = () => {
+    setTimeout(() => {
+      router.push('/app/card-info')  
+    }, 500)
+  }
+
+  const onRippleStart = (e: any) => {
+    // @ts-ignore
+    rippleRef.current.start(e)
+  }
+  const onRippleStop = (e: any) => {
+    // @ts-ignore
+    rippleRef.current.stop(e)
+  }
 
   return (
-    <div className={styles.container}>
+    <div
+      onClick={goToNote}
+      onMouseDown={onRippleStart}
+      onMouseUp={onRippleStop}
+      className={styles.container}
+    >
       <div className={styles.noteTitleContainer}>
         <span className={styles.noteName}>
           {note.title}
@@ -22,6 +47,7 @@ const NoteContainer = ({ note }: NoteContainerProps) => {
           {note.body}
         </span>
       </div>
+      <TouchRipple ref={rippleRef} center={false} />
     </div>
   )
 }
@@ -31,6 +57,7 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     width: 250,
     height: 130,
     display: 'flex',
+    position: 'relative',
     flexDirection: 'column',
     padding: 15,
     borderRadius: theme.shape.borderRadius,

@@ -1,6 +1,10 @@
+import { useRef } from 'react'
 import { Theme, useTheme } from '@mui/material'
+import TouchRipple from '@mui/material/ButtonBase/TouchRipple'
 import { createStyles, makeStyles } from '@mui/styles'
+import { useRouter } from 'next/router'
 import { PasswordProps } from '../interfaces/interfaces'
+import { usePasslogUserData } from '../services/PasslogUserdataProvider'
 
 interface PasswordContainerProps {
   password: PasswordProps
@@ -9,9 +13,33 @@ interface PasswordContainerProps {
 const PasswordContainer = ({ password }: PasswordContainerProps) => {
   const styles = styleSheet()
   const theme = useTheme()
+  const router = useRouter()
+  const { setSelectedPassword } = usePasslogUserData()
+  const rippleRef = useRef(null)
+
+  const goToPassword = () => {
+    setSelectedPassword!(password)
+    setTimeout(() => {
+      router.push('/app/password-info')
+    }, 500)
+  }
+
+  const onRippleStart = (e: any) => {
+    // @ts-ignore
+    rippleRef.current.start(e)
+  }
+  const onRippleStop = (e: any) => {
+    // @ts-ignore
+    rippleRef.current.stop(e)
+  }
 
   return (
-    <div className={styles.container}>
+    <div
+      onClick={goToPassword}
+      onMouseDown={onRippleStart}
+      onMouseUp={onRippleStop}
+      className={styles.container}
+    >
       <div className={styles.passwordTitleContainer}>
         <span className={styles.passwordName}>
           {password.profileName}
@@ -27,6 +55,7 @@ const PasswordContainer = ({ password }: PasswordContainerProps) => {
           {password.email}
         </span>
       </div>
+      <TouchRipple ref={rippleRef} center={false} />
     </div>
   )
 }
@@ -36,6 +65,7 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     width: 250,
     height: 130,
     display: 'flex',
+    position: 'relative',
     flexDirection: 'column',
     padding: 15,
     borderRadius: theme.shape.borderRadius,

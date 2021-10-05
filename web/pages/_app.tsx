@@ -15,6 +15,7 @@ interface MyAppProps extends AppProps {
 const clientSideEmotionCache = createEmotionCache()
 
 function MyApp({ Component, pageProps, emotionCache = clientSideEmotionCache }: MyAppProps) {
+  
   return (
     <CacheProvider value={emotionCache}>
       <CssBaseline />

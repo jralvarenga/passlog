@@ -48,7 +48,8 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    padding: 20
+    padding: 20,
+    paddingBottom: 0
   },
   body: {
     width: '100%',

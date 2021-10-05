@@ -7,8 +7,8 @@ interface NavBarProps {
   setIndex: Function
 }
 
-export const NAVBAR_WIDHT = 80
-export const NAVBAR_HEIGHT = 70
+export const NAVBAR_WIDHT = 70
+export const NAVBAR_HEIGHT = 60
 
 const NavBar = ({ index, setIndex }: NavBarProps) => {
   const styles = styleSheet()
