@@ -1,4 +1,4 @@
-import { CardProps, PasswordProps } from '../interfaces/interfaces'
+import { CardProps, NoteProps, PasswordProps } from '../interfaces/interfaces'
 
 export const testPasswords: PasswordProps[] = [
   {
@@ -273,5 +273,68 @@ export const testCards: CardProps[] = [
     number: '346795417r54326515',
     date: '01/10/21',
     addedInfo: "",
+  },
+]
+
+export const testNotes: NoteProps[] = [
+  {
+    id: 'feg2y82379131',
+    title: 'Note 1',
+    body: 'myholdernnamexdwrhuyifwegyfewgyueqtyf7',
+    date: '01/10/21',
+  },
+  {
+    id: 'feg2y82379132',
+    title: 'Note 2',
+    body: 'myholdernnamexdwrhuyifwegyfewgyueqtyf7',
+    date: '01/10/21',
+  },
+  {
+    id: 'feg2y82379133',
+    title: 'Note 3',
+    body: 'myholdernnamexdwrhuyifwegyfewgyueqtyf7',
+    date: '01/10/21',
+  },
+  {
+    id: 'feg2y82379134',
+    title: 'Note 4',
+    body: 'myholdernnamexdwrhuyifwegyfewgyueqtyf7',
+    date: '01/10/21',
+  },
+  {
+    id: 'feg2y82379135',
+    title: 'Note 5',
+    body: 'myholdernnamexdwrhuyifwegyfewgyueqtyf7',
+    date: '01/10/21',
+  },
+  {
+    id: 'feg2y82379136',
+    title: 'Note 6',
+    body: 'myholdernnamexdwrhuyifwegyfewgyueqtyf7',
+    date: '01/10/21',
+  },
+  {
+    id: 'feg2y82379137',
+    title: 'Note 7',
+    body: 'myholdernnamexdwrhuyifwegyfewgyueqtyf7',
+    date: '01/10/21',
+  },
+  {
+    id: 'feg2y82379138',
+    title: 'Note 8',
+    body: 'myholdernnamexdwrhuyifwegyfewgyueqtyf7',
+    date: '01/10/21',
+  },
+  {
+    id: 'feg2y82379139',
+    title: 'Note 9',
+    body: 'myholdernnamexdwrhuyifwegyfewgyueqtyf7',
+    date: '01/10/21',
+  },
+  {
+    id: 'feg2y823791380',
+    title: 'Note 20',
+    body: 'myholdernnamexdwrhuyifwegyfewgyueqtyf7',
+    date: '01/10/21',
   },
 ]

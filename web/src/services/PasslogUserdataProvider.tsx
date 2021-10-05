@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { testCards, testPasswords } from '../data/test'
-import { CardProps, PasslogUserDataProps, PasswordProps } from '../interfaces/interfaces'
+import { testCards, testNotes, testPasswords } from '../data/test'
+import { CardProps, NoteProps, PasslogUserDataProps, PasswordProps } from '../interfaces/interfaces'
 
 const PasslogUserDataContext = createContext({})
 
@@ -9,10 +9,12 @@ export const PasslogUserDataProvider = ({ children }: any) => {
   const [renderPasslogData, setRenderPasslogData] = useState(0)
   const [passwords, setPasswords] = useState<PasswordProps[]>([])
   const [cards, setCards] = useState<CardProps[]>([])
+  const [notes, setNotes] = useState<NoteProps[]>([])
 
   useEffect(() => {
     setPasswords(testPasswords)
     setCards(testCards)
+    setNotes(testNotes)
     setDataLoading(false)
   }, [renderPasslogData])
 
@@ -27,6 +29,8 @@ export const PasslogUserDataProvider = ({ children }: any) => {
         setPasswords,
         cards,
         setCards,
+        notes,
+        setNotes,
         renderPasslogDataHandler,
         dataLoading,
         setDataLoading,

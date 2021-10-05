@@ -1,6 +1,7 @@
 import { Theme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import CardsPage from '../pages/CardsPage'
+import NotesPage from '../pages/NotesPage'
 import PasswordsPage from '../pages/PasswordsPage'
 import { NAVBAR_HEIGHT, NAVBAR_WIDHT } from './NavBar'
 
@@ -17,7 +18,7 @@ const AppBody = ({ index, setIndex }: AppBodyProps) => {
       {index == 0 ? (
         <PasswordsPage />
       ) : index == 1 ? (
-        <div></div>
+        <NotesPage />
       ) : index == 2 ? (
         <CardsPage />
       ) : (
