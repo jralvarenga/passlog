@@ -1,10 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { Theme, useTheme } from '@react-navigation/native'
-import { Button, Chip, Icon } from 'react-native-elements'
-import { generatePassword } from '../lib/generatePassword'
-import Clipboard from '@react-native-clipboard/clipboard'
-import Snackbar from 'react-native-snackbar'
+import { Chip } from 'react-native-elements'
 import BottomSheet from './BottomSheet'
 import { useTranslation } from 'react-i18next'
 

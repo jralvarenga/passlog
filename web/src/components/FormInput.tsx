@@ -12,9 +12,11 @@ interface FormInputProps {
   multiline?: boolean
   rows?: number
   secureEntry?: boolean
+  children?: any
+  selectInput?: boolean
 }
 
-const FormInput = ({ label, value, setValue, placeholder, width, icon, multiline, rows, secureEntry }: FormInputProps) => {
+const FormInput = ({ label, value, setValue, placeholder, width, icon, multiline, rows, secureEntry, selectInput, children }: FormInputProps) => {
   const styles = styleSheet()
   const theme = useTheme()
   
@@ -57,6 +59,8 @@ const FormInput = ({ label, value, setValue, placeholder, width, icon, multiline
           },
           disableUnderline: true
         }}
+        select={selectInput}
+        children={children}
       />
     </Box>
   )
