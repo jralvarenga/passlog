@@ -28,8 +28,8 @@ export interface NoteProps {
 export interface PasslogUserDataProps {
   passwords?: PasswordProps[]
   setPasswords?: Function
-  selectedPassword?: PasswordProps
-  setSelectedPassword?: Function
+  selectedPasslogItem?: PasswordProps | NoteProps | CardProps
+  setSelectedPasslogItem?: Function
   cards?: CardProps[]
   setCards?: Function
   renderPasslogDataHandler?: Function

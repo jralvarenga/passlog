@@ -3,34 +3,34 @@ import { createStyles, makeStyles } from '@mui/styles'
 import { useEffect, useState } from 'react'
 import HeaderNavigationBar, { HEADERBAR_HEIGHT } from '../../src/components/HeaderNavigationBar'
 import PageLayout from '../../src/components/PageLayout'
-import { PasswordProps } from '../../src/interfaces/interfaces'
+import { CardProps } from '../../src/interfaces/interfaces'
 import { usePasslogUserData } from '../../src/services/PasslogUserdataProvider'
-import {Mail as EmailIcon, Lock as PasswordIcon, FileCopy as ContentCopyIcon, Menu as MenuIcon } from '@mui/icons-material'
+import {Mail as EmailIcon, Lock as CardIcon, FileCopy as ContentCopyIcon, Menu as MenuIcon } from '@mui/icons-material'
 import copy from 'copy-to-clipboard'
 import AppSnackbar from '../../src/components/AppSnackbar'
 import Header from '../../src/components/Header'
 
-const PasswordInfoPage = () => {
+const CardInfoPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
   const { selectedPasslogItem } = usePasslogUserData()
-  const [password, setPassword] = useState<PasswordProps>()
+  const [card, setCard] = useState<CardProps>()
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState("")
 
   useEffect(() => {
     // @ts-ignore
-    setPassword(selectedPasslogItem)
+    setCard(selectedPasslogItem)
   }, [selectedPasslogItem])
 
-  const copyToClipboard = (type: 'Password' | 'Email') => {
-    if (type == 'Email') {
-      copy(password!.email)
-      setSnackbarMessage("Email copied!")
+  const copyToClipboard = (type: 'Numbers' | 'Holder') => {
+    if (type == 'Holder') {
+      copy(card!.holder)
+      setSnackbarMessage("Holder copied!")
       setOpenSnackbar(true)
     } else {
-      copy(password!.password)
-      setSnackbarMessage("Password copied!")
+      copy(card!.number)
+      setSnackbarMessage("Numbers copied!")
       setOpenSnackbar(true)
     }
   }
@@ -38,75 +38,60 @@ const PasswordInfoPage = () => {
   return (
     <PageLayout className={styles.container}>
       <Header
-        name="Password info"
+        name="Card info"
       />
       <HeaderNavigationBar
-        title={password?.profileName ? password!.profileName : ""}
+        title={card?.cardName ? card!.cardName : ""}
         showIcon
         icon={<MenuIcon style={{ color: theme.palette.text.primary }} />}
         iconFunction={() => console.log('hi man')}
       />
       <div className={styles.body}>
-        {password?.user && (
-          <span style={{ fontSize: 14 }}>
-            Password of {password?.user}
-          </span>
-        )}
-        <div className={styles.passwordInfoContainer}>
-          <div className={styles.passwordInfoBox}>
+        <span style={{ fontSize: 14 }}>
+          Card of {card?.type ? card!.type : ""}
+        </span>
+        <div className={styles.cardInfoContainer}>
+          <div className={styles.cardInfoBox}>
             <div style={{ display: 'flex', alignItems: 'center', width: '85%' }}>
               <EmailIcon
                 style={{ marginRight: 5 }}
               />
               <span
-                onClick={() => copyToClipboard('Email')}
-                className={styles.emailPasswordSpan}
+                onClick={() => copyToClipboard('Holder')}
+                className={styles.emailCardSpan}
               >
-                {password?.email ? password!.email : ""}
+                {card?.holder ? card!.holder : ""}
               </span>
             </div>
             <IconButton
-              onClick={() => copyToClipboard('Email')}
+              onClick={() => copyToClipboard('Holder')}
               style={{ backgroundColor: theme.palette.background.paper }}
             >
               <ContentCopyIcon style={{ color: theme.palette.text.primary, fontSize: 25 }} />
             </IconButton>
           </div>
-          <div className={styles.passwordInfoBox}>
+          <div className={styles.cardInfoBox}>
             <div style={{ display: 'flex', alignItems: 'center', width: '85%' }}>
-              <PasswordIcon
+              <CardIcon
                 style={{ marginRight: 5 }}
               />
               <span
-                onClick={() => copyToClipboard('Password')}
-                className={styles.emailPasswordSpan}
+                onClick={() => copyToClipboard('Numbers')}
+                className={styles.emailCardSpan}
               >
-                {password?.password ? password!.password : ""}
+                {card?.number ? card!.number : ""}
               </span>
             </div>
             <IconButton
-              onClick={() => copyToClipboard('Password')}
+              onClick={() => copyToClipboard('Numbers')}
               style={{ backgroundColor: theme.palette.background.paper }}
             >
               <ContentCopyIcon style={{ color: theme.palette.text.primary, fontSize: 25 }} />
             </IconButton>
           </div>
           <span style={{ marginTop: 15, fontSize: 14 }}>
-            Last update on {password?.date ? password!.date : ""}
+            Last update on {card?.date ? card!.date : ""}
           </span>
-        </div>
-        <div className={styles.commentsContainer}>
-          <div className={styles.commentsBox}>
-            {password?.comments ? (
-              <span>
-                {password?.comments}
-              </span>
-            ) : (
-              <span style={{ color: theme.palette.background.paper }}>
-                No comments...
-              </span>
-            )}
-          </div>
         </div>
       </div>
       <AppSnackbar
@@ -136,13 +121,13 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     flexDirection: 'column',
     padding: 15
   },
-  passwordInfoContainer: {
-    flex: 2,
+  cardInfoContainer: {
+    marginTop: 40,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center'
   },
-  passwordInfoBox: {
+  cardInfoBox: {
     width: '100%',
     display: 'flex',
     alignItems: 'center',
@@ -150,7 +135,7 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     marginTop: 5,
     marginBottom: 5
   },
-  emailPasswordSpan: {
+  emailCardSpan: {
     fontSize: 16,
     padding: 10,
     width: '100%',
@@ -161,20 +146,6 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
       fontSize: 14
     },
   },
-  commentsContainer: {
-    flex: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    padding: 5
-  },
-  commentsBox: {
-    width: '100%',
-    height: '100%',
-    padding: 10,
-    border: `2px solid ${theme.palette.background.paper}`,
-    borderRadius: theme.shape.borderRadius
-  }
 }))
 
-export default PasswordInfoPage
+export default CardInfoPage

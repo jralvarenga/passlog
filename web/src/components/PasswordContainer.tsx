@@ -14,14 +14,14 @@ const PasswordContainer = ({ password }: PasswordContainerProps) => {
   const styles = styleSheet()
   const theme = useTheme()
   const router = useRouter()
-  const { setSelectedPassword } = usePasslogUserData()
+  const { setSelectedPasslogItem } = usePasslogUserData()
   const rippleRef = useRef(null)
 
   const goToPassword = () => {
-    setSelectedPassword!(password)
+    setSelectedPasslogItem!(password)
     setTimeout(() => {
       router.push('/app/password-info')
-    }, 500)
+    }, 400)
   }
 
   const onRippleStart = (e: any) => {

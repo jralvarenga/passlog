@@ -17,7 +17,7 @@ const NoteContainer = ({ note }: NoteContainerProps) => {
 
   const goToNote = () => {
     setTimeout(() => {
-      router.push('/app/card-info')  
+      router.push('/app/note-editor')  
     }, 500)
   }
 

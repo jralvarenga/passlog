@@ -21,7 +21,7 @@ const TopBar = ({ title }: TopBarProps)  => {
         router.push('/app/create-card')
       break
       case 'Notes':
-        router.push('/app/create-note')
+        router.push('/app/note-editor')
       break    
       default:
         router.push('/app/create-password')

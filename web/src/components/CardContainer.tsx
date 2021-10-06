@@ -4,6 +4,7 @@ import TouchRipple from '@mui/material/ButtonBase/TouchRipple'
 import { CardProps } from '../interfaces/interfaces'
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
+import { usePasslogUserData } from '../services/PasslogUserdataProvider'
 
 interface CardContainerProps {
   card: CardProps
@@ -14,11 +15,13 @@ const CardContainer = ({ card }: CardContainerProps) => {
   const theme = useTheme()
   const router = useRouter()
   const rippleRef = useRef(null)
+  const { setSelectedPasslogItem } = usePasslogUserData()
 
   const goToCard = () => {
+    setSelectedPasslogItem!(card)
     setTimeout(() => {
-      router.push('/app/card-info')  
-    }, 500)
+      router.push('/app/card-info')
+    }, 400)
   }
 
   const onRippleStart = (e: any) => {
