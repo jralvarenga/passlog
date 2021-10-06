@@ -7,6 +7,9 @@ interface TopBarProps {
   title: 'Passwords' | 'Notes' | 'Cards'
 }
 
+export const TOPBAR_HEIGHT = '10%'
+export const TOPBAR_HEIGHT_MOBILE = '14%'
+
 const TopBar = ({ title }: TopBarProps)  => {
   const styles = styleSheet()
   const theme = useTheme()
@@ -42,7 +45,7 @@ const TopBar = ({ title }: TopBarProps)  => {
       <div>
         <IconButton
           onClick={goToCreateNew}
-          style={{ backgroundColor: theme.palette.background.paper }}
+          className={styles.iconStyle}
         >
           <AddIcon style={{ color: theme.palette.text.primary }} />
         </IconButton>
@@ -55,12 +58,20 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
   container: {
     width: '100%',
     maxWidth: 300,
-    height: '10%',
+    height: TOPBAR_HEIGHT,
     display: 'flex',
     alignItems: 'center',
+    paddingTop: 20,
+    paddingLeft: 20,
     justifyContent: 'space-between',
     [theme.breakpoints.down('sm')]: {
       maxWidth: '100%',
+      paddingRight: 20,
+      height: TOPBAR_HEIGHT_MOBILE,
+      paddingBottom: 20,
+      backgroundColor: theme.palette.primary.main,
+      borderBottomLeftRadius: 30,
+      borderBottomRightRadius: 30,
     },
   },
   title: {
@@ -72,6 +83,12 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     height: 43,
     marginRight: 30
   },
+  iconStyle: {
+    backgroundColor: theme.palette.background.paper,
+    [theme.breakpoints.down('sm')]: {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  }
 }))
 
 export default TopBar

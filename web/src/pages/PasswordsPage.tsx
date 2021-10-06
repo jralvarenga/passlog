@@ -4,7 +4,7 @@ import { useState } from 'react'
 import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 import PasswordContainer from '../components/PasswordContainer'
 import SearchBar from '../components/SearchBar'
-import TopBar from '../components/TopBar'
+import TopBar, { TOPBAR_HEIGHT, TOPBAR_HEIGHT_MOBILE } from '../components/TopBar'
 import { usePasslogUserData } from '../services/PasslogUserdataProvider'
 
 const PasswordsPage = () => {
@@ -48,17 +48,20 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    padding: 20,
-    paddingBottom: 0
   },
   body: {
     width: '100%',
-    height: '90%',
+    height: `calc(100% - ${TOPBAR_HEIGHT})`,
     display: 'flex',
     flexDirection: 'column',
-    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: 20, 
+    },
     [theme.breakpoints.down('sm')]: {
-      paddingTop: 30,
+      paddingTop: 10, 
+      height: `calc(100% - ${TOPBAR_HEIGHT_MOBILE})`,
     },
   },
   searchBarContainer: {

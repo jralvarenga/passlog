@@ -13,7 +13,7 @@ interface TopBarProps {
   icon?: { name: string, type: string }
 }
 
-const WINDOE_HEIGHT = Dimensions.get('window').height
+const WINDOW_HEIGHT = Dimensions.get('window').height
 
 const TopBar = ({ title, iconFunction, showIcon, icon }: TopBarProps) => {
   const theme = useTheme()
@@ -49,7 +49,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
   topBar: {
     width: '100%',
     padding: 20,
-    height: WINDOE_HEIGHT * 0.16,
+    height: WINDOW_HEIGHT * 0.16,
     borderBottomLeftRadius: 35,
     borderBottomRightRadius: 35,
     overflow: 'hidden',
