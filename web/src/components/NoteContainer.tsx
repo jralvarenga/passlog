@@ -4,6 +4,7 @@ import TouchRipple from '@mui/material/ButtonBase/TouchRipple'
 import { NoteProps } from '../interfaces/interfaces'
 import { useRouter } from 'next/router'
 import { useRef } from 'react'
+import { usePasslogUserData } from '../services/PasslogUserdataProvider'
 
 interface NoteContainerProps {
   note: NoteProps
@@ -11,11 +12,12 @@ interface NoteContainerProps {
 
 const NoteContainer = ({ note }: NoteContainerProps) => {
   const styles = styleSheet()
-  const theme = useTheme()
   const router = useRouter()
+  const { setSelectedPasslogItem } = usePasslogUserData()
   const rippleRef = useRef(null)
 
   const goToNote = () => {
+    setSelectedPasslogItem!(note)
     setTimeout(() => {
       router.push('/app/note-editor')  
     }, 500)
