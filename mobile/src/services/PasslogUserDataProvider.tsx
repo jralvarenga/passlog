@@ -29,10 +29,23 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
     let cards: CardProps[] = await getCardsFromStorage()
     let notes: NoteProps[] = await getNotesFromStorage()
     let settings: SettingsProps = await getSettings()
+    // Set from async storage first
+    setPasswords(passwords)
+    setCards(cards)
+    setNotes(notes)
+    setSettings(settings)
+    setDataLoading(false)
+    // Removes Splashscreen
+    hideSplashScreen()
     if (user) {
+      // Set user if it exists
+      setDataLoading(true)
       const userSettings = await getUserSettings()
       setUserSettings(userSettings)
+      setDataLoading(false)
       if (userSettings.alwaysSync) {
+        setDataLoading(true)
+        // If has sync gets from cloud
         const { firestorePasswords, firestoreCards, firestoreNotes } = await getPasslogUserDataInFirestore()
         await setPasswordsInStorage(firestorePasswords)
         await setCardsInStorage(firestoreCards)
@@ -40,12 +53,13 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
         passwords = firestorePasswords
         cards = firestoreCards
         notes = firestoreNotes
+        setPasswords(passwords)
+        setCards(cards)
+        setNotes(notes)
+        setSettings(settings)
+        setDataLoading(false)
       }
     }
-    setPasswords(passwords)
-    setCards(cards)
-    setNotes(notes)
-    setSettings(settings)
   }
 
   const hideSplashScreen = () => {
@@ -57,7 +71,6 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
   useEffect(() => {
     const asyncHandler = async() => {
       await getData()
-      hideSplashScreen()
     }
 
     asyncHandler()

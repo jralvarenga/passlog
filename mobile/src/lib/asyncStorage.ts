@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { CardProps, NoteProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interface/interfaces'
-import { decryptCard, decryptNote, decryptPassword, decryptString, encryptCard, encryptNote, encryptPassword } from './encripter'
+import { decryptCard, decryptNote, decryptPassword, encryptCard, encryptNote, encryptPassword } from './encripter'
 
 // Get methods
 

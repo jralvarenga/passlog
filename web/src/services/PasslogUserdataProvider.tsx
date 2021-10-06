@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { testCards, testNotes, testPasswords } from '../data/test'
 import { CardProps, NoteProps, PasslogUserDataProps, PasswordProps } from '../interfaces/interfaces'
+import { getCardsFromLocalStorage, getNotesFromLocalStorage, getPasswordsFromLocalStorage } from '../lib/localStorage'
 
 const PasslogUserDataContext = createContext({})
 
@@ -11,12 +12,41 @@ export const PasslogUserDataProvider = ({ children }: any) => {
   const [selectedPasslogItem, setSelectedPasslogItem] = useState<PasswordProps | CardProps | NoteProps | null>()
   const [cards, setCards] = useState<CardProps[]>([])
   const [notes, setNotes] = useState<NoteProps[]>([])
+  console.log({ cards, notes, passwords })
+
+  const getData = async() => {
+    //const user = returnCurrentUser()
+    //setUser(user)
+    let passwords: PasswordProps[] = await getPasswordsFromLocalStorage()
+    let cards: CardProps[] = await getCardsFromLocalStorage()
+    let notes: NoteProps[] = await getNotesFromLocalStorage()
+    //let settings: SettingsProps = await getSettings()
+    setPasswords(passwords)
+    setCards(cards)
+    setNotes(notes)
+    //setSettings(settings)
+    setDataLoading(false)
+    /*if (user) {
+      const userSettings = await getUserSettings()
+      setUserSettings(userSettings)
+      if (userSettings.alwaysSync) {
+        const { firestorePasswords, firestoreCards, firestoreNotes } = await getPasslogUserDataInFirestore()
+        await setPasswordsInStorage(firestorePasswords)
+        await setCardsInStorage(firestoreCards)
+        await setNotesInStorage(firestoreNotes)
+        passwords = firestorePasswords
+        cards = firestoreCards
+        notes = firestoreNotes
+      }
+    }*/
+  }
 
   useEffect(() => {
-    setPasswords(testPasswords)
-    setCards(testCards)
-    setNotes(testNotes)
-    setDataLoading(false)
+    const asyncHandler = async() => {
+      await getData()
+    }
+
+    asyncHandler()
   }, [renderPasslogData])
 
   const renderPasslogDataHandler = () => {
