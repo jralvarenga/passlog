@@ -9,14 +9,19 @@ import {Mail as EmailIcon, Lock as PasswordIcon, FileCopy as ContentCopyIcon, Me
 import copy from 'copy-to-clipboard'
 import AppSnackbar from '../../src/components/AppSnackbar'
 import Header from '../../src/components/Header'
+import PasswordOptions from '../../src/components/PasswordOptions'
+import { setPasswordsInLocalStorage } from '../../src/lib/localStorage'
+import { useRouter } from 'next/router'
 
 const PasswordInfoPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
-  const { selectedPasslogItem } = usePasslogUserData()
+  const router = useRouter()
+  const { selectedPasslogItem, passwords, setPasswords, renderPasslogDataHandler } = usePasslogUserData()
   const [password, setPassword] = useState<PasswordProps>()
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState("")
+  const [showPasswordOptions, setShowPasswordOptions] = useState(false)
 
   useEffect(() => {
     // @ts-ignore
@@ -35,6 +40,58 @@ const PasswordInfoPage = () => {
     }
   }
 
+  const changePasswordData = (npw: PasswordProps) => {
+    const newData: PasswordProps = {
+      id: npw.id,
+      date: npw.date,
+      // @ts-ignore
+      profileName: npw.profileName ? npw.profileName : password?.profileName,
+      // @ts-ignore
+      user: npw.user ? npw.user : password?.user,
+      // @ts-ignore
+      email: npw.email ? npw.email : password?.email,
+      // @ts-ignore
+      password: npw.password ? npw.password : password?.password,
+      // @ts-ignore
+      comments: npw.comments ? npw.comments : password?.comments
+    }
+    try {
+      const newPasswords = passwords!.map((password) => {
+        if (password.id == newData.id) {
+          return newData
+        } else {
+          return password
+        }
+      })
+      setPassword(newData)
+      setPasswords!(newPasswords)
+      
+      setPasswordsInLocalStorage(newPasswords!)
+      renderPasslogDataHandler!()
+      setShowPasswordOptions(false)
+    } catch (error) {
+      setSnackbarMessage("There's been a problem")
+      setShowPasswordOptions(true)
+    }
+  }
+
+  const deletePassword = () => {
+    try {
+      setShowPasswordOptions(false)
+      const id = password!.id
+      const index = passwords!.map((password) => password.id).indexOf(id)
+      passwords!.splice(index, 1)
+      setPasswords!(passwords)
+
+      setPasswordsInLocalStorage(passwords!)
+      renderPasslogDataHandler!()
+      router.back()
+    } catch (error) {
+      setSnackbarMessage("There's been a problem")
+      setShowPasswordOptions(true)      
+    }
+  }
+
   return (
     <PageLayout className={styles.container}>
       <Header
@@ -44,7 +101,7 @@ const PasswordInfoPage = () => {
         title={password?.profileName ? password!.profileName : ""}
         showIcon
         icon={<MenuIcon style={{ color: theme.palette.text.primary }} />}
-        iconFunction={() => console.log('hi man')}
+        iconFunction={() => setShowPasswordOptions(true)}
       />
       <div className={styles.body}>
         {password?.user && (
@@ -113,6 +170,14 @@ const PasswordInfoPage = () => {
         open={openSnackbar}
         setOpen={setOpenSnackbar}
         message={snackbarMessage}
+      />
+      <PasswordOptions
+        open={showPasswordOptions}
+        //@ts-ignore
+        password={password ? password : {}}
+        setOpen={setShowPasswordOptions}
+        changePasswordData={changePasswordData}
+        deletePassword={deletePassword}
       />
     </PageLayout>
   )

@@ -92,15 +92,17 @@ const SettingsPage = () => {
           </div>
         </div>
         <div className={styles.signOutContainer}>
-          <Button
-            className={styles.cloudButton}
-            style={{ background: '#ff2e2e' }}
-            //onClick={createPassword}
-            variant="contained"
-            startIcon={<LogOutIcon />}
-          >
-            Log out
-          </Button>
+          {user && (
+            <Button
+              className={styles.cloudButton}
+              style={{ background: '#ff2e2e' }}
+              //onClick={createPassword}
+              variant="contained"
+              startIcon={<LogOutIcon />}
+            >
+              Log out
+            </Button>
+          )}
         </div>
       </div>
     </div>
