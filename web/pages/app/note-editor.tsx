@@ -23,12 +23,23 @@ const NoteEditorPage = () => {
   useEffect(() => {
     // @ts-ignore
     setNote(selectedPasslogItem)
-    console.log(selectedPasslogItem)
     // @ts-ignore
     setNoteTitle(selectedPasslogItem?.title ? selectedPasslogItem!.title : "")
     // @ts-ignore
     setNoteBody(selectedPasslogItem?.body! ? selectedPasslogItem!.body! : "")
   }, [selectedPasslogItem])
+
+  /*useEffect(() => {
+    window.addEventListener('beforeunload', (e) => {
+      console.log('adios')
+    })
+
+    return () => {
+      window.removeEventListener('beforeunload', (e) => {
+        console.log('adios')
+      })
+    }
+  }, [])*/
 
   const goBack = () => {
     router.back()
