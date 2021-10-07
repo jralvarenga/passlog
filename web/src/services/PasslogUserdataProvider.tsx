@@ -12,7 +12,6 @@ export const PasslogUserDataProvider = ({ children }: any) => {
   const [selectedPasslogItem, setSelectedPasslogItem] = useState<PasswordProps | CardProps | NoteProps | null>()
   const [cards, setCards] = useState<CardProps[]>([])
   const [notes, setNotes] = useState<NoteProps[]>([])
-  console.log({ cards, notes, passwords })
 
   const getData = async() => {
     //const user = returnCurrentUser()

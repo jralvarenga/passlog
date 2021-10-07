@@ -1,27 +1,10 @@
 import { CardProps, NoteProps, PasswordProps } from '../interfaces/interfaces'
-import { decryptCard, decryptNote, decryptPassword } from './encripter'
+import { decryptCard, decryptNote, decryptPassword, encryptCard, encryptNote, encryptPassword } from './encripter'
 
-const asyncLocalStorage = {
-  setItem: async (key: string, value: string) => {
-    await Promise.resolve()
-    localStorage.setItem(key, value)
-  },
-  getItem: async (key: string) => {
-    await Promise.resolve()
-    localStorage.getItem(key)
-  },
-  removeItem: async (key: string) => {
-    await Promise.resolve()
-    localStorage.removeItem(key)
-  },
-  clearAll: async () => {
-    await Promise.resolve()
-    localStorage.clear()
-  },
-}
+// Get methods
 
-export const getPasswordsFromLocalStorage = async(): Promise<PasswordProps[]> => {
-  const jsonPasswords = await asyncLocalStorage.getItem('passwords')
+export const getPasswordsFromLocalStorage = (): PasswordProps[] => {
+  const jsonPasswords = localStorage.getItem('profiles')
   let passwords: PasswordProps[] = jsonPasswords != null ? JSON.parse(jsonPasswords) : []
   
   passwords = passwords.map((password) => {
@@ -32,8 +15,8 @@ export const getPasswordsFromLocalStorage = async(): Promise<PasswordProps[]> =>
   return passwords
 }
 
-export const getCardsFromLocalStorage = async(): Promise<CardProps[]> => {
-  const jsonCards = await asyncLocalStorage.getItem('cards')
+export const getCardsFromLocalStorage = (): CardProps[] => {
+  const jsonCards = localStorage.getItem('cards')
   let cards: CardProps[] = jsonCards != null ? JSON.parse(jsonCards) : []
 
   cards = cards.map((card) => {
@@ -44,8 +27,8 @@ export const getCardsFromLocalStorage = async(): Promise<CardProps[]> => {
   return cards
 }
 
-export const getNotesFromLocalStorage = async(): Promise<NoteProps[]> => {
-  const jsonCards = await asyncLocalStorage.getItem('notes')
+export const getNotesFromLocalStorage = (): NoteProps[] => {
+  const jsonCards = localStorage.getItem('notes')
   let notes: NoteProps[] = jsonCards != null ? JSON.parse(jsonCards) : []
 
   notes = notes.map((note) => {
@@ -56,8 +39,8 @@ export const getNotesFromLocalStorage = async(): Promise<NoteProps[]> => {
   return notes
 }
 
-/*export const getSettings = async(): Promise<SettingsProps> => {
-  const jsonSettings = await asyncLocalStorage.getItem('settings')
+/*export const getSettings = (): SettingsProps => {
+  const jsonSettings = localStorage.getItem('settings')
   const settings: SettingsProps = jsonSettings != null ? JSON.parse(jsonSettings) : {
     pinNumber: '',
     useBiometrics: false,
@@ -69,9 +52,49 @@ export const getNotesFromLocalStorage = async(): Promise<NoteProps[]> => {
   return settings
 }
 
-export const getUserSettings = async(): Promise<UserSettingsProps> => {
-  const jsonSettings = await asyncLocalStorage.getItem('user')
+export const getUserSettings = (): UserSettingsProps => {
+  const jsonSettings = localStorage.getItem('user')
   const settings: UserSettingsProps = JSON.parse(jsonSettings!)
 
   return settings
+}*/
+
+// Set methods
+
+export const setPasswordsInLocalStorage = async(passwords: PasswordProps[]) => {
+  passwords = passwords.map((password) => encryptPassword(password))
+  const jsonValue = JSON.stringify(passwords)  
+  localStorage.setItem('profiles', jsonValue)
+}
+
+export const setCardsInLocalStorage = async(cards: CardProps[]) => {
+  cards = cards.map((card) => encryptCard(card))
+  const jsonValue = JSON.stringify(cards)
+  localStorage.setItem('cards', jsonValue)
+}
+
+export const setNotesInLocalStorage = async(notes: NoteProps[]) => {
+  notes = notes.map((note) => encryptNote(note))
+  const jsonValue = JSON.stringify(notes)
+  localStorage.setItem('notes', jsonValue)
+}
+
+/*export const setSettingsInLocalStorage = async(settings: SettingsProps) => {
+  const jsonValue = JSON.stringify(settings)
+  localStorage.setItem('settings', jsonValue)
+}
+
+export const setUserSettings = async(settings: UserSettingsProps) => {
+  const jsonValue = JSON.stringify(settings)
+  localStorage.setItem('user', jsonValue)
+}
+
+// Delete methods
+
+export const removeUserSettings = () => {
+  localStorage.removeItem('user')
+}
+
+export const wipeAllStorageData = () => {
+  localStorage.clear()
 }*/

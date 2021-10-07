@@ -80,9 +80,12 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     overflowY: 'scroll',
     overflowX: 'hidden',
     display: 'flex',
-    flexWrap: 'wrap',
     marginLeft: -10,
+    [theme.breakpoints.up('sm')]: {
+      flexWrap: 'wrap',
+    },
     [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
       alignItems: 'center',
       marginLeft: 0,
     },

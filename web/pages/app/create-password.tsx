@@ -10,11 +10,15 @@ import { PasswordProps } from '../../src/interfaces/interfaces'
 import { createId } from '../../src/lib/createId'
 import { useRouter } from 'next/router'
 import PageLayout from '../../src/components/PageLayout'
+import { usePasslogUserData } from '../../src/services/PasslogUserdataProvider'
+import { setPasswordsInLocalStorage } from '../../src/lib/localStorage'
+import AppSnackbar from '../../src/components/AppSnackbar'
 
 const CreatePasswordPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
   const router = useRouter()
+  const { passwords, setPasswords, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [user, setUser] = useState("")
   const [email, setEmail] = useState("")
@@ -22,6 +26,8 @@ const CreatePasswordPage = () => {
   const [comments, setComments] = useState("")
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [showSnackbar, setShowSnackbar] = useState(false)
+  const [snackbarText, setSnackbarText] = useState("")
 
   useEffect(() => {
     const { query } = router
@@ -29,22 +35,31 @@ const CreatePasswordPage = () => {
     setPassword(gnp)
   }, [router])
 
-  const createPassword = () => {
+  const createPassword = async() => {
     setLoading(true)
-    const currentDate = new Date()
-    currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
-    const newPassword: PasswordProps = {
-      id: createId(),
-      profileName: name,
-      user: user,
-      email: email,
-      password: password,
-      comments: comments,
-      date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
+    try {
+      const currentDate = new Date()
+      currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
+      const newPassword: PasswordProps = {
+        id: createId(),
+        profileName: name,
+        user: user,
+        email: email,
+        password: password,
+        comments: comments,
+        date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
+      }
+      passwords!.push(newPassword)
+      setPasswords!(passwords)
+      
+      setPasswordsInLocalStorage(passwords!)
+      renderPasslogDataHandler!()
+      setLoading(false)
+      router.back()
+    } catch (error) {
+      setSnackbarText("There's been an error, try later")
+      setShowSnackbar(true)
     }
-    console.log(newPassword)
-    setLoading(false)
-    router.back()
   }
 
   return (
@@ -167,6 +182,11 @@ const CreatePasswordPage = () => {
           </LoadingButton>
         </div>
       </div>
+      <AppSnackbar
+        open={showSnackbar}
+        setOpen={setShowSnackbar}
+        message={snackbarText}
+      />
     </PageLayout>
   )
 }

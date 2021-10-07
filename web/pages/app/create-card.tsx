@@ -10,16 +10,23 @@ import { CardProps } from '../../src/interfaces/interfaces'
 import { createId } from '../../src/lib/createId'
 import { useRouter } from 'next/router'
 import PageLayout from '../../src/components/PageLayout'
+import { usePasslogUserData } from '../../src/services/PasslogUserdataProvider'
+import { setCardsInLocalStorage } from '../../src/lib/localStorage'
+import AppSnackbar from '../../src/components/AppSnackbar'
 
 const CreateCardPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
   const router = useRouter()
+  const { cards, setCards, renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
   const [type, setType] = useState("")
   const [holder, setHolder] = useState("")
   const [number, setNumber] = useState("")
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showSnackbar, setShowSnackbar] = useState(false)
+  const [snackbarText, setSnackbarText] = useState("")
 
   useEffect(() => {
     const { query } = router
@@ -29,20 +36,29 @@ const CreateCardPage = () => {
 
   const createCard = () => {
     setLoading(true)
-    const currentDate = new Date()
-    currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
-    const newCard: CardProps = {
-      id: createId(),
-      type: type,
-      cardName: name,
-      holder: holder,
-      number: number,
-      addedInfo: "",
-      date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
+    try {
+      const currentDate = new Date()
+      currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
+      const newCard: CardProps = {
+        id: createId(),
+        type: type,
+        cardName: name,
+        holder: holder,
+        number: number,
+        addedInfo: "",
+        date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
+      }
+      cards!.push(newCard)
+      setCards!(cards)
+
+      setCardsInLocalStorage(cards!)
+      renderPasslogDataHandler!()
+      setLoading(false)
+      router.back()
+    } catch (error) {
+      setSnackbarText("There's been an error, try later")
+      setShowSnackbar(true)      
     }
-    console.log(newCard)
-    setLoading(false)
-    router.back()
   }
 
   return (
@@ -131,6 +147,11 @@ const CreateCardPage = () => {
           </LoadingButton>
         </div>
       </div>
+      <AppSnackbar
+        open={showSnackbar}
+        setOpen={setShowSnackbar}
+        message={snackbarText}
+      />
     </PageLayout>
   )
 }
