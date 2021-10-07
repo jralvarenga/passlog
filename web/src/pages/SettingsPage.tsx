@@ -1,49 +1,72 @@
 import { Theme, Button  } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
-import { Google as GoogleIcon, Settings as AppSettingsIcon, Person as AccountSettingsIcon, Star as StarIcon } from '@mui/icons-material'
+import { Google as GoogleIcon, Settings as AppSettingsIcon, Person as AccountSettingsIcon, Star as StarIcon, Logout as LogOutIcon } from '@mui/icons-material'
+import { usePasslogUserData } from '../services/PasslogUserdataProvider'
+import { getCloudAvailableSpace, objectMemorySize } from '../lib/objectMemorySize'
 
 const PADDING = 20
 
 const SettingsPage = () => {
   const styles = styleSheet()
+  const { passwords, cards, notes } = usePasslogUserData()
+  const user = "null"
 
   return (
     <div className={styles.container}>
       <div className={styles.titleContainer}>
         <span className={styles.name}>
-          Rigo Alvarenga
+          {user ? (
+            "Rigo Alvarenga"
+          ) : (
+            "No user"
+          )}
         </span>
         <span className={styles.dataCount}>
-          24 passwords & 5 cards
+          {passwords?.length} passwords, {cards?.length} cards & {notes?.length} notes
         </span>
       </div>
       <div className={styles.body}>
         <div className={styles.storageSizeContainer}>
           <div className={styles.storageSizeBox}>
             <span>
-              4.368 KiB used in storage
+              {objectMemorySize({ passwords, cards, notes })} used in storage
             </span>
-            <span>
-              295.631 Kib available in Cloud
-            </span>
+            {user && (
+              <span>
+                {getCloudAvailableSpace(objectMemorySize({ passwords, cards, notes }))} available in Cloud
+              </span>
+            )}
           </div>
           <div className={styles.buttonsContainer}>
-            <Button
-              className={styles.cloudButton}
-              //onClick={createPassword}
-              variant="contained"
-            >
-              Cloud settings
-            </Button>
-            <Button
-              className={styles.cloudButton}
-              style={{ background: '#fff', color: '#000' }}
-              //onClick={createPassword}
-              variant="contained"
-              startIcon={<GoogleIcon />}
-            >
-              Passwords
-            </Button>
+            {user ? (
+              <>
+                <Button
+                  className={styles.cloudButton}
+                  //onClick={createPassword}
+                  variant="contained"
+                >
+                  Cloud settings
+                </Button>
+                <a 
+                  href="https://passwords.google.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.cloudButton}
+                >
+                  <Button
+                    className={styles.cloudButton}
+                    style={{ background: '#fff', color: '#000', width: '100%' }}
+                    //onClick={createPassword}
+                    variant="contained"
+                    startIcon={<GoogleIcon />}
+                  >
+                    Passwords
+                  </Button>
+                </a>
+              </>
+            ) : (
+              <div></div>
+            )}
           </div>
         </div>
         <div className={styles.optionsContainer}>
@@ -53,12 +76,14 @@ const SettingsPage = () => {
               App settings
             </span>
           </div>
-          <div className={styles.optionBox}>
-            <AccountSettingsIcon style={{ marginRight: 10 }} />
-            <span style={{ fontWeight: 'bold' }}>
-              Account settings
-            </span>
-          </div>
+          {user && (
+            <div className={styles.optionBox}>
+              <AccountSettingsIcon style={{ marginRight: 10 }} />
+              <span style={{ fontWeight: 'bold' }}>
+                Account settings
+              </span>
+            </div>
+          )}
           <div className={styles.optionBox}>
             <StarIcon style={{ marginRight: 10 }} />
             <span style={{ fontWeight: 'bold' }}>
@@ -72,6 +97,7 @@ const SettingsPage = () => {
             style={{ background: '#ff2e2e' }}
             //onClick={createPassword}
             variant="contained"
+            startIcon={<LogOutIcon />}
           >
             Log out
           </Button>
