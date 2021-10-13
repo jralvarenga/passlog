@@ -1,15 +1,20 @@
-import { Theme, useTheme } from '@mui/material'
+import { Theme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import { useState } from 'react'
+import { Player } from '@lottiefiles/react-lottie-player'
 import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 import PasswordContainer from '../components/PasswordContainer'
 import SearchBar from '../components/SearchBar'
 import TopBar, { TOPBAR_HEIGHT, TOPBAR_HEIGHT_MOBILE } from '../components/TopBar'
 import { usePasslogUserData } from '../services/PasslogUserdataProvider'
+import lockedAnimation from '../assets/animations/locked.json'
+import EmptyDataDiv from '../components/EmptyDataDiv'
+import { useRouter } from 'next/router'
 
 const PasswordsPage = () => {
   const styles = styleSheet()
   const { passwords, setPasswords } = usePasslogUserData()
+  const router = useRouter()
   const [searchInput, setSearchInput] = useState("")
   const [showGeneratePassword, setShowGeneratePassword] = useState(false)
 
@@ -25,14 +30,28 @@ const PasswordsPage = () => {
             buttonFunction={() => setShowGeneratePassword(true)}
           />
         </div>
-        <div className={styles.passwordsContainer}>
-          {passwords?.map((password, i) => (
-            <PasswordContainer
-              key={i}
-              password={password}
+        {passwords?.length != 0 ? (
+          <div className={styles.passwordsContainer}>
+            {passwords?.map((password, i) => (
+              <PasswordContainer
+                key={i}
+                password={password}
+              />
+            ))}
+          </div>
+        ) : (
+          <EmptyDataDiv
+            text="Start adding your passwords and keep them safe here"
+            buttonFunction={() => router.push('/app/create-password')}
+          >
+            <Player
+              autoplay
+              loop
+              src={lockedAnimation}
+              className={styles.animationContainer}
             />
-          ))}
-        </div>
+          </EmptyDataDiv>
+        )}
       </div>
       <GeneratePasswordSheet
         open={showGeneratePassword}
@@ -89,6 +108,10 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
       alignItems: 'center',
       marginLeft: 0,
     },
+  },
+  animationContainer: {
+    width: 250,
+    height: 250,
   }
 }))
 

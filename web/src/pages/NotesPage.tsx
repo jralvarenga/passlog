@@ -1,17 +1,50 @@
-import { Theme, useTheme } from '@mui/material'
+import { Theme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import { useState } from 'react'
+import { Player } from '@lottiefiles/react-lottie-player'
 import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 import NoteContainer from '../components/NoteContainer'
 import SearchBar from '../components/SearchBar'
 import TopBar, { TOPBAR_HEIGHT, TOPBAR_HEIGHT_MOBILE } from '../components/TopBar'
 import { usePasslogUserData } from '../services/PasslogUserdataProvider'
+import notesAnimation from '../assets/animations/notes.json'
+import EmptyDataDiv from '../components/EmptyDataDiv'
+import { useRouter } from 'next/router'
+import { createId } from '../lib/createId'
+import { NoteProps } from '../interfaces/interfaces'
+import { setNotesInLocalStorage } from '../lib/localStorage'
+import AppSnackbar from '../components/AppSnackbar'
 
 const NotesPage = () => {
   const styles = styleSheet()
-  const { notes, setNotes } = usePasslogUserData()
+  const { notes, setNotes, renderPasslogDataHandler, setSelectedPasslogItem } = usePasslogUserData()
+  const router = useRouter()
   const [searchInput, setSearchInput] = useState("")
-  const [showGeneratePassword, setShowGeneratePassword] = useState(false)
+  const [showSnackbar, setShowSnackbar] = useState(false)
+  const [snackbarText, setSnackbarText] = useState("")
+
+  const createNote = async() => {
+    try {
+      const currentDate = new Date()
+        currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
+        const newNote: NoteProps = {
+          id: createId(),
+          title: "New Note",
+          body: "",
+          date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
+        }
+        notes?.push(newNote)
+        setNotes!(notes!)
+
+        setNotesInLocalStorage(notes!)
+        renderPasslogDataHandler!()
+        setSelectedPasslogItem!(newNote)
+        router.push('/app/note-editor')
+    } catch (error) {
+      setSnackbarText("There's been an error, try later")
+      setShowSnackbar(true)
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -22,21 +55,34 @@ const NotesPage = () => {
             type="note"
             value={searchInput}            
             setValue={setSearchInput}
-            buttonFunction={() => setShowGeneratePassword(true)}
           />
         </div>
-        <div className={styles.notesContainer}>
-          {notes?.map((note, i) => (
-            <NoteContainer
-              key={i}
-              note={note}
+        {notes?.length != 0 ? (
+          <div className={styles.notesContainer}>
+            {notes?.map((note, i) => (
+              <NoteContainer
+                key={i}
+                note={note}
+              />
+            ))}
+          </div>
+        ) : (
+          <EmptyDataDiv
+            text="Start writing your secret notes and keep them safe here"
+            buttonFunction={createNote}
+          >
+            <Player
+              autoplay
+              src={notesAnimation}
+              className={styles.animationContainer}
             />
-          ))}
-        </div>
+          </EmptyDataDiv>
+        )}
       </div>
-      <GeneratePasswordSheet
-        open={showGeneratePassword}
-        setOpen={setShowGeneratePassword}
+      <AppSnackbar
+        open={showSnackbar}
+        setOpen={setShowSnackbar}
+        message={snackbarText}
       />
     </div>
   )
@@ -90,6 +136,10 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
       marginLeft: 0,
     },
   },
+  animationContainer: {
+    width: 250,
+    height: 250,
+  }
 }))
 
 export default NotesPage

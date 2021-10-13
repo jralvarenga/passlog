@@ -113,7 +113,7 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
   container: {
     width: '100%',
     maxWidth: 800,
-    height: '100vh',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     [theme.breakpoints.down('sm')]: {
@@ -196,7 +196,7 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     flex: 1,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   }
 }))
 

@@ -44,8 +44,7 @@ const TopBar = ({ title }: TopBarProps)  => {
         router.push('/app/note-editor')
     } catch (error) {
       setSnackbarText("There's been an error, try later")
-      setShowSnackbar(true)
-      
+      setShowSnackbar(true) 
     }
   }
 

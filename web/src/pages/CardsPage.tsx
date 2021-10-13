@@ -6,12 +6,17 @@ import GeneratePasswordSheet from '../components/GeneratePasswordSheet'
 import SearchBar from '../components/SearchBar'
 import TopBar, { TOPBAR_HEIGHT, TOPBAR_HEIGHT_MOBILE } from '../components/TopBar'
 import { usePasslogUserData } from '../services/PasslogUserdataProvider'
+import cardsAnimation from '../assets/animations/cards.json'
+import EmptyDataDiv from '../components/EmptyDataDiv'
+import { Player } from '@lottiefiles/react-lottie-player'
+import { useRouter } from 'next/router'
 
 const CardsPage = () => {
   const styles = styleSheet()
   const { cards, setCards } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
   const [showGeneratePassword, setShowGeneratePassword] = useState(false)
+  const router = useRouter()
 
   return (
     <div className={styles.container}>
@@ -25,14 +30,28 @@ const CardsPage = () => {
             buttonFunction={() => setShowGeneratePassword(true)}
           />
         </div>
-        <div className={styles.cardsContainer}>
-          {cards?.map((card, i) => (
-            <CardContainer
-              key={i}
-              card={card}
+        {cards?.length != 0 ? (
+          <div className={styles.cardsContainer}>
+            {cards?.map((card, i) => (
+              <CardContainer
+                key={i}
+                card={card}
+              />
+            ))}
+          </div>
+        ) : (
+          <EmptyDataDiv
+            text="Keep all your cards, codes, etc. safe in Cards"
+            buttonFunction={() => router.push('/app/create-card')}
+          >
+            <Player
+              autoplay
+              loop
+              src={cardsAnimation}
+              className={styles.animationContainer}
             />
-          ))}
-        </div>
+          </EmptyDataDiv>
+        )}
       </div>
       <GeneratePasswordSheet
         open={showGeneratePassword}
@@ -89,6 +108,10 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
       alignItems: 'center',
       marginLeft: 0,
     },
+  },
+  animationContainer: {
+    width: 250,
+    height: 250,
   }
 }))
 

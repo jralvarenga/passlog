@@ -8,7 +8,7 @@ interface NavBarProps {
 }
 
 export const NAVBAR_WIDHT = 70
-export const NAVBAR_HEIGHT = 60
+export const NAVBAR_HEIGHT = 70
 
 const NavBar = ({ index, setIndex }: NavBarProps) => {
   const styles = styleSheet()
