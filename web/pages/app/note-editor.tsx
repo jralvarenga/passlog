@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { NoteProps } from '../../src/interfaces/interfaces'
 import { usePasslogUserData } from '../../src/services/PasslogUserdataProvider'
 import { useRouter } from 'next/router'
+import { setNotesInLocalStorage } from '../../src/lib/localStorage'
 import { ArrowBackIosNew as ArrowBackIosNewIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Header from '../../src/components/Header'
 
@@ -12,7 +13,7 @@ export const HEADERBAR_HEIGHT = '16%'
 const NoteEditorPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
-  const { selectedPasslogItem } = usePasslogUserData()
+  const { notes, setNotes, renderPasslogDataHandler, selectedPasslogItem } = usePasslogUserData()
   const router = useRouter()
   const [note, setNote] = useState<NoteProps>()
   const [noteTitle, setNoteTitle] = useState("")
@@ -29,20 +30,27 @@ const NoteEditorPage = () => {
     setNoteBody(selectedPasslogItem?.body! ? selectedPasslogItem!.body! : "")
   }, [selectedPasslogItem])
 
-  /*useEffect(() => {
-    window.addEventListener('beforeunload', (e) => {
-      console.log('adios')
-    })
-
-    return () => {
-      window.removeEventListener('beforeunload', (e) => {
-        console.log('adios')
-      })
-    }
-  }, [])*/
-
   const goBack = () => {
+    saveChanges()
     router.back()
+  }
+
+  const saveChanges = async() => {
+    const newData: NoteProps = {
+      ...note!,
+      title: noteTitle,
+      body: noteBody
+    }
+    const newNotes = notes!.map((note) => {
+      if (note.id == newData.id) {
+        return newData
+      } else {
+        return note
+      }
+    })
+    setNotes!(newNotes)
+    setNotesInLocalStorage(newNotes)
+    renderPasslogDataHandler!()
   }
 
   return (
@@ -67,6 +75,7 @@ const NoteEditorPage = () => {
               type="text"
               value={noteTitle}
               ref={titleRef}
+              onBlur={saveChanges}
               onChange={(e) => setNoteTitle(e.target.value)}
               className={styles.inputTitle}
             />
@@ -88,6 +97,7 @@ const NoteEditorPage = () => {
           className={styles.bodyInput}
           value={noteBody}
           ref={bodyRef}
+          onBlur={saveChanges}
           onChange={(e) => setNoteBody(e.target.value)}
         />
       </div>

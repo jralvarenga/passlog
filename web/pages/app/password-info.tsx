@@ -17,7 +17,7 @@ const PasswordInfoPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
   const router = useRouter()
-  const { selectedPasslogItem, passwords, setPasswords, renderPasslogDataHandler } = usePasslogUserData()
+  const { selectedPasslogItem, passwords, setPasswords, renderPasslogDataHandler, setSelectedPasslogItem } = usePasslogUserData()
   const [password, setPassword] = useState<PasswordProps>()
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState("")
@@ -83,6 +83,7 @@ const PasswordInfoPage = () => {
       passwords!.splice(index, 1)
       setPasswords!(passwords)
 
+      setSelectedPasslogItem!(null)
       setPasswordsInLocalStorage(passwords!)
       renderPasslogDataHandler!()
       router.back()

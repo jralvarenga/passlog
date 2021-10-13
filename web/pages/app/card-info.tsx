@@ -5,15 +5,18 @@ import HeaderNavigationBar, { HEADERBAR_HEIGHT } from '../../src/components/Head
 import PageLayout from '../../src/components/PageLayout'
 import { CardProps } from '../../src/interfaces/interfaces'
 import { usePasslogUserData } from '../../src/services/PasslogUserdataProvider'
-import {Mail as EmailIcon, Lock as CardIcon, FileCopy as ContentCopyIcon, Menu as MenuIcon } from '@mui/icons-material'
+import {Mail as EmailIcon, Lock as CardIcon, FileCopy as ContentCopyIcon, DeleteOutlined as DeleteIcon } from '@mui/icons-material'
 import copy from 'copy-to-clipboard'
 import AppSnackbar from '../../src/components/AppSnackbar'
 import Header from '../../src/components/Header'
+import { setCardsInLocalStorage } from '../../src/lib/localStorage'
+import { useRouter } from 'next/router'
 
 const CardInfoPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
-  const { selectedPasslogItem } = usePasslogUserData()
+  const { cards, setCards, renderPasslogDataHandler, selectedPasslogItem, setSelectedPasslogItem } = usePasslogUserData()
+  const router = useRouter()
   const [card, setCard] = useState<CardProps>()
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState("")
@@ -35,6 +38,22 @@ const CardInfoPage = () => {
     }
   }
 
+  const deleteCardHandler = async() => {
+    try {
+      const id = card!.id
+      const index = cards!.map((card) => card.id).indexOf(id)
+      cards!.splice(index, 1)
+      setCards!(cards)
+
+      setCardsInLocalStorage(cards!)
+      renderPasslogDataHandler!()
+      setSelectedPasslogItem!(null)
+      router.back()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <PageLayout className={styles.container}>
       <Header
@@ -43,8 +62,8 @@ const CardInfoPage = () => {
       <HeaderNavigationBar
         title={card?.cardName ? card!.cardName : ""}
         showIcon
-        icon={<MenuIcon style={{ color: theme.palette.text.primary }} />}
-        iconFunction={() => console.log('hi man')}
+        icon={<DeleteIcon style={{ color: theme.palette.text.primary }} />}
+        iconFunction={deleteCardHandler}
       />
       <div className={styles.body}>
         <span style={{ fontSize: 14 }}>
