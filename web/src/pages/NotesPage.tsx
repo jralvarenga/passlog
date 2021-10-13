@@ -46,6 +46,21 @@ const NotesPage = () => {
     }
   }
 
+  const sortedNotes = notes?.sort((a: NoteProps, b: NoteProps) => {
+    if (a.title! > b.title!) {
+      return 1
+    }
+    if (a.title! < b.title!) {
+      return -1
+    }
+    return 0
+  })
+
+  const filteredNotes = sortedNotes?.filter((notes: NoteProps) =>
+    notes.title?.toLowerCase().includes(searchInput.toLowerCase()) ||
+    notes.body?.toLowerCase().includes(searchInput.toLowerCase())
+  )
+
   return (
     <div className={styles.container}>
       <TopBar title="Notes" />
@@ -59,7 +74,7 @@ const NotesPage = () => {
         </div>
         {notes?.length != 0 ? (
           <div className={styles.notesContainer}>
-            {notes?.map((note, i) => (
+            {filteredNotes?.map((note, i) => (
               <NoteContainer
                 key={i}
                 note={note}

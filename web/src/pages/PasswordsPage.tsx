@@ -10,6 +10,7 @@ import { usePasslogUserData } from '../services/PasslogUserdataProvider'
 import lockedAnimation from '../assets/animations/locked.json'
 import EmptyDataDiv from '../components/EmptyDataDiv'
 import { useRouter } from 'next/router'
+import { PasswordProps } from '../interfaces/interfaces'
 
 const PasswordsPage = () => {
   const styles = styleSheet()
@@ -17,6 +18,22 @@ const PasswordsPage = () => {
   const router = useRouter()
   const [searchInput, setSearchInput] = useState("")
   const [showGeneratePassword, setShowGeneratePassword] = useState(false)
+
+  const sortedPasswords = passwords?.sort((a: PasswordProps, b: PasswordProps) => {
+    if (a.profileName > b.profileName) {
+      return 1
+    }
+    if (a.profileName < b.profileName) {
+      return -1
+    }
+    return 0
+  })
+
+  const filteredPasswords = sortedPasswords?.filter((password: PasswordProps) =>
+    password.profileName.toLowerCase().includes(searchInput.toLowerCase()) ||
+    password.email.toLowerCase().includes(searchInput.toLowerCase()) ||
+    password.user.toLowerCase().includes(searchInput.toLowerCase())
+  )
 
   return (
     <div className={styles.container}>
@@ -32,7 +49,7 @@ const PasswordsPage = () => {
         </div>
         {passwords?.length != 0 ? (
           <div className={styles.passwordsContainer}>
-            {passwords?.map((password, i) => (
+            {filteredPasswords?.map((password, i) => (
               <PasswordContainer
                 key={i}
                 password={password}
@@ -46,7 +63,7 @@ const PasswordsPage = () => {
           >
             <Player
               autoplay
-              loop
+              keepLastFrame
               src={lockedAnimation}
               className={styles.animationContainer}
             />

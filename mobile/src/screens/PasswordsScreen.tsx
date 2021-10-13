@@ -46,10 +46,10 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
     return 0
   })
 
-  const filteredPasswords = sortedPasswords?.filter((profiles: PasswordProps) =>
-    profiles.profileName.toLowerCase().includes(searchInput.toLowerCase()) ||
-    profiles.email.toLowerCase().includes(searchInput.toLowerCase()) ||
-    profiles.user.toLowerCase().includes(searchInput.toLowerCase())
+  const filteredPasswords = sortedPasswords?.filter((password: PasswordProps) =>
+    password.profileName.toLowerCase().includes(searchInput.toLowerCase()) ||
+    password.email.toLowerCase().includes(searchInput.toLowerCase()) ||
+    password.user.toLowerCase().includes(searchInput.toLowerCase())
   )
 
   return (

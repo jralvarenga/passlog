@@ -10,6 +10,7 @@ import cardsAnimation from '../assets/animations/cards.json'
 import EmptyDataDiv from '../components/EmptyDataDiv'
 import { Player } from '@lottiefiles/react-lottie-player'
 import { useRouter } from 'next/router'
+import { CardProps } from '../interfaces/interfaces'
 
 const CardsPage = () => {
   const styles = styleSheet()
@@ -17,6 +18,22 @@ const CardsPage = () => {
   const [searchInput, setSearchInput] = useState("")
   const [showGeneratePassword, setShowGeneratePassword] = useState(false)
   const router = useRouter()
+
+  const sortedCards = cards?.sort((a: CardProps, b: CardProps) => {
+    if (a.cardName > b.cardName) {
+      return 1
+    }
+    if (a.cardName < b.cardName) {
+      return -1
+    }
+    return 0
+  })
+
+  const filteredCards = sortedCards?.filter((card: CardProps) =>
+    card.cardName.toLowerCase().includes(searchInput.toLowerCase()) ||
+    card.holder.toLowerCase().includes(searchInput.toLowerCase()) ||
+    card.type.toLowerCase().includes(searchInput.toLowerCase())
+  )
 
   return (
     <div className={styles.container}>
@@ -32,7 +49,7 @@ const CardsPage = () => {
         </div>
         {cards?.length != 0 ? (
           <div className={styles.cardsContainer}>
-            {cards?.map((card, i) => (
+            {filteredCards?.map((card, i) => (
               <CardContainer
                 key={i}
                 card={card}
@@ -45,8 +62,8 @@ const CardsPage = () => {
             buttonFunction={() => router.push('/app/create-card')}
           >
             <Player
+              keepLastFrame
               autoplay
-              loop
               src={cardsAnimation}
               className={styles.animationContainer}
             />
