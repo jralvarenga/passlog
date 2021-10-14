@@ -1,15 +1,18 @@
-import { Theme, Button  } from '@mui/material'
+import { Theme, Button, useTheme  } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import { Google as GoogleIcon, Settings as AppSettingsIcon, Person as AccountSettingsIcon, Star as StarIcon, Logout as LogOutIcon } from '@mui/icons-material'
 import { usePasslogUserData } from '../services/PasslogUserdataProvider'
 import { getCloudAvailableSpace, objectMemorySize } from '../lib/objectMemorySize'
+import { useRouter } from 'next/router'
 
 const PADDING = 20
 
 const SettingsPage = () => {
   const styles = styleSheet()
+  const theme = useTheme()
   const { passwords, cards, notes } = usePasslogUserData()
-  const user = "null"
+  const router = useRouter()
+  const user = null
 
   return (
     <div className={styles.container}>
@@ -76,20 +79,27 @@ const SettingsPage = () => {
               App settings
             </span>
           </div>
-          {user && (
+          {user ? (
             <div className={styles.optionBox}>
               <AccountSettingsIcon style={{ marginRight: 10 }} />
               <span style={{ fontWeight: 'bold' }}>
                 Account settings
               </span>
             </div>
+          ) : (
+            <div onClick={() => router.push('/app/account/login')} className={styles.optionBox} style={{ background: theme.palette.primary.main }}>
+              <AccountSettingsIcon style={{ marginRight: 10 }} />
+              <span style={{ fontWeight: 'bold' }}>
+                Login or create account
+              </span>
+            </div>
           )}
-          <div className={styles.optionBox}>
+          {/*<div className={styles.optionBox}>
             <StarIcon style={{ marginRight: 10 }} />
             <span style={{ fontWeight: 'bold' }}>
               Rate app & give feedback
             </span>
-          </div>
+          </div>*/}
         </div>
         <div className={styles.signOutContainer}>
           {user && (
