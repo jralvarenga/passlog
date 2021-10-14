@@ -32,7 +32,6 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
   const [showUnsaveSheet, setShowUnsavedSheet] = useState(false)
-  const [loading, setLoading] = useState(false)
   const noteTitleRef = useRef<TextInput>(null)
   const noteBodyRef = useRef<TextInput>(null)
 
@@ -54,7 +53,6 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   }
 
   const saveChanges = async() => {
-    setLoading(true)
     noteBodyRef.current?.blur()
     noteTitleRef.current?.blur()
     const newNoteData: NoteProps = {
@@ -77,6 +75,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
       await updatePasslogDocument(encrypted, 'notes')
     }
     setHasUnsavedChanges(false)
+    setShowUnsavedSheet(false)
     renderPasslogDataHandler!()
     Snackbar.show({
       text: t('saved_changes'),
@@ -84,7 +83,6 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
       textColor: theme.colors.text,
       backgroundColor: theme.colors.primary
     })
-    setLoading(false)
   }
 
   const unsaveAndGoback = () => {
