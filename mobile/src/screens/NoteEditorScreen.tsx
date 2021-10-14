@@ -31,14 +31,10 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
   const [noteTitle, setNoteTitle] = useState("")
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [showBottomSheet, setShowBottomSheet] = useState(false)
-  const [editBody, setEditBody] = useState(false)
-  const [editTitle, setEditTitle] = useState(false)
   const [showUnsaveSheet, setShowUnsavedSheet] = useState(false)
   const [loading, setLoading] = useState(false)
   const noteTitleRef = useRef<TextInput>(null)
   const noteBodyRef = useRef<TextInput>(null)
-  const doubleTapTitle = createRef()
-  const doubleTapBody = createRef()
 
   useEffect(() => {
     const note: NoteProps = route.params.note
@@ -61,8 +57,6 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
     setLoading(true)
     noteBodyRef.current?.blur()
     noteTitleRef.current?.blur()
-    setEditBody(false)
-    setEditTitle(false)
     const newNoteData: NoteProps = {
       id: noteInfo!.id,
       body: noteBody,
@@ -93,15 +87,6 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
     setLoading(false)
   }
 
-  useEffect(() => navigation.addListener('beforeRemove', (e: any) => {
-    if (!hasUnsavedChanges) {
-      return
-    }
-    
-    e.preventDefault()
-    setShowUnsavedSheet(true)
-  }), [navigation, hasUnsavedChanges])
-
   const unsaveAndGoback = () => {
     setHasUnsavedChanges(false)
     setShowBottomSheet(false)
@@ -114,14 +99,15 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
     navigation.goBack()
   }
 
-  useEffect(() => {
-    Snackbar.show({
-      text: t('double_tap_to_edit'),
-      fontFamily: 'poppins',
-      textColor: theme.colors.text,
-      backgroundColor: theme.colors.primary
-    })
-  }, [])
+  useEffect(() => navigation.addListener('beforeRemove', (e: any) => {
+    if (!hasUnsavedChanges) {
+      return
+    }
+    
+    e.preventDefault()
+    setShowUnsavedSheet(true)
+  }), [navigation, hasUnsavedChanges])
+
 
   const deleteNote = async() => {
     setHasUnsavedChanges(false)
@@ -140,19 +126,9 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
     navigation.goBack()
   }
 
-  const enableEditing = (type: 'title' | 'body') => {
-    if (type == 'body') {
-      setEditBody(true)
-      noteBodyRef.current?.focus()
-    } else {
-      setEditTitle(true)
-      noteTitleRef.current?.focus()
-    }
-  }
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.headerContainer}>
+      <View style={styles.headerContainer}>
         <View style={styles.headerInfo}>
           <View style={styles.goBackContainer}>
             <Icon
@@ -164,30 +140,15 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
             />
           </View>
           <View style={styles.pageName}>
-            {editTitle ? (
-              <TextInput
+            <TextInput
               style={[styles.text, { fontSize: 28, fontFamily: 'poppins-bold' }]}
-                value={noteTitle}
-                textAlignVertical="center"
-                selectionColor={theme.colors.primary}
-                ref={noteTitleRef}
-                onBlur={saveChanges}
-                onChangeText={(value) => changeNoteInfo(value, 'title')}
-              />
-            ) : (
-              <TapGestureHandler
-                onActivated={() => enableEditing('title')}
-                ref={doubleTapTitle}
-                numberOfTaps={2}
-              >
-                <Text
-                  selectable
-                  style={[styles.text, { fontSize: 28, fontFamily: 'poppins-bold' }]}
-                >
-                  {noteTitle}
-                </Text>
-              </TapGestureHandler>
-            )}
+              value={noteTitle}
+              textAlignVertical="center"
+              selectionColor={theme.colors.primary}
+              ref={noteTitleRef}
+              onBlur={saveChanges}
+              onChangeText={(value) => changeNoteInfo(value, 'title')}
+            />
           </View>
         </View>
         <View style={styles.headerOptions}>
@@ -203,43 +164,17 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
           </View>
         </View>
       </View>
-      <View style={styles.editContainer}>
-        {hasUnsavedChanges && (
-          <Button
-            loading={loading}
-            titleStyle={styles.text}
-            containerStyle={{ width: '40%' }}
-            title={t('save_changes')}
-            onPress={saveChanges}
-          />
-        )}
-      </View>
       <View style={styles.bodyContainer}>
-        {editBody ? (
-          <TextInput
-            style={styles.noteBodyInput}
-            value={noteBody}
-            multiline={true}
-            textAlignVertical="top"
-            selectionColor={theme.colors.primary}
-            ref={noteBodyRef}
-            onBlur={saveChanges}
-            onChangeText={(value) => changeNoteInfo(value, 'body')}
-          />
-        ) : (
-          <TapGestureHandler
-            onActivated={() => enableEditing('body')}
-            ref={doubleTapBody}
-            numberOfTaps={2}
-          >
-            <Text
-              selectable
-              style={styles.noteBodyInput}
-            >
-              {noteBody}
-            </Text>
-          </TapGestureHandler>
-        )}
+        <TextInput
+          style={styles.noteBodyInput}
+          value={noteBody}
+          multiline={true}
+          textAlignVertical="top"
+          selectionColor={theme.colors.primary}
+          ref={noteBodyRef}
+          onBlur={saveChanges}
+          onChangeText={(value) => changeNoteInfo(value, 'body')}
+        />
       </View>
       <NoteOptionsSheet
         name={noteInfo?.title ? noteInfo?.title : ""}
@@ -261,7 +196,7 @@ const NoteEditorScreen = ({ route, navigation }: NoteEditorScreenProps) => {
 const styleSheet = (theme: Theme) => StyleSheet.create({
   headerContainer: {
     width: '100%',
-    height: WINDOW_HEIGHT * 0.15,
+    height: WINDOW_HEIGHT * 0.17,
     display: 'flex',
     flexDirection: 'row',
     padding: 10

@@ -1,10 +1,8 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { NoteProps } from '../interface/interfaces'
-import { reduceIncrementColor } from '../lib/reduceIncrementColor'
 
 interface NoteContainerProps {
   note: NoteProps
@@ -20,12 +18,7 @@ const NoteContainer = ({ note, goToScreen }: NoteContainerProps) => {
       activeOpacity={0.7}
       onPress={() => goToScreen('noteEditor', { note: note })}
     >
-      <LinearGradient
-        colors={[theme.colors.card, reduceIncrementColor(theme.colors.card, 'reduce', 20)]}
-        style={styles.container}
-        start={{ x: 0.3, y: 0.3 }}
-        end={{ x: 0.8, y: 0.9 }}
-      >
+      <View style={styles.container}>
         <View style={styles.noteName}>
           <View style={styles.noteNameInfo}>
             <Text
@@ -47,7 +40,7 @@ const NoteContainer = ({ note, goToScreen }: NoteContainerProps) => {
             {note.body}
           </Text>
         </View>
-      </LinearGradient>
+      </View>
     </TouchableOpacity>
   )
 }
@@ -59,7 +52,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     height: 130,
     padding: 15,
     marginVertical: 12,
-    //backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.card,
     borderRadius: 20,
   },
   text: {

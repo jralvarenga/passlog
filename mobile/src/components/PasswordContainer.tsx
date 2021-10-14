@@ -1,7 +1,6 @@
 import { Theme, useTheme } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { PasswordProps } from '../interface/interfaces'
@@ -23,12 +22,7 @@ const PasswordContainer = ({ password, goToScreen }: PasswordContainerProps) => 
       activeOpacity={0.7}
       onPress={() => goToScreen('passwordInfo', { passwordInfo: password })}
     >
-      <LinearGradient
-        colors={[theme.colors.card, reduceIncrementColor(theme.colors.card, 'reduce', 20)]}
-        style={styles.container}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
+      <View style={styles.container}>
         <View style={styles.profileName}>
           <View style={[styles.profileNameInfo, password.user == '' && { flexDirection: 'row', alignItems: 'center' }]}>
             {password.user || password.user != '' ? (
@@ -71,7 +65,7 @@ const PasswordContainer = ({ password, goToScreen }: PasswordContainerProps) => 
         <View style={styles.profileInfo}>
           <Text style={[styles.text]}>{password.email}</Text>
         </View>
-      </LinearGradient>
+      </View>
     </TouchableOpacity>
   )
 }
@@ -83,7 +77,7 @@ const styleSheet = (theme: Theme) => StyleSheet.create({
     height: 130,
     padding: 15,
     marginVertical: 12,
-    //backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.card,
     borderRadius: 20,
   },
   text: {

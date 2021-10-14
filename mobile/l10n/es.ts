@@ -23,7 +23,7 @@ export default {
 
   // Settings screen
   "no_user": "Sin usuario",
-  "passwords_cards_in_passlog": "{{ passwords }} contraseñas & {{ cards }} tarjetas en Passlog",
+  "passwords_cards_in_passlog": "{{ passwords }} contraseñas, {{ notes }} notas & {{ cards }} tarjetas en Passlog",
   "memory_used": "{{ memory }} usados en almacenamiento",
   "available_in_cloud": "{{ memory }} disponibles en la nube",
   "cloud_settings": "Config. de la nube",
@@ -88,7 +88,7 @@ export default {
   "password_of": "Contraseña de {{ user }}",
   "last_update": "Última actualización {{ date }}",
   "no_comments": "No comentarios",
-  "saved_changes": "Guardar",
+  "saved_changes": "Guardado",
   "email_copied": "Email copiado",
   "password_copied": "Contraseña copiada",
 

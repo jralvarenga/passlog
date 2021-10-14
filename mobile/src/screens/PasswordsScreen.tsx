@@ -27,7 +27,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const { t } = useTranslation()
-  const { passwords } = usePasslogUserData()
+  const { passwords, dataLoading } = usePasslogUserData()
   const [searchInput, setSearchInput] = useState("")
   const [showBottomSheet, setShowBottomSheet] = useState(false)
 
@@ -54,7 +54,7 @@ const PasswordsScreen = ({ navigation }: PasswordContainer) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <FocusAwareStatusBar backgroundColor={theme.colors.primary} />
+      <FocusAwareStatusBar backgroundColor={dataLoading ? theme.colors.background : theme.colors.primary} />
       <TopBar
         showIcon
         iconFunction={() => goToScreen('createPassword', {})}

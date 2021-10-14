@@ -43,10 +43,10 @@ const CardsScreen = ({ navigation }: CardsContainerProps) => {
     return 0
   })
 
-  const filteredCards = sortedCards?.filter((profiles: CardProps) =>
-    profiles.cardName.toLowerCase().includes(searchInput.toLowerCase()) ||
-    profiles.holder.toLowerCase().includes(searchInput.toLowerCase()) ||
-    profiles.type.toLowerCase().includes(searchInput.toLowerCase())
+  const filteredCards = sortedCards?.filter((card: CardProps) =>
+    card.cardName.toLowerCase().includes(searchInput.toLowerCase()) ||
+    card.holder.toLowerCase().includes(searchInput.toLowerCase()) ||
+    card.type.toLowerCase().includes(searchInput.toLowerCase())
   )
 
   return (

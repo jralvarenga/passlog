@@ -13,40 +13,13 @@ interface PasslogUserDataProviderProps {
 const PasslogUserDataContext = createContext({})
 
 export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderProps) => {
-  const [renderPasslogData, setRenderPasslogData] = useState(0)
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null)
   const [passwords, setPasswords] = useState<PasswordProps[]>([])
   const [cards, setCards] = useState<CardProps[]>([])
   const [notes, setNotes] = useState<NoteProps[]>([])
   const [settings, setSettings] = useState<SettingsProps>({})
   const [userSettings, setUserSettings] = useState<UserSettingsProps | null>(null)
-  const [dataLoading, setDataLoading] = useState(false)
-
-  const getData = async() => {
-    const user = returnCurrentUser()
-    setUser(user)
-    let passwords: PasswordProps[] = await getPasswordsFromStorage()
-    let cards: CardProps[] = await getCardsFromStorage()
-    let notes: NoteProps[] = await getNotesFromStorage()
-    let settings: SettingsProps = await getSettings()
-    if (user) {
-      const userSettings = await getUserSettings()
-      setUserSettings(userSettings)
-      if (userSettings.alwaysSync) {
-        const { firestorePasswords, firestoreCards, firestoreNotes } = await getPasslogUserDataInFirestore()
-        await setPasswordsInStorage(firestorePasswords)
-        await setCardsInStorage(firestoreCards)
-        await setNotesInStorage(firestoreNotes)
-        passwords = firestorePasswords
-        cards = firestoreCards
-        notes = firestoreNotes
-      }
-    }
-    setPasswords(passwords)
-    setCards(cards)
-    setNotes(notes)
-    setSettings(settings)
-  }
+  const [dataLoading, setDataLoading] = useState(true)
 
   const hideSplashScreen = () => {
     SplashScreen.hide({
@@ -54,17 +27,53 @@ export const PasslogUserDataProvider = ({ children }: PasslogUserDataProviderPro
     })
   }
 
+  const getFromStorage = async() => {
+    const passwords: PasswordProps[] = await getPasswordsFromStorage()
+    const cards: CardProps[] = await getCardsFromStorage()
+    const notes: NoteProps[] = await getNotesFromStorage()
+    const settings: SettingsProps = await getSettings()
+    setPasswords(passwords)
+    setCards(cards)
+    setNotes(notes)
+    setSettings(settings)
+  }
+
+  const getFromFirebase = async() => {
+    const { firestorePasswords, firestoreCards, firestoreNotes } = await getPasslogUserDataInFirestore()
+    await setPasswordsInStorage(firestorePasswords)
+    await setCardsInStorage(firestoreCards)
+    await setNotesInStorage(firestoreNotes)
+    setPasswords(firestorePasswords)
+    setCards(firestoreCards)
+    setNotes(firestoreNotes)
+  }
+
+  const getData = async() => {
+    const user = returnCurrentUser()
+    setUser(user)
+    await getFromStorage()
+    
+    setDataLoading(false)
+    hideSplashScreen()
+    if (user) {
+      const userSettings = await getUserSettings()
+      setUserSettings(userSettings)
+      if (userSettings.alwaysSync) {
+        getFromFirebase()
+      }
+    }
+  }
+
   useEffect(() => {
     const asyncHandler = async() => {
       await getData()
-      hideSplashScreen()
     }
 
     asyncHandler()
-  }, [renderPasslogData])
+  }, [])
 
-  const renderPasslogDataHandler = () => {
-    setRenderPasslogData(renderPasslogData + 1)
+  const renderPasslogDataHandler = async() => {
+    await getFromStorage()
   }
 
   return (

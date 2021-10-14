@@ -20,7 +20,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const theme = useTheme()
   const styles = styleSheet(theme)
   const { t } = useTranslation()
-  const { passwords, cards, user, setUser, renderPasslogDataHandler, userSettings, setUserSettings }= usePasslogUserData()
+  const { passwords, cards, notes, user, setUser, renderPasslogDataHandler, userSettings, setUserSettings }= usePasslogUserData()
   const [showSettingsSheet, setShowSettingsSheet] = useState(false)
   const [showInSheet, setShowInSheet] = useState("")
 
@@ -71,18 +71,18 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
         </View>
         <View style={{ width: '100%' }}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold' }]}>
-            {t('passwords_cards_in_passlog', { passwords: passwords?.length, cards: cards?.length })}
+            {t('passwords_cards_in_passlog', { passwords: passwords?.length, cards: cards?.length, notes: notes?.length })}
           </Text>
         </View>
       </View>
       <View style={styles.backUpContainer}>
         <View style={styles.backupSpaceContainer}>
           <Text style={[styles.text, { fontFamily: 'poppins-bold', textAlign: 'center' }]}>
-            {t('memory_used', { memory: objectMemorySize({ psw: passwords, crd: cards }) })}
+            {t('memory_used', { memory: objectMemorySize({ passwords, cards, notes }) })}
           </Text>
           {user != null && (
             <Text style={[styles.text, { fontFamily: 'poppins-bold', textAlign: 'center' }]}>
-              {t('available_in_cloud', { memory: getCloudAvailableSpace(objectMemorySize({ psw: passwords, crd: cards })) })}
+              {t('available_in_cloud', { memory: getCloudAvailableSpace(objectMemorySize({ passwords, cards, notes })) })}
             </Text>
           )}
         </View>

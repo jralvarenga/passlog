@@ -23,7 +23,7 @@ export default {
 
   // Settings screen
   "no_user": "No user",
-  "passwords_cards_in_passlog": "{{ passwords }} passwords & {{ cards }} cards in Passlog",
+  "passwords_cards_in_passlog": "{{ passwords }} passwords, {{ notes }} notes & {{ cards }} cards in Passlog",
   "memory_used": "{{ memory }} used in Storage",
   "available_in_cloud": "{{ memory }} available in Cloud",
   "cloud_settings": "Cloud settings",
