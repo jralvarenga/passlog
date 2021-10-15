@@ -1,28 +1,27 @@
-import { MenuItem, Theme, useTheme } from '@mui/material'
+import { Theme, useTheme } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { createStyles, makeStyles } from '@mui/styles'
-import FormInput from '../../src/components/FormInput'
-import Header from '../../src/components/Header'
-import HeaderNavigationBar, { HEADERBAR_HEIGHT } from '../../src/components/HeaderNavigationBar'
-import { AccountCircle as AccountCircleIcon, MoreHoriz as NumberIcon } from '@mui/icons-material'
-import { useEffect, useState } from 'react'
-import { CardProps } from '../../src/interfaces/interfaces'
-import { createId } from '../../src/lib/createId'
+import FormInput from '../../../src/components/FormInput'
+import Header from '../../../src/components/Header'
+import HeaderNavigationBar, { HEADERBAR_HEIGHT } from '../../../src/components/HeaderNavigationBar'
+import { AccountCircle as AccountCircleIcon, Mail as EmailIcon, Lock as AccountIcon, ModeComment as CommentIcon, VisibilityOff as EyeOffIcon, Visibility as EyeOnIcon, VisibilityOff } from '@mui/icons-material'
+import { useEffect, useRef, useState } from 'react'
+import { createId } from '../../../src/lib/createId'
 import { useRouter } from 'next/router'
-import PageLayout from '../../src/components/PageLayout'
-import { usePasslogUserData } from '../../src/services/PasslogUserdataProvider'
-import { setCardsInLocalStorage } from '../../src/lib/localStorage'
-import AppSnackbar from '../../src/components/AppSnackbar'
+import PageLayout from '../../../src/components/PageLayout'
+import { usePasslogUserData } from '../../../src/services/PasslogUserdataProvider'
+import AppSnackbar from '../../../src/components/AppSnackbar'
 
-const CreateCardPage = () => {
+const CreateAccountPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
   const router = useRouter()
-  const { cards, setCards, renderPasslogDataHandler } = usePasslogUserData()
+  const { renderPasslogDataHandler } = usePasslogUserData()
   const [name, setName] = useState("")
-  const [type, setType] = useState("")
-  const [holder, setHolder] = useState("")
-  const [number, setNumber] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setAccount] = useState("")
+  const [repeatPassword, setRepeatPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showSnackbar, setShowSnackbar] = useState(false)
@@ -31,27 +30,13 @@ const CreateCardPage = () => {
   useEffect(() => {
     const { query } = router
     const gnp: any = query.gnp
-    setNumber(gnp)
+    setAccount(gnp)
   }, [router])
 
-  const createCard = () => {
+  const createAccount = async() => {
     setLoading(true)
     try {
-      const currentDate = new Date()
-      currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
-      const newCard: CardProps = {
-        id: createId(),
-        type: type,
-        cardName: name,
-        holder: holder,
-        number: number,
-        addedInfo: "",
-        date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
-      }
-      cards!.push(newCard)
-      setCards!(cards)
-
-      setCardsInLocalStorage(cards!)
+      
       renderPasslogDataHandler!()
       setLoading(false)
       router.back()
@@ -64,10 +49,18 @@ const CreateCardPage = () => {
   return (
     <PageLayout className={styles.container}>
       <Header
-        name="Create Card"
+        name="Create Account"
       />
       <HeaderNavigationBar
-        title="Create Card"
+        title="Create Account"
+        showIcon
+        icon={
+          showPassword ?
+            <EyeOnIcon style={{ color: theme.palette.text.primary }} />
+          :
+            <EyeOffIcon style={{ color: theme.palette.text.primary }} />
+        }
+        iconFunction={() => setShowPassword(!showPassword)}
       />
       <div className={styles.body}>
         <div className={styles.inputsContainer}>
@@ -76,8 +69,8 @@ const CreateCardPage = () => {
             style={{ justifyContent: 'space-between' }}
           >
             <FormInput
-              label="Card name"
-              placeholder="Name"
+              label="First name"
+              placeholder="Steve"
               width="48%"
               value={name}
               setValue={setName}
@@ -90,27 +83,11 @@ const CreateCardPage = () => {
               }
             />
             <FormInput
-              placeholder="Steve Adonis Dolphin"
-              label="Card type"
+              label="Last name"
+              placeholder="Dolphin"
               width="48%"
-              value={type}
-              setValue={setType}
-              selectInput
-            >
-              <MenuItem value="" disabled>Select type</MenuItem>
-              <MenuItem value="ID">ID</MenuItem>
-              <MenuItem value="Pay card">Pay card</MenuItem>
-              <MenuItem value="Licence">Licence</MenuItem>
-              <MenuItem value="Promo code">Promo code</MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
-            </FormInput>
-          </div>
-          <div className={styles.inputBox}>
-            <FormInput
-              label="The holder"
-              placeholder="Steve Adonis Dolphin"
-              value={holder}
-              setValue={setHolder}
+              value={lastName}
+              setValue={setLastName}
               icon={
                 <AccountCircleIcon
                   style={{
@@ -122,12 +99,43 @@ const CreateCardPage = () => {
           </div>
           <div className={styles.inputBox}>
             <FormInput
-              label="The numbers"
-              placeholder="***********7882"
-              value={number}
-              setValue={setNumber}
+              label="The email"
+              placeholder="stevedolphin123@email.com"
+              value={email}
+              setValue={setEmail}
               icon={
-                <NumberIcon
+                <EmailIcon
+                  style={{
+                    color: theme.palette.background.paper
+                  }}
+                />
+              }
+            />
+          </div>
+          <div className={styles.inputBox} style={{ flexDirection: 'column' }}>
+            <FormInput
+              label="The password"
+              placeholder="myawesome_password123"
+              value={password}
+              secureEntry={!showPassword}
+              setValue={setAccount}
+              icon={
+                <AccountIcon
+                  style={{
+                    color: theme.palette.background.paper
+                  }}
+                />
+              }
+            />
+            <br />
+            <FormInput
+              label="Repeat the password"
+              placeholder="myawesome_password123"
+              value={repeatPassword}
+              secureEntry={!showPassword}
+              setValue={setRepeatPassword}
+              icon={
+                <AccountIcon
                   style={{
                     color: theme.palette.background.paper
                   }}
@@ -139,11 +147,11 @@ const CreateCardPage = () => {
         <div className={styles.createButtonContainer}>
           <LoadingButton
             className={styles.createButton}
-            onClick={createCard}
+            onClick={createAccount}
             variant="contained"
             loading={loading}
           >
-            Create card
+            Create account
           </LoadingButton>
         </div>
       </div>
@@ -172,7 +180,8 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     maxWidth: 800,
     display: 'flex',
     flexDirection: 'column',
-    padding: 20
+    padding: 20,
+    paddingTop: 50
   },
   inputsContainer: {
     width: '100%',
@@ -203,4 +212,4 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
   },
 }))
 
-export default CreateCardPage
+export default CreateAccountPage

@@ -134,7 +134,7 @@ const LoginScreen = ({ navigation }: any) => {
       <View style={styles.noAccountContainer}>
         <View style={styles.dontHaveAccountContainer}>
           <Text
-          onPress={() => navigation.navigate('createAccount')}
+            onPress={() => navigation.navigate('createAccount')}
             style={[styles.text, { fontSize: 14, textAlign: 'center' }]}
           >
             {t('dont_have_account')} <Text style={{ fontFamily: 'poppins-bold', color: theme.colors.primary, textDecorationLine: 'underline' }}>{t('create_account_here')}</Text>
