@@ -14,9 +14,10 @@ interface FormInputProps {
   secureEntry?: boolean
   children?: any
   selectInput?: boolean
+  onKeyDown?: Function
 }
 
-const FormInput = ({ label, value, setValue, placeholder, width, icon, multiline, rows, secureEntry, selectInput, children }: FormInputProps) => {
+const FormInput = ({ label, value, setValue, placeholder, width, icon, multiline, rows, secureEntry, selectInput, onKeyDown, children }: FormInputProps) => {
   const styles = styleSheet()
   const theme = useTheme()
   
@@ -38,6 +39,8 @@ const FormInput = ({ label, value, setValue, placeholder, width, icon, multiline
         value={value}
         multiline={multiline}
         rows={rows ? rows : 1}
+        // @ts-ignore
+        onKeyDown={onKeyDown ? onKeyDown : () => { return }}
         style={{
           width: '100%',
           marginLeft: icon ? 10 : 0,

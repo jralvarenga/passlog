@@ -1,7 +1,8 @@
+import { User } from '@firebase/auth'
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { testCards, testNotes, testPasswords } from '../data/test'
-import { CardProps, NoteProps, PasslogUserDataProps, PasswordProps } from '../interfaces/interfaces'
-import { getCardsFromLocalStorage, getNotesFromLocalStorage, getPasswordsFromLocalStorage } from '../lib/localStorage'
+import { CardProps, NoteProps, PasslogUserDataProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interfaces/interfaces'
+import { returnCurrentUser } from '../lib/auth'
+import { getCardsFromLocalStorage, getNotesFromLocalStorage, getPasswordsFromLocalStorage, getSettings, getUserSettings } from '../lib/localStorage'
 
 const PasslogUserDataContext = createContext({})
 
@@ -12,23 +13,26 @@ export const PasslogUserDataProvider = ({ children }: any) => {
   const [selectedPasslogItem, setSelectedPasslogItem] = useState<PasswordProps | CardProps | NoteProps | null>(null)
   const [cards, setCards] = useState<CardProps[]>([])
   const [notes, setNotes] = useState<NoteProps[]>([])
+  const [user, setUser] = useState<User | null>(null)
+  const [settings, setSettings] = useState<SettingsProps>({})
+  const [userSettings, setUserSettings] = useState<UserSettingsProps | null>(null)
 
   const getData = async() => {
-    //const user = returnCurrentUser()
-    //setUser(user)
-    let passwords: PasswordProps[] = await getPasswordsFromLocalStorage()
-    let cards: CardProps[] = await getCardsFromLocalStorage()
-    let notes: NoteProps[] = await getNotesFromLocalStorage()
-    //let settings: SettingsProps = await getSettings()
+    const user = returnCurrentUser()
+    setUser(user)
+    let passwords: PasswordProps[] = getPasswordsFromLocalStorage()
+    let cards: CardProps[] = getCardsFromLocalStorage()
+    let notes: NoteProps[] = getNotesFromLocalStorage()
+    let settings: SettingsProps = getSettings()
     setPasswords(passwords)
     setCards(cards)
     setNotes(notes)
-    //setSettings(settings)
+    setSettings(settings)
     setDataLoading(false)
-    /*if (user) {
-      const userSettings = await getUserSettings()
+    if (user) {
+      const userSettings = getUserSettings()
       setUserSettings(userSettings)
-      if (userSettings.alwaysSync) {
+      /*if (userSettings.alwaysSync) {
         const { firestorePasswords, firestoreCards, firestoreNotes } = await getPasslogUserDataInFirestore()
         await setPasswordsInStorage(firestorePasswords)
         await setCardsInStorage(firestoreCards)
@@ -36,8 +40,8 @@ export const PasslogUserDataProvider = ({ children }: any) => {
         passwords = firestorePasswords
         cards = firestoreCards
         notes = firestoreNotes
-      }
-    }*/
+      }*/
+    }
   }
 
   useEffect(() => {
@@ -57,15 +61,21 @@ export const PasslogUserDataProvider = ({ children }: any) => {
       value={{
         passwords,
         setPasswords,
-        setSelectedPasslogItem,
         selectedPasslogItem,
+        setSelectedPasslogItem,
         cards,
         setCards,
-        notes,
-        setNotes,
         renderPasslogDataHandler,
+        settings,
+        setSettings,
+        user,
+        setUser,
+        userSettings,
+        setUserSettings,
         dataLoading,
         setDataLoading,
+        notes,
+        setNotes
       }}>
       {children}
     </PasslogUserDataContext.Provider>

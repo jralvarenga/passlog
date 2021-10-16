@@ -2,9 +2,13 @@ import { LoadingButton } from '@mui/lab'
 import { Theme, useTheme  } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AppSnackbar from '../../../src/components/AppSnackbar'
 import FormInput from '../../../src/components/FormInput'
+import { SettingsProps, UserSettingsProps } from '../../../src/interfaces/interfaces'
+import { loginInFirebaseAuth } from '../../../src/lib/auth'
+import { setSettingsInLocalStorage, setUserSettings as setUserSettingsInStorage } from '../../../src/lib/localStorage'
+import { usePasslogUserData } from '../../../src/services/PasslogUserdataProvider'
 
 const BORDER_RADIUS = 60
 
@@ -12,6 +16,7 @@ const LoginPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
   const router = useRouter()
+  const { settings, setSettings, renderPasslogDataHandler, setUser } = usePasslogUserData()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showSnackbar, setShowSnackbar] = useState(false)
@@ -19,10 +24,29 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false)
 
   const loginHandler = async() => {
+    if (password == '' || email == '') {
+      setSnackbarText("All the fields are required")
+      setShowSnackbar(true)      
+    }
     setLoading(true)
     try {
-      console.log('xd')
+      const { user } = await loginInFirebaseAuth(email, password)
+      const userDefaultSettings: UserSettingsProps = {
+        uid: user.uid,
+        name: user.displayName!,
+        alwaysSync: false
+      }
+      const newSettings: SettingsProps = {
+        ...settings,
+        askForAlwaysSync: true
+      }
+      await setSettingsInLocalStorage(newSettings)
+      await setUserSettingsInStorage(userDefaultSettings)
+      setUser!(user)
+      setSettings!(newSettings)
+      renderPasslogDataHandler!()
       setLoading(false)
+      router.back()
     } catch (error) {
       setLoading(false)
       setSnackbarText("There's been an error, try later")
@@ -30,8 +54,14 @@ const LoginPage = () => {
     }
   }
 
+  const handlePressedEnter = (e: any) => {
+    if (e.key === 'Enter') {
+      loginHandler()
+    }
+  }
+
   return (
-    <div className={styles.container}>
+    <form className={styles.container}>
       <div className={styles.body}>
         <div className={styles.imgContainer}>
           <img className={styles.img} src="/assets/img/login-bg.png" alt="" />
@@ -53,6 +83,7 @@ const LoginPage = () => {
               label="Email"
               value={email}
               setValue={setEmail}
+              onKeyDown={handlePressedEnter}
               placeholder="your_email123@email.com"
             />
             <br />
@@ -60,6 +91,8 @@ const LoginPage = () => {
               label="Password"
               value={password}
               setValue={setPassword}
+              onKeyDown={handlePressedEnter}
+              secureEntry
               placeholder="yourpassword_130"
             />
           </div>
@@ -86,7 +119,7 @@ const LoginPage = () => {
         setOpen={setShowSnackbar}
         message={snackbarText}
       />
-    </div>
+    </form>
   )
 }
 

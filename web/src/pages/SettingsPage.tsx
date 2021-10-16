@@ -4,22 +4,31 @@ import { Google as GoogleIcon, Settings as AppSettingsIcon, Person as AccountSet
 import { usePasslogUserData } from '../services/PasslogUserdataProvider'
 import { getCloudAvailableSpace, objectMemorySize } from '../lib/objectMemorySize'
 import { useRouter } from 'next/router'
+import { returnCurrentUser, signOutHandler } from '../lib/auth'
+import { removeUserSettings } from '../lib/localStorage'
 
 const PADDING = 20
 
 const SettingsPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
-  const { passwords, cards, notes } = usePasslogUserData()
+  const { passwords, cards, notes, setUser, renderPasslogDataHandler } = usePasslogUserData()
   const router = useRouter()
-  const user = null
+  const user = returnCurrentUser()
+
+  const signOutButtonHandler = async() => {
+    await signOutHandler()
+    removeUserSettings()
+    setUser!(null)
+    renderPasslogDataHandler!()
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.titleContainer}>
         <span className={styles.name}>
           {user ? (
-            "Rigo Alvarenga"
+            user.displayName
           ) : (
             "No user"
           )}
@@ -106,7 +115,7 @@ const SettingsPage = () => {
             <Button
               className={styles.cloudButton}
               style={{ background: '#ff2e2e' }}
-              //onClick={createPassword}
+              onClick={signOutButtonHandler}
               variant="contained"
               startIcon={<LogOutIcon />}
             >

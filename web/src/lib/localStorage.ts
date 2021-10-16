@@ -1,4 +1,4 @@
-import { CardProps, NoteProps, PasswordProps } from '../interfaces/interfaces'
+import { CardProps, NoteProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interfaces/interfaces'
 import { decryptCard, decryptNote, decryptPassword, encryptCard, encryptNote, encryptPassword } from './encripter'
 
 // Get methods
@@ -39,7 +39,7 @@ export const getNotesFromLocalStorage = (): NoteProps[] => {
   return notes
 }
 
-/*export const getSettings = (): SettingsProps => {
+export const getSettings = (): SettingsProps => {
   const jsonSettings = localStorage.getItem('settings')
   const settings: SettingsProps = jsonSettings != null ? JSON.parse(jsonSettings) : {
     pinNumber: '',
@@ -57,7 +57,7 @@ export const getUserSettings = (): UserSettingsProps => {
   const settings: UserSettingsProps = JSON.parse(jsonSettings!)
 
   return settings
-}*/
+}
 
 // Set methods
 
@@ -79,7 +79,7 @@ export const setNotesInLocalStorage = async(notes: NoteProps[]) => {
   localStorage.setItem('notes', jsonValue)
 }
 
-/*export const setSettingsInLocalStorage = async(settings: SettingsProps) => {
+export const setSettingsInLocalStorage = async(settings: SettingsProps) => {
   const jsonValue = JSON.stringify(settings)
   localStorage.setItem('settings', jsonValue)
 }
@@ -97,4 +97,4 @@ export const removeUserSettings = () => {
 
 export const wipeAllStorageData = () => {
   localStorage.clear()
-}*/
+}
