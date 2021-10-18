@@ -6,15 +6,18 @@ import { getCloudAvailableSpace, objectMemorySize } from '../lib/objectMemorySiz
 import { useRouter } from 'next/router'
 import { returnCurrentUser, signOutHandler } from '../lib/auth'
 import { removeUserSettings } from '../lib/localStorage'
+import CloudSettingsSheet from '../components/CloudSettingsSheet'
+import { useState } from 'react'
 
 const PADDING = 20
 
 const SettingsPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
-  const { passwords, cards, notes, setUser, renderPasslogDataHandler } = usePasslogUserData()
+  const { passwords, cards, notes, setUser, renderPasslogDataHandler, settings, setSettings, userSettings, setUserSettings } = usePasslogUserData()
   const router = useRouter()
   const user = returnCurrentUser()
+  const [openCloudSettingsSheet, setOpenCloudSettingsSheet] = useState(false)
 
   const signOutButtonHandler = async() => {
     await signOutHandler()
@@ -54,7 +57,7 @@ const SettingsPage = () => {
               <>
                 <Button
                   className={styles.cloudButton}
-                  //onClick={createPassword}
+                  onClick={() => setOpenCloudSettingsSheet(true)}
                   variant="contained"
                 >
                   Cloud settings
@@ -124,6 +127,14 @@ const SettingsPage = () => {
           )}
         </div>
       </div>
+      {user && (
+        <CloudSettingsSheet
+          open={openCloudSettingsSheet}
+          setOpen={setOpenCloudSettingsSheet}
+          userSettings={userSettings!}
+          setUserSettings={setUserSettings!}
+        />
+      )}
     </div>
   )
 }

@@ -31,6 +31,7 @@ export const PasslogUserDataProvider = ({ children }: any) => {
     setDataLoading(false)
     if (user) {
       const userSettings = getUserSettings()
+      console.log(userSettings.alwaysSync)
       setUserSettings(userSettings)
       /*if (userSettings.alwaysSync) {
         const { firestorePasswords, firestoreCards, firestoreNotes } = await getPasslogUserDataInFirestore()
