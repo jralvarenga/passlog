@@ -1,14 +1,16 @@
-import { FC } from 'react'
 import { Button, Theme, useTheme } from '@mui/material'
 import { createStyles, makeStyles } from '@mui/styles'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import DownloadIcon from '@mui/icons-material/Download'
 import { KEYFRAMES_DURATION, KEYFRAME_DELAY } from '../../../pages'
+import { Language as WebIcon } from '@mui/icons-material'
 import EnterAnimation from '../EnterAnimation'
+import { useRouter } from 'next/router'
 
-const WelcomePage: FC = () => {
+const WelcomePage = () => {
   const styles = styleSheet()
   const theme = useTheme()
+  const router = useRouter()
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({
@@ -24,12 +26,26 @@ const WelcomePage: FC = () => {
           animation="fadeInLeft"
           duration={KEYFRAMES_DURATION + KEYFRAME_DELAY*0}
         >
-          <>
-          <img className={styles.passlogLogo} src="assets/icons/passlog_logo.svg" alt="" />
-          <span className={styles.logoTitle}>
-            Passlog
-          </span>
-          </>
+          <div onClick={() => router.push('/app')} className={styles.topBarItemContainer}>
+            <img className={styles.passlogLogo} src="assets/icons/passlog_logo.svg" alt="" />
+            <span className={styles.logoTitle}>
+              Passlog
+            </span>
+          </div>
+        </EnterAnimation>
+        <EnterAnimation
+          className={styles.topBarItemContainerUseButton}
+          animation="fadeInLeft"
+          duration={KEYFRAMES_DURATION + KEYFRAME_DELAY*0}
+        >
+          <Button
+            className={styles.actionButton}
+            variant="contained"
+            onClick={() => router.push('/app')}
+            startIcon={<WebIcon />}
+          >
+            Use the app
+          </Button>
         </EnterAnimation>
       </div>
       <div className={styles.body}>
@@ -125,6 +141,7 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     flex: 0.5,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'space-between',
     [theme.breakpoints.down('md')]: {
       justifyContent: 'center',
     },
@@ -137,6 +154,16 @@ const styleSheet = makeStyles((theme: Theme) => createStyles({
     [theme.breakpoints.down('md')]: {
       width: '100%',
       justifyContent: 'center',
+    },
+  },
+  topBarItemContainerUseButton: {
+    width: '50%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    [theme.breakpoints.down('md')]: {
+      display: 'none'
     },
   },
   logoTitle: {

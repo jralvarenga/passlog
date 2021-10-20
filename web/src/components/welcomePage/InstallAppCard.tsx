@@ -1,4 +1,4 @@
-import { Button, Theme, useTheme } from '@mui/material'
+import { Button, Theme, } from '@mui/material'
 import { createStyles, makeStyles, withStyles } from '@mui/styles'
 import { Android as PlayStoreIcon, Language as WebIcon, Apple as AppleIcon } from '@mui/icons-material'
 import EnterAnimation from '../EnterAnimation'
@@ -109,10 +109,10 @@ const PlayStoreButton = withStyles((theme) => ({
 
 const PWAButton = withStyles((theme) => ({
   root: {
-    color: theme.palette.getContrastText('#854da7'),
-    backgroundColor: '#854da7',
+    color: theme.palette.getContrastText('#5a0fc8'),
+    backgroundColor: '#5a0fc8',
     '&:hover': {
-      backgroundColor: '#7d36a8',
+      backgroundColor: '#7414ff',
     },
   },
 }))(Button)
