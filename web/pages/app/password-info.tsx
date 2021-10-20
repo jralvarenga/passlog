@@ -12,12 +12,14 @@ import Header from '../../src/components/Header'
 import PasswordOptions from '../../src/components/PasswordOptions'
 import { setPasswordsInLocalStorage } from '../../src/lib/localStorage'
 import { useRouter } from 'next/router'
+import { deletePasslogDocument, updatePasslogDocument } from '../../src/lib/firestore'
+import { encryptPassword } from '../../src/lib/encripter'
 
 const PasswordInfoPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
   const router = useRouter()
-  const { selectedPasslogItem, passwords, setPasswords, renderPasslogDataHandler, setSelectedPasslogItem } = usePasslogUserData()
+  const { selectedPasslogItem, passwords, setPasswords, renderPasslogDataHandler, setSelectedPasslogItem, userSettings } = usePasslogUserData()
   const [password, setPassword] = useState<PasswordProps>()
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState("")
@@ -40,8 +42,8 @@ const PasswordInfoPage = () => {
     }
   }
 
-  const changePasswordData = (npw: PasswordProps) => {
-    const newData: PasswordProps = {
+  const changePasswordData = async(npw: PasswordProps) => {
+    let newData: PasswordProps = {
       id: npw.id,
       date: npw.date,
       // @ts-ignore
@@ -67,6 +69,10 @@ const PasswordInfoPage = () => {
       setPasswords!(newPasswords)
       
       setPasswordsInLocalStorage(newPasswords!)
+      if (userSettings?.alwaysSync) {
+        newData = encryptPassword(newData)
+        await updatePasslogDocument(newData, 'passwords')
+      }
       renderPasslogDataHandler!()
       setShowPasswordOptions(false)
     } catch (error) {
@@ -75,7 +81,7 @@ const PasswordInfoPage = () => {
     }
   }
 
-  const deletePassword = () => {
+  const deletePassword = async() => {
     try {
       setShowPasswordOptions(false)
       const id = password!.id
@@ -85,6 +91,9 @@ const PasswordInfoPage = () => {
 
       setSelectedPasslogItem!(null)
       setPasswordsInLocalStorage(passwords!)
+      if (userSettings?.alwaysSync) {
+        await deletePasslogDocument(id, 'passwords')
+      }
       renderPasslogDataHandler!()
       router.back()
     } catch (error) {

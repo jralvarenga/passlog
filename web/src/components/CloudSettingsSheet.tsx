@@ -7,7 +7,7 @@ import BottomSheet from './BottomSheet'
 interface CloudSettingsSheetProps {
   open: boolean
   setOpen: Function
-  userSettings: UserSettingsProps
+  userSettings: UserSettingsProps | null
   setUserSettings: Function
 }
 
@@ -17,7 +17,7 @@ const CloudSettingsSheet = ({ open, setOpen, setUserSettings, userSettings }: Cl
 
   const enableAlwaysSync = (checked: boolean) => {
     const newSettings: UserSettingsProps = {
-      ...userSettings,
+      ...userSettings!,
       alwaysSync: checked
     }
     setUserSettingsInStorage(newSettings)
@@ -44,7 +44,7 @@ const CloudSettingsSheet = ({ open, setOpen, setUserSettings, userSettings }: Cl
           </span>
           <div>
             <Switch
-              checked={userSettings.alwaysSync}
+              checked={userSettings?.alwaysSync ? userSettings.alwaysSync : false}
               onChange={(e) => enableAlwaysSync(e.target.checked)}
               inputProps={{ 'aria-label': 'controlled' }}
             />

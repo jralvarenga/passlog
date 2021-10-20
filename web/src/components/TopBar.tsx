@@ -8,6 +8,8 @@ import { usePasslogUserData } from '../services/PasslogUserdataProvider'
 import { setNotesInLocalStorage } from '../lib/localStorage'
 import { useState } from 'react'
 import AppSnackbar from './AppSnackbar'
+import { encryptNote } from '../lib/encripter'
+import { createNewPasslogDocument } from '../lib/firestore'
 
 interface TopBarProps {
   title: 'Passwords' | 'Notes' | 'Cards'
@@ -20,7 +22,7 @@ const TopBar = ({ title }: TopBarProps)  => {
   const styles = styleSheet()
   const theme = useTheme()
   const router = useRouter()
-  const { notes, setNotes, renderPasslogDataHandler, setSelectedPasslogItem } = usePasslogUserData()
+  const { notes, setNotes, renderPasslogDataHandler, setSelectedPasslogItem, userSettings } = usePasslogUserData()
   const [showPassword, setShowPassword] = useState(false)
   const [showSnackbar, setShowSnackbar] = useState(false)
   const [snackbarText, setSnackbarText] = useState("")
@@ -39,6 +41,10 @@ const TopBar = ({ title }: TopBarProps)  => {
         setNotes!(notes!)
 
         setNotesInLocalStorage(notes!)
+        if (userSettings?.alwaysSync) {
+          const encrypted = encryptNote(newNote)
+          await createNewPasslogDocument(encrypted, 'notes')
+        }
         renderPasslogDataHandler!()
         setSelectedPasslogItem!(newNote)
         router.push('/app/note-editor')

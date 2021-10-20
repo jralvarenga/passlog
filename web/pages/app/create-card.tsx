@@ -13,18 +13,19 @@ import PageLayout from '../../src/components/PageLayout'
 import { usePasslogUserData } from '../../src/services/PasslogUserdataProvider'
 import { setCardsInLocalStorage } from '../../src/lib/localStorage'
 import AppSnackbar from '../../src/components/AppSnackbar'
+import { encryptCard } from '../../src/lib/encripter'
+import { createNewPasslogDocument } from '../../src/lib/firestore'
 
 const CreateCardPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
   const router = useRouter()
-  const { cards, setCards, renderPasslogDataHandler } = usePasslogUserData()
+  const { cards, setCards, renderPasslogDataHandler, userSettings } = usePasslogUserData()
   const [name, setName] = useState("")
   const [type, setType] = useState("")
   const [holder, setHolder] = useState("")
   const [number, setNumber] = useState("")
   const [loading, setLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
   const [showSnackbar, setShowSnackbar] = useState(false)
   const [snackbarText, setSnackbarText] = useState("")
 
@@ -34,12 +35,12 @@ const CreateCardPage = () => {
     setNumber(gnp)
   }, [router])
 
-  const createCard = () => {
+  const createCard = async() => {
     setLoading(true)
     try {
       const currentDate = new Date()
       currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
-      const newCard: CardProps = {
+      let newCard: CardProps = {
         id: createId(),
         type: type,
         cardName: name,
@@ -52,6 +53,10 @@ const CreateCardPage = () => {
       setCards!(cards)
 
       setCardsInLocalStorage(cards!)
+      if (userSettings?.alwaysSync) {
+        newCard = encryptCard(newCard)
+        await createNewPasslogDocument(newCard, 'cards')
+      }
       renderPasslogDataHandler!()
       setLoading(false)
       router.back()

@@ -2,7 +2,8 @@ import { User } from '@firebase/auth'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { CardProps, NoteProps, PasslogUserDataProps, PasswordProps, SettingsProps, UserSettingsProps } from '../interfaces/interfaces'
 import { returnCurrentUser } from '../lib/auth'
-import { getCardsFromLocalStorage, getNotesFromLocalStorage, getPasswordsFromLocalStorage, getSettings, getUserSettings } from '../lib/localStorage'
+import { getPasslogUserDataInFirestore } from '../lib/firestore'
+import { getCardsFromLocalStorage, getNotesFromLocalStorage, getPasswordsFromLocalStorage, getSettings, getUserSettings, setPasswordsInLocalStorage, setCardsInLocalStorage, setNotesInLocalStorage } from '../lib/localStorage'
 
 const PasslogUserDataContext = createContext({})
 
@@ -33,15 +34,16 @@ export const PasslogUserDataProvider = ({ children }: any) => {
       const userSettings = getUserSettings()
       console.log(userSettings.alwaysSync)
       setUserSettings(userSettings)
-      /*if (userSettings.alwaysSync) {
+      if (userSettings.alwaysSync) {
         const { firestorePasswords, firestoreCards, firestoreNotes } = await getPasslogUserDataInFirestore()
-        await setPasswordsInStorage(firestorePasswords)
-        await setCardsInStorage(firestoreCards)
-        await setNotesInStorage(firestoreNotes)
+        console.log({ firestorePasswords, firestoreNotes, firestoreCards })
+        await setPasswordsInLocalStorage(firestorePasswords)
+        await setCardsInLocalStorage(firestoreCards)
+        await setNotesInLocalStorage(firestoreNotes)
         passwords = firestorePasswords
         cards = firestoreCards
         notes = firestoreNotes
-      }*/
+      }
     }
   }
 

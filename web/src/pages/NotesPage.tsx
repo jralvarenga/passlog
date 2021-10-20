@@ -14,10 +14,12 @@ import { createId } from '../lib/createId'
 import { NoteProps } from '../interfaces/interfaces'
 import { setNotesInLocalStorage } from '../lib/localStorage'
 import AppSnackbar from '../components/AppSnackbar'
+import { encryptNote } from '../lib/encripter'
+import { createNewPasslogDocument } from '../lib/firestore'
 
 const NotesPage = () => {
   const styles = styleSheet()
-  const { notes, setNotes, renderPasslogDataHandler, setSelectedPasslogItem } = usePasslogUserData()
+  const { notes, setNotes, renderPasslogDataHandler, setSelectedPasslogItem, userSettings } = usePasslogUserData()
   const router = useRouter()
   const [searchInput, setSearchInput] = useState("")
   const [showSnackbar, setShowSnackbar] = useState(false)
@@ -37,6 +39,10 @@ const NotesPage = () => {
         setNotes!(notes!)
 
         setNotesInLocalStorage(notes!)
+        if (userSettings?.alwaysSync) {
+          const encrypted = encryptNote(newNote)
+          await createNewPasslogDocument(encrypted, 'notes')
+        }
         renderPasslogDataHandler!()
         setSelectedPasslogItem!(newNote)
         router.push('/app/note-editor')

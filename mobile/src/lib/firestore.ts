@@ -109,7 +109,6 @@ export const fullBackupInFirestore = async(passwords: PasswordProps[], cards: Ca
   })
 
   batch.commit()
-  
 }
 
 export const deleteUserPasslogData = async() => {
@@ -119,7 +118,6 @@ export const deleteUserPasslogData = async() => {
   const cardsCollection = firestore().collection('data').doc(user?.uid).collection('cards')
   const notesCollection = firestore().collection('data').doc(user?.uid).collection('notes')
 
-  
   const getPasswords = await passwordsCollection.get()
   const getCards = await cardsCollection.get()
   const getNotes = await notesCollection.get()

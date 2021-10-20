@@ -11,11 +11,12 @@ import AppSnackbar from '../../src/components/AppSnackbar'
 import Header from '../../src/components/Header'
 import { setCardsInLocalStorage } from '../../src/lib/localStorage'
 import { useRouter } from 'next/router'
+import { deletePasslogDocument } from '../../src/lib/firestore'
 
 const CardInfoPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
-  const { cards, setCards, renderPasslogDataHandler, selectedPasslogItem, setSelectedPasslogItem } = usePasslogUserData()
+  const { cards, setCards, renderPasslogDataHandler, selectedPasslogItem, setSelectedPasslogItem, userSettings } = usePasslogUserData()
   const router = useRouter()
   const [card, setCard] = useState<CardProps>()
   const [openSnackbar, setOpenSnackbar] = useState(false)
@@ -46,6 +47,9 @@ const CardInfoPage = () => {
       setCards!(cards)
 
       setCardsInLocalStorage(cards!)
+      if (userSettings?.alwaysSync) {
+        await deletePasslogDocument(id, 'cards')
+      }
       renderPasslogDataHandler!()
       setSelectedPasslogItem!(null)
       router.back()

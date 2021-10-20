@@ -9,13 +9,15 @@ import { ArrowBackIosNew as ArrowBackIosNewIcon, Menu as MenuIcon } from '@mui/i
 import Header from '../../src/components/Header'
 import NoteOptions from '../../src/components/NoteOptions'
 import AppSnackbar from '../../src/components/AppSnackbar'
+import { encryptNote } from '../../src/lib/encripter'
+import { deletePasslogDocument, updatePasslogDocument } from '../../src/lib/firestore'
 
 export const HEADERBAR_HEIGHT = '16%'
 
 const NoteEditorPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
-  const { notes, setNotes, renderPasslogDataHandler, selectedPasslogItem, setSelectedPasslogItem } = usePasslogUserData()
+  const { notes, setNotes, renderPasslogDataHandler, selectedPasslogItem, setSelectedPasslogItem, userSettings } = usePasslogUserData()
   const router = useRouter()
   const [note, setNote] = useState<NoteProps>()
   const [noteTitle, setNoteTitle] = useState("")
@@ -42,20 +44,24 @@ const NoteEditorPage = () => {
 
   const saveChanges = async() => {
     try {
-      const newData: NoteProps = {
+      const newNoteData: NoteProps = {
         ...note!,
         title: noteTitle,
         body: noteBody
       }
       const newNotes = notes!.map((note) => {
-        if (note.id == newData.id) {
-          return newData
+        if (note.id == newNoteData.id) {
+          return newNoteData
         } else {
           return note
         }
       })
       setNotes!(newNotes)
       setNotesInLocalStorage(newNotes)
+      if (userSettings?.alwaysSync) {
+        const encrypted = encryptNote(newNoteData!)
+        await updatePasslogDocument(encrypted, 'notes')
+      }
       renderPasslogDataHandler!()
       setSnackbarText("Saved changes")
       setShowSnackbar(true)
@@ -74,6 +80,10 @@ const NoteEditorPage = () => {
       setNotes!(notes)
 
       setNotesInLocalStorage(notes!)
+      if (userSettings?.alwaysSync) {
+        const encrypted = encryptNote(note!)
+        deletePasslogDocument(encrypted.id, 'notes')
+      }
       renderPasslogDataHandler!()
       setSelectedPasslogItem!(null)
       router.back()

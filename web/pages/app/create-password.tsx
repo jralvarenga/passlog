@@ -13,12 +13,14 @@ import PageLayout from '../../src/components/PageLayout'
 import { usePasslogUserData } from '../../src/services/PasslogUserdataProvider'
 import { setPasswordsInLocalStorage } from '../../src/lib/localStorage'
 import AppSnackbar from '../../src/components/AppSnackbar'
+import { encryptPassword } from '../../src/lib/encripter'
+import { createNewPasslogDocument } from '../../src/lib/firestore'
 
 const CreatePasswordPage = () => {
   const styles = styleSheet()
   const theme = useTheme()
   const router = useRouter()
-  const { passwords, setPasswords, renderPasslogDataHandler } = usePasslogUserData()
+  const { passwords, setPasswords, renderPasslogDataHandler, userSettings } = usePasslogUserData()
   const [name, setName] = useState("")
   const [user, setUser] = useState("")
   const [email, setEmail] = useState("")
@@ -40,7 +42,7 @@ const CreatePasswordPage = () => {
     try {
       const currentDate = new Date()
       currentDate.setMinutes(currentDate.getMinutes() + currentDate.getTimezoneOffset())
-      const newPassword: PasswordProps = {
+      let newPasswordInfo: PasswordProps = {
         id: createId(),
         profileName: name,
         user: user,
@@ -49,10 +51,14 @@ const CreatePasswordPage = () => {
         comments: comments,
         date: `${currentDate.getMonth() + 1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
       }
-      passwords!.push(newPassword)
+      passwords!.push(newPasswordInfo)
       setPasswords!(passwords)
       
       setPasswordsInLocalStorage(passwords!)
+      if (userSettings?.alwaysSync) {
+        newPasswordInfo = encryptPassword(newPasswordInfo)
+        await createNewPasslogDocument(newPasswordInfo, 'passwords')
+      }
       renderPasslogDataHandler!()
       setLoading(false)
       router.back()
