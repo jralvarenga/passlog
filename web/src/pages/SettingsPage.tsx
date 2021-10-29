@@ -8,6 +8,7 @@ import { returnCurrentUser, signOutHandler } from '../lib/auth'
 import { removeUserSettings } from '../lib/localStorage'
 import CloudSettingsSheet from '../components/CloudSettingsSheet'
 import { useState } from 'react'
+import AppSettingsSheet from '../components/AppSettingsSheet'
 
 const PADDING = 20
 
@@ -18,6 +19,7 @@ const SettingsPage = () => {
   const router = useRouter()
   const user = returnCurrentUser()
   const [openCloudSettingsSheet, setOpenCloudSettingsSheet] = useState(false)
+  const [openAppSettingsSheet, setOpenAppSettingsSheet] = useState(false)
 
   const signOutButtonHandler = async() => {
     await signOutHandler()
@@ -85,14 +87,14 @@ const SettingsPage = () => {
           </div>
         </div>
         <div className={styles.optionsContainer}>
-          <div className={styles.optionBox}>
+          <div className={styles.optionBox} onClick={() => setOpenAppSettingsSheet(true)}>
             <AppSettingsIcon style={{ marginRight: 10 }} />
             <span style={{ fontWeight: 'bold' }}>
               App settings
             </span>
           </div>
           {user ? (
-            <div className={styles.optionBox}>
+            <div className={styles.optionBox} onClick={() => router.push('/app/account/account-settings')}>
               <AccountSettingsIcon style={{ marginRight: 10 }} />
               <span style={{ fontWeight: 'bold' }}>
                 Account settings
@@ -135,6 +137,12 @@ const SettingsPage = () => {
           setUserSettings={setUserSettings!}
         />
       )}
+      <AppSettingsSheet
+          open={openAppSettingsSheet}
+          setOpen={setOpenAppSettingsSheet}
+          settings={settings ? settings : {}}
+          setSettings={setSettings ? setSettings : () => {}}
+      />
     </div>
   )
 }

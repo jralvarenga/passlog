@@ -27,8 +27,7 @@
 			"ms-vscode.vscode-typescript-next",
 			"msjsdiag.vscode-react-native",
 			"ms-vscode.js-debug",
-			"VisualStudioExptTeam.vscodeintellicode",
-			"toba.vsfire"
+			"VisualStudioExptTeam.vscodeintellicode"
 		]
 	}
 }

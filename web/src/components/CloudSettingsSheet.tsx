@@ -3,6 +3,10 @@ import { createStyles, makeStyles } from '@mui/styles'
 import { setUserSettings as  setUserSettingsInStorage } from '../lib/localStorage'
 import { UserSettingsProps } from '../interfaces/interfaces'
 import BottomSheet from './BottomSheet'
+import { useState } from 'react'
+import { fullBackupInFirestore } from '../lib/firestore'
+import { usePasslogUserData } from '../services/PasslogUserdataProvider'
+import AppSnackbar from './AppSnackbar'
 
 interface CloudSettingsSheetProps {
   open: boolean
@@ -13,7 +17,10 @@ interface CloudSettingsSheetProps {
 
 const CloudSettingsSheet = ({ open, setOpen, setUserSettings, userSettings }: CloudSettingsSheetProps) => {
   const styles = styleSheet()
-  const theme = useTheme()
+  const { passwords, cards, notes, renderPasslogDataHandler } = usePasslogUserData()
+  const [loading, setLoading] = useState(false)
+  const [showSnackbar, setShowSnackbar] = useState(false)
+  const [snackbarText, setSnackbarText] = useState("")
 
   const enableAlwaysSync = (checked: boolean) => {
     const newSettings: UserSettingsProps = {
@@ -23,9 +30,23 @@ const CloudSettingsSheet = ({ open, setOpen, setUserSettings, userSettings }: Cl
     setUserSettingsInStorage(newSettings)
 
     setUserSettings(newSettings)
+    renderPasslogDataHandler!()
     setTimeout(() => {
       setOpen(false)
     }, 300)
+  }
+
+  const backupNow = async() => {
+    setLoading(true)
+    try {
+      await fullBackupInFirestore(passwords!, cards!, notes!)
+      setLoading(false)
+      setOpen(false)
+    } catch (error) {
+      setLoading(false)
+      setSnackbarText("There's been an error, try later")
+      setShowSnackbar(true)
+    }
   }
 
   return (
@@ -33,7 +54,7 @@ const CloudSettingsSheet = ({ open, setOpen, setUserSettings, userSettings }: Cl
       open={open}
       setOpen={setOpen}
       snapPoints={[230]}
-    >
+    ><>
       <div className={styles.container}>
         <div className={styles.titleContainer}>
           <span>Cloud Settings</span>
@@ -54,11 +75,18 @@ const CloudSettingsSheet = ({ open, setOpen, setUserSettings, userSettings }: Cl
           <Button
             className={styles.backupButton}
             variant="contained"
+            onClick={backupNow}
           >
             Backup now
           </Button>
         </div>
       </div>
+      <AppSnackbar
+        open={showSnackbar}
+        setOpen={setShowSnackbar}
+        message={snackbarText}
+      />
+      </>
     </BottomSheet>
   )
 }
